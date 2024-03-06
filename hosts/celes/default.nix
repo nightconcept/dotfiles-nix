@@ -60,8 +60,13 @@
 
   };
 
-  programs.zsh.enable = true;
-  
+  programs.zsh = {
+    enable = true;
+    syntaxHighlighting.enable = true;
+    autosuggestions.enable = true;
+    enableCompletion = true;
+  };
+
   users.users.danny = {
     isNormalUser = true;
     description = "Danny";

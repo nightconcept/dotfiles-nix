@@ -60,7 +60,14 @@
 
   };
 
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    syntaxHighlighting.enable = true;
+    autosuggestions.enable = true;
+    enableCompletion = true;
+  };
+
+  environment.pathsToLink = [ "/share/zsh" ];
   
   users.users.danny = {
     isNormalUser = true;
@@ -136,6 +143,8 @@
     hugo
     corectrl
     gcc
+    home-manager
+    gh
   ];
 
   system.stateVersion = "23.11"; # Did you read the comment?
