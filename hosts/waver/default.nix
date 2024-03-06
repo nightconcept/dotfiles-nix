@@ -1,17 +1,7 @@
 { config, pkgs, lib, ... }:
 
-let
-  unstableTarball =
-    fetchTarball
-      https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
-in
 {
   nixpkgs.config = {
-    packageOverrides = pkgs: {
-      unstable = import unstableTarball {
-        config = config.nixpkgs.config;
-      };
-    };
     allowUnfree = true;
   };
 
@@ -27,12 +17,12 @@ in
 # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
-    unstable.aldente
-    unstable.alt-tab-macos
-    unstable.discord
-    unstable.hugo
-    unstable.plex-media-player
-    unstable.obsidian
+    aldente
+    alt-tab-macos
+    discord
+    hugo
+    plex-media-player
+    obsidian
   ];
 
   # Use a custom configuration.nix location.
