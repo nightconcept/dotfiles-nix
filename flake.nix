@@ -23,18 +23,21 @@
       nixosConfigurations = {
         celes = lib.nixosSystem {
           system = "x86_64-linux";
-          modules = [ ./hosts/celes ];
+          modules = [ ./machines/nixos/celes ];
         };
         cloud = lib.nixosSystem {
           system = "x86_64-linux";
-          modules = [ ./hosts/cloud ];
+          modules = [ ./machines/nixos/cloud ];
         };
       };
 
       darwinConfigurations = {
         waver = nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
-          modules = [ ./hosts/waver ];
+          modules = [
+            ./machines/darwin
+            ./machines/darwin/waver
+          ];
         };
       };
   };

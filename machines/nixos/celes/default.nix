@@ -109,15 +109,12 @@
     eza
     zoxide
     thefuck
-    vim
     fd
     pavucontrol
     audacious
     bandwhich
     pyenv
     audacious
-    bandwhich
-    pyenv
     mpv
     libreoffice-fresh
     foliate
