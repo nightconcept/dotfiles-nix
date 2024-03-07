@@ -1,20 +1,5 @@
 { inputs, pkgs, lib, ... }:
 {
-  imports = [ <home-manager/nix-darwin> ];
-  home-manager = {
-    useGlobalPkgs = false; # makes hm use nixos's pkgs value
-      extraSpecialArgs = { inherit inputs; }; # allows access to flake inputs in hm modules
-      users.danny = { config, pkgs, ... }: {
-        nixpkgs.overlays = [ 
-        ];
-        home.homeDirectory = lib.mkForce "/Users/danny";
-        
-        imports = [
-        ];
-      };
-    backupFileExtension = "bak";
-    useUserPackages = true;
-  };
 
   nix.extraOptions = ''
   auto-optimise-store = true
