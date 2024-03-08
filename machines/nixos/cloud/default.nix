@@ -83,43 +83,40 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
+    acpi
+    tlp
     bat
-    fzf
-    duf
-    vim
-    speedtest-cli
-    wget
-    curl
-    nmap
-    rsync
-    trash-cli
-    tldr
     btop
-    ncdu
+    curl
     dosfstools
-    mtools
-    p7zip
-    unzip
-    zip
-    zsh
-    stow
-    tmux
-    neovim
+    duf
+    eza
     fastfetch
+    fd
+    fnm
+    fzf
     git
     lazygit
-    eza
-    zoxide
+    wget
+    ncdu
+    neovim
+    nmap
+    pyenv
+    rsync
+    speedtest-cli
+    stow
     thefuck
+    tldr
+    tmux
+    trash-cli
     vim
-    fd
+    wget
+    zip
+    zoxide
+    zsh
     pavucontrol
     audacious
     bandwhich
-    pyenv
-    audacious
-    bandwhich
-    pyenv
     mpv
     libreoffice-fresh
     foliate
@@ -147,6 +144,7 @@
     gh
   ];
 
-  system.stateVersion = "23.11"; # Did you read the comment?
+  # Do not touch
+  system.stateVersion = "23.11";
 
 }

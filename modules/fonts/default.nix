@@ -16,11 +16,5 @@
         }
       )
     ];
-    fontconfig = {
-      hinting.autohint = true;
-      defaultFonts = {
-        emoji = [ "OpenMoji Color" ];
-      };
-    };
   };
 }

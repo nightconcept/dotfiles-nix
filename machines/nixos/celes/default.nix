@@ -41,10 +41,6 @@
     xkb.variant = "";
   };
 
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" "DroidSansMono" ]; })
-  ];
-  
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   services.printing.enable = true;

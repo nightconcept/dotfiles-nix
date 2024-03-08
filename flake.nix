@@ -13,7 +13,6 @@
       url = "github:LnL7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
   };
 
   outputs = { self, nixpkgs, home-manager, nix-darwin, ... }@inputs:
@@ -23,11 +22,19 @@
       nixosConfigurations = {
         celes = lib.nixosSystem {
           system = "x86_64-linux";
-          modules = [ ./machines/nixos/celes ];
+          modules = [
+            ./modules/fonts
+
+            ./machines/nixos/celes
+            ];
         };
         cloud = lib.nixosSystem {
           system = "x86_64-linux";
-          modules = [ ./machines/nixos/cloud ];
+          modules = [
+            ./modules/fonts
+
+            ./machines/nixos/cloud
+            ];
         };
       };
 
