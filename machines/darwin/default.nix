@@ -6,7 +6,7 @@
     settings.allowed-users = [ "danny" ];
     gc = {
       automatic = true;
-      dates = "weekly";
+      interval = "03:45";
       options = "--delete-older-than 7d";
     };
     extraOptions = ''
@@ -17,6 +17,8 @@
       extra-platforms = x86_64-darwin aarch64-darwin
       '';
   };
+
+  nixpkgs.config.allowUnfree = true;
 
 #   homebrew = {
 #     enable = true;

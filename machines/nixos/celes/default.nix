@@ -114,7 +114,6 @@
     audacious
     bandwhich
     pyenv
-    audacious
     mpv
     libreoffice-fresh
     foliate
