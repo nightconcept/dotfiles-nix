@@ -12,10 +12,6 @@
         };
     };
     
-    # Remove unecessary preinstalled packages
-    environment.defaultPackages = [ ];
-    services.xserver.desktopManager.xterm.enable = false;
-
     programs.zsh.enable = true;
 
     # Laptop-specific packages (the other ones are installed in `packages.nix`)
@@ -41,22 +37,10 @@
     };
 
 
-    # Wayland stuff: enable XDG integration, allow sway to use brillo
-    xdg = {
-        portal = {
-            enable = true;
-            extraPortals = with pkgs; [
-                xdg-desktop-portal-wlr
-                xdg-desktop-portal-gtk
-            ];
-            gtkUsePortal = true;
-        };
-    };
-
     # Nix settings, auto cleanup and enable flakes
     nix = {
         settings.auto-optimise-store = true;
-        settings.allowed-users = [ "notus" ];
+        settings.allowed-users = [ "danny" ];
         gc = {
             automatic = true;
             dates = "weekly";
@@ -66,52 +50,49 @@
             experimental-features = nix-command flakes
             keep-outputs = true
             keep-derivations = true
+            '' + lib.optionalString (pkgs.system == "aarch64-darwin") ''
+            extra-platforms = x86_64-darwin aarch64-darwin
         '';
     };
 
-    # Boot settings: clean /tmp/, latest kernel and enable bootloader
-
+    nixpkgs.config = {
+        allowUnfree = true;
+    };
 
     # Set up locales (timezone and keyboard layout)
     time.timeZone = "America/Los_Angeles";
     i18n.defaultLocale = "en_US.UTF-8";
+    i18n.extraLocaleSettings = {
+        LC_ADDRESS = "en_US.UTF-8";
+        LC_IDENTIFICATION = "en_US.UTF-8";
+        LC_MEASUREMENT = "en_US.UTF-8";
+        LC_MONETARY = "en_US.UTF-8";
+        LC_NAME = "en_US.UTF-8";
+        LC_NUMERIC = "en_US.UTF-8";
+        LC_PAPER = "en_US.UTF-8";
+        LC_TELEPHONE = "en_US.UTF-8";
+        LC_TIME = "en_US.UTF-8";
+    };
     console = {
         font = "Lat2-Terminus16";
         keyMap = "us";
     };
 
     # Set up user and enable sudo
-    users.users.notus = {
+    users.users.danny = {
         isNormalUser = true;
         extraGroups = [ "input" "wheel" ];
         shell = pkgs.zsh;
     };
 
-    # Set up networking and secure it
-    networking = {
-        wireless.iwd.enable = true;
-        firewall = {
-            enable = true;
-            allowedTCPPorts = [ 443 80 ];
-            allowedUDPPorts = [ 443 80 44857 ];
-            allowPing = false;
-        };
-    };
+
 
     # Set environment variables
     environment.variables = {
         NIXOS_CONFIG = "$HOME/.config/nixos/configuration.nix";
         NIXOS_CONFIG_DIR = "$HOME/.config/nixos/";
-        XDG_DATA_HOME = "$HOME/.local/share";
-        PASSWORD_STORE_DIR = "$HOME/.local/share/password-store";
-        GTK_RC_FILES = "$HOME/.local/share/gtk-1.0/gtkrc";
-        GTK2_RC_FILES = "$HOME/.local/share/gtk-2.0/gtkrc";
-        MOZ_ENABLE_WAYLAND = "1";
         ZK_NOTEBOOK_DIR = "$HOME/stuff/notes/";
         EDITOR = "nvim";
-        DIRENV_LOG_FORMAT = "";
-        ANKI_WAYLAND = "1";
-        DISABLE_QT5_COMPAT = "0";
     };
 
     # Security 
@@ -120,7 +101,7 @@
         doas = {
             enable = true;
             extraRules = [{
-                users = [ "notus" ];
+                users = [ "dany" ];
                 keepEnv = true;
                 persist = true;
             }];

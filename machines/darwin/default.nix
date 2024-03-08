@@ -1,12 +1,22 @@
 { inputs, pkgs, lib, ... }:
 {
-
-  nix.extraOptions = ''
-  auto-optimise-store = true
-  experimental-features = nix-command flakes
-  '' + lib.optionalString (pkgs.system == "aarch64-darwin") ''
-  extra-platforms = x86_64-darwin aarch64-darwin
-  '';
+  # Nix settings, auto cleanup and enable flakes
+  nix = {
+    settings.auto-optimise-store = true;
+    settings.allowed-users = [ "danny" ];
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+    extraOptions = ''
+      experimental-features = nix-command flakes
+      keep-outputs = true
+      keep-derivations = true
+      '' + lib.optionalString (pkgs.system == "aarch64-darwin") ''
+      extra-platforms = x86_64-darwin aarch64-darwin
+      '';
+  };
 
 #   homebrew = {
 #     enable = true;
@@ -35,12 +45,7 @@
 #     ];
 #   };
 
-
   services.nix-daemon.enable = true;
-
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
 
   programs.zsh = {
     enable = true;
@@ -49,35 +54,34 @@
 
   environment.systemPackages = with pkgs; [
     bat
-    fzf
-    duf
-    vim
-    speedtest-cli
-    wget
-    curl
-    nmap
-    rsync
-    trash-cli
-    tldr
     btop
-    ncdu
+    curl
     dosfstools
-    mtools
-    p7zip
-    unzip
-    zip
-    zsh
-    stow
-    tmux
-    neovim
-    fastfetch
-    git
-    lazygit
+    duf
     eza
-    zoxide
-    thefuck
+    fastfetch
     fd
     fnm
+    fzf
+    git
+    lazygit
+    wget
+    ncdu
+    neovim
+    nmap
+    pyenv
+    rsync
+    speedtest-cli
+    stow
+    thefuck
+    tldr
+    tmux
+    trash-cli
+    vim
+    wget
+    zip
+    zoxide
+    zsh
   ];
 
   system.stateVersion = 4;
