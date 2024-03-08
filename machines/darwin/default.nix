@@ -20,32 +20,35 @@
 
   nixpkgs.config.allowUnfree = true;
 
-#   homebrew = {
-#     enable = true;
-#     onActivation = {
-#       autoUpdate = true;
-#       cleanup = "zap";
-#       upgrade = true;
-#     };
-#     brewPrefix = "/opt/homebrew/bin";
-#     caskArgs = {
-#       no_quarantine = true;
-#     };
+  # Use homebrew to install casks and Mac App Store apps
+  homebrew = {
+    enable = true;
 
-#     casks = [
-#       "discord"
-#       "notion"
-#       "telegram"
-#       "spotify"
-#       "signal"
-#       "karabiner-elements"
-#       "grid"
-#       "scroll-reverser"
-#       "topnotch"
-#       "bambu-studio"
-#       "monitorcontrol"
-#     ];
-#   };
+    casks = [
+      "calibre"
+      "eloston-chromium"
+      "ferdium"
+      "fig"
+      "firefox"
+      "github"
+      "hiddenbar"
+      "karabiner-elements"
+      "libreoffice"
+      "mos"
+      "nomachine"
+      "notunes"
+      "raycast"
+      "rectangle"
+      "spotify"
+      "stretchly"
+      "the-unarchiver"
+      "typora"
+      "visual-studio-code"
+      "vlc"
+      "wezterm"
+      "zoom"
+    ];
+  };
 
   services.nix-daemon.enable = true;
 
