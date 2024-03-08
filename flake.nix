@@ -46,6 +46,16 @@
 
             ./machines/darwin
             ./machines/darwin/waver
+            
+            # setup home-manager
+            home-manager.darwinModules.home-manager
+            {
+              home-manager = {
+                # include the home-manager module
+                #users.danny = import ../home-manager/home.nix;
+              };
+              users.users.evan.home = "/Users/danny";
+            }
           ];
         };
       };
