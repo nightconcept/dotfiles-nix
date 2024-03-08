@@ -6,7 +6,7 @@
     settings.allowed-users = [ "danny" ];
     gc = {
       automatic = true;
-      interval = "03:45";
+      user = "danny";
       options = "--delete-older-than 7d";
     };
     extraOptions = ''

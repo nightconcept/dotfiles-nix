@@ -35,6 +35,10 @@
         waver = nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           modules = [
+            # system
+            ./modules/fonts
+
+            # machine setup
             ./machines/darwin
             ./machines/darwin/waver
           ];
