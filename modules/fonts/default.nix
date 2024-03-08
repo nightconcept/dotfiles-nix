@@ -1,19 +1,26 @@
 { inputs, pkgs, lib, ... }:
 {
-  fonts.packages = with pkgs; [
-    (nerdfonts.override
-      { 
-        fonts = [ 
-          "DroidSansMono"
-          "FiraCode"
-          "FiraMono"
-          "Hack"
-          "Inconsolata"
-          "Noto"
-          "SourceCodePro"
-          "Ubuntu"
-        ]; 
-      }
-    )
-  ];
+  fonts = {
+    fonts = with pkgs; [
+      (nerdfonts.override
+        { fonts = [ 
+            "DroidSansMono"
+            "FiraCode"
+            "FiraMono"
+            "Hack"
+            "Inconsolata"
+            "Noto"
+            "SourceCodePro"
+            "Ubuntu"
+          ]; 
+        }
+      )
+    ];
+    fontconfig = {
+      hinting.autohint = true;
+      defaultFonts = {
+        emoji = [ "OpenMoji Color" ];
+      };
+    };
+  };
 }
