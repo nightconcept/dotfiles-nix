@@ -12,7 +12,6 @@
     discord
     hugo
     mpv
-    plex-media-player
     obsidian
   ];
 }
