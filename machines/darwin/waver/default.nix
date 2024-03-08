@@ -11,6 +11,7 @@
     alt-tab-macos
     discord
     hugo
+    karabiner-elements
     mpv
     obsidian
   ];

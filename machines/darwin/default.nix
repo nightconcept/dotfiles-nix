@@ -32,7 +32,6 @@
       "firefox"
       "github"
       "hiddenbar"
-      "karabiner-elements"
       "libreoffice"
       "mos"
       "nomachine"
