@@ -1,25 +1,11 @@
-{ inputs, pkgs, lib, vars, config, ... }:
+{ inputs, pkgs, lib, ... }:
 
 {
-  users.users.${vars.user} = {
-    shell = pkgs.zsh;
-  };
-
   programs = {
 
     zsh = {
       enable = true;
-      autosuggestions.enable = true;
-      syntaxHighlighting.enable = true;
-      enableCompletion = true;
-      histSize = 100000;
-
-      ohMyZsh = {                               # Plug-ins
-        enable = true;
-        plugins = [ "git" ];
-        theme = "powerlevel10k/powerlevel10k";
-      };
-
+      
       shellInit = ''
         ########################
         # Headers (do not touch)
@@ -66,7 +52,7 @@
 
         # Path to your oh-my-zsh installation.
 
-        # ZSH_THEME="powerlevel10k/powerlevel10k"
+        ZSH_THEME="powerlevel10k/powerlevel10k"
 
         # Uncomment the following line to use case-sensitive completion.
         # CASE_SENSITIVE="true"
@@ -88,13 +74,13 @@
         # ENABLE_CORRECTION="true"
 
         # zsh plugins
-        # plugins=(
-        #   git
-        #   zsh-autosuggestions
-        #   zsh-syntax-highlighting
-        #   zsh-history-substring-search
-        #   zsh-completions
-        # )
+        plugins=(
+           git
+           zsh-autosuggestions
+           zsh-syntax-highlighting
+           zsh-history-substring-search
+           zsh-completions
+        )
 
         source $ZSH/oh-my-zsh.sh
 
@@ -167,7 +153,6 @@
         # Fig post block. Keep at the bottom of this file.
         if [ -d "$HOME/.fig/" ]; then
           fi
-
       '';                                       # Theming
     };
   };

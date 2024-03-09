@@ -56,6 +56,12 @@
 
   services.nix-daemon.enable = true;
 
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    enableSyntaxHighlighting = true;
+  };
+
   environment.systemPackages = with pkgs; [
     bat
     btop
