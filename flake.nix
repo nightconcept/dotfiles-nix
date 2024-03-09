@@ -41,6 +41,9 @@
       darwinConfigurations = {
         waver = nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
+          specialArgs = {
+            inherit inputs;
+          };
           modules = [
             ./modules/fonts
 

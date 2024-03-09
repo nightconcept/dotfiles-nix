@@ -23,6 +23,11 @@
   # Use homebrew to install casks and Mac App Store apps
   homebrew = {
     enable = true;
+    onActivation = {
+      autoUpdate = true;
+      cleanup = "zap";
+      upgrade = true;
+    };
 
     casks = [
       "calibre"
@@ -50,11 +55,6 @@
   };
 
   services.nix-daemon.enable = true;
-
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-  };
 
   environment.systemPackages = with pkgs; [
     bat
