@@ -5,11 +5,4 @@
     # ../../dots/nvim
     # ../../dots/git
   ];
-
-  programs.nix-index =
-  {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
 }

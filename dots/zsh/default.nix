@@ -6,6 +6,11 @@
   };
 
   programs = {
+    zoxide = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
     zsh = {
       enable = true;
       autosuggestions.enable = true;

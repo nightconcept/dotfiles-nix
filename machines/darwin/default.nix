@@ -52,15 +52,8 @@
   services.nix-daemon.enable = true;
 
   programs.zsh = {
-    zplug = {
-      enable = true;
-      plugins = [
-        { name = "zsh-users/zsh-autosuggestions"; }
-        { name = "zsh-users/zsh-syntax-highlighting"; }
-        { name = "zsh-users/zsh-completions"; }
-        { name = "zsh-users/zsh-history-substring-search"; }
-      ];
-    };
+    enable = true;
+    enableCompletion = true;
   };
 
   environment.systemPackages = with pkgs; [
