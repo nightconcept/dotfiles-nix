@@ -44,6 +44,8 @@
           modules = [
             ./modules/fonts
 
+            ./users/danny
+
             ./machines/darwin
             ./machines/darwin/waver
             
@@ -54,7 +56,7 @@
                 # include the home-manager module
                 #users.danny = import ../home-manager/home.nix;
               };
-              users.users.evan.home = "/Users/danny";
+              users.users.danny.home = "/Users/danny";
             }
           ];
         };
