@@ -12,5 +12,4 @@
     enableZshIntegration = true;
   };
 
-  programs.home-manager.enable = true;
 }
