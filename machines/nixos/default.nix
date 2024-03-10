@@ -1,23 +1,25 @@
 { config, pkgs, inputs, ... }:
 
 {
-  # Bootloader
+  # Bootloader settings
   boot = {
     cleanTmpDir = true;
     loader = {
       systemd-boot.enable = true;
-      systemd-boot.editor = false;
       efi.canTouchEfiVariables = true;
-      timeout = 0;
     };
   };
+
 
   # Nix settings
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
 
-  time.timeZone = "America/Los_Angeles";
+  # Networking settings
+  networking.networkmanager.enable = true;
 
+  # Time and locale settings
+  time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
@@ -31,17 +33,7 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Display settings
-  services.xserver.enable = true;
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
-  services.xserver = {
-    xkb.layout = "us";
-    xkb.variant = "";
-  };
-
-  networking.networkmanager.enable = true;
-
+  # Printing settings
   services.printing.enable = true;
 
   # Sound settings
@@ -55,10 +47,13 @@
     pulse.enable = true;
   };
 
+  # Set zsh defaults
   programs.zsh = {
     enable = true;
     syntaxHighlighting.enable = true;
     autosuggestions.enable = true;
     enableCompletion = true;
   };
+
+
 }
