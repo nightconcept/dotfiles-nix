@@ -47,9 +47,23 @@
         cloud = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
+            ./modules/cli
+            ./modules/gui
             ./modules/fonts
 
+            ./users/danny
+
+            ./machines/nixos
             ./machines/nixos/cloud
+            # setup home-manager
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                # include the home-manager module
+                #users.danny = import ../home-manager/home.nix;
+              };
+              users.users.danny.home = "/Users/danny";
+            }
             ];
         };
       };
