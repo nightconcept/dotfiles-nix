@@ -32,6 +32,15 @@
 
             ./machines/nixos
             ./machines/nixos/celes
+            # setup home-manager
+            home-manager.darwinModules.home-manager
+            {
+              home-manager = {
+                # include the home-manager module
+                #users.danny = import ../home-manager/home.nix;
+              };
+              users.users.danny.home = "/home/danny";
+            }
             ];
         };
         cloud = lib.nixosSystem {
@@ -40,6 +49,15 @@
             ./modules/fonts
 
             ./machines/nixos/cloud
+            # setup home-manager
+            home-manager.darwinModules.home-manager
+            {
+              home-manager = {
+                # include the home-manager module
+                #users.danny = import ../home-manager/home.nix;
+              };
+              users.users.danny.home = "/home/danny";
+            }
             ];
         };
       };
