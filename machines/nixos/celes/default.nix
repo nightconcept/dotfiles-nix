@@ -7,12 +7,8 @@
       ./hardware-configuration.nix
     ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "celes"; # Define your hostname.
-
-  networking.networkmanager.enable = true;
 
   services.xserver.enable = true;
   services.xserver.displayManager.sddm.enable = true;

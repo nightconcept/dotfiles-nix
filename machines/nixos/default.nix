@@ -2,15 +2,15 @@
 
 {
   # Bootloader
-  # boot = {
-  #   cleanTmpDir = true;
-  #   loader = {
-  #   systemd-boot.enable = true;
-  #   systemd-boot.editor = false;
-  #   efi.canTouchEfiVariables = true;
-  #   timeout = 0;
-  #   };
-  # };
+  boot = {
+    cleanTmpDir = true;
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+  };
+
+  networking.networkmanager.enable = true;
 
   time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";
