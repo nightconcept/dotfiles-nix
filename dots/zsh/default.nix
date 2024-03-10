@@ -3,10 +3,25 @@
 {
   programs = {
 
+    zoxide = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
     zsh = {
       enable = true;
+      zplug = {
+        enable = true;
+        plugins = [
+          { name = "zsh-users/zsh-autosuggestions"; }
+          { name = "zsh-users/zsh-syntax-highlighting"; }
+          { name = "zsh-users/zsh-completions"; }
+          { name = "zsh-users/zsh-history-substring-search"; }
+          { name = "git"; }
+        ];
+      };
       
-      shellInit = ''
+      initExtra = ''
         ########################
         # Headers (do not touch)
         ########################
@@ -75,11 +90,7 @@
 
         # zsh plugins
         plugins=(
-           git
-           zsh-autosuggestions
-           zsh-syntax-highlighting
-           zsh-history-substring-search
-           zsh-completions
+          git
         )
 
         source $ZSH/oh-my-zsh.sh
