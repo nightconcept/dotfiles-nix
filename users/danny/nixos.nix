@@ -1,4 +1,4 @@
-{ config, pkgs, lib, vars, ... }: 
+{ config, pkgs, ... }:
 {
   users.users.danny = {
     isNormalUser = true;
