@@ -7,9 +7,6 @@
   ];
 
   users.users.danny = {
-    isNormalUser = true;
-    description = "Danny";
-    extraGroups = [ "networkmanager" "wheel" ];
     shell = pkgs.zsh;
   };
 }
