@@ -2,11 +2,6 @@
 {
   programs = {
 
-    zoxide = {
-      enable = true;
-      enableZshIntegration = true;
-    };
-
     zsh = {
       enable = true;
       

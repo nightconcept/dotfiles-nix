@@ -28,7 +28,6 @@
             ./modules/fonts
 
             ./users/danny
-            ./users/danny/nixos.nix
 
             ./machines/nixos
             ./machines/nixos/celes
@@ -53,7 +52,6 @@
             ./modules/fonts
 
             ./users/danny
-            ./users/danny/nixos.nix
 
             ./machines/nixos
             ./machines/nixos/cloud
