@@ -32,40 +32,14 @@
 
             ./machines/nixos
             ./machines/nixos/celes
-
-            # setup home-manager
-            home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                # include the home-manager module
-                #users.danny = import ../home-manager/home.nix;
-              };
-              users.users.danny.home = "/Users/danny";
-            }
-          ];
-
+            ];
         };
         cloud = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
-            ./modules/cli
-            ./modules/gui
             ./modules/fonts
 
-            ./users/danny
-            ./users/danny/nixos.nix
-
-            ./machines/nixos
             ./machines/nixos/cloud
-            # setup home-manager
-            home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                # include the home-manager module
-                #users.danny = import ../home-manager/home.nix;
-              };
-              users.users.danny.home = "/Users/danny";
-            }
             ];
         };
       };
@@ -77,6 +51,8 @@
             inherit inputs;
           };
           modules = [
+            ./modules/cli
+            ./modules/gui
             ./modules/fonts
 
             ./users/danny
