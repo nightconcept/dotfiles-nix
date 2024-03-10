@@ -13,6 +13,7 @@
     fnm
     fzf
     gcc
+    gh
     git
     lazygit
     wget
