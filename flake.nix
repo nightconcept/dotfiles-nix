@@ -40,7 +40,7 @@
                 # include the home-manager module
                 #users.danny = import ../home-manager/home.nix;
               };
-              users.users.danny.home = "/Users/danny";
+              users.users.danny.home = "/home/danny";
             }
           ];
 
@@ -64,7 +64,7 @@
                 # include the home-manager module
                 #users.danny = import ../home-manager/home.nix;
               };
-              users.users.danny.home = "/Users/danny";
+              users.users.danny.home = "/home/danny";
             }
             ];
         };
