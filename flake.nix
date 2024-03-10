@@ -23,6 +23,8 @@
         celes = lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
+            ./modules/cli
+            ./modules/gui
             ./modules/fonts
 
             ./machines/nixos/celes
@@ -45,6 +47,8 @@
             inherit inputs;
           };
           modules = [
+            ./modules/cli
+            ./modules/gui
             ./modules/fonts
 
             ./users/danny
