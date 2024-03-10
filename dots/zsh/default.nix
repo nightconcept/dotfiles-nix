@@ -153,7 +153,7 @@
         # Fig post block. Keep at the bottom of this file.
         if [ -d "$HOME/.fig/" ]; then
           fi
-      '';                                       # Theming
+      '';
     };
   };
 }
