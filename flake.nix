@@ -33,13 +33,15 @@
             ./machines/nixos
             ./machines/nixos/celes
             # setup home-manager
-            home-manager.darwinModules.home-manager
+            home-manager.nixosModules.home-manager
             {
               home-manager = {
-                # include the home-manager module
-                #users.danny = import ../home-manager/home.nix;
+                users.danny.home.stateVersion = "23.11";
+                useGlobalPkgs = false; # makes hm use nixos's pkgs value
+                users.danny.imports = [ 
+                  ./users/danny/home.nix                 
+                ];
               };
-              users.users.danny.home = "/home/danny";
             }
             ];
         };
