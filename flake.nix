@@ -27,6 +27,10 @@
             ./modules/gui
             ./modules/fonts
 
+            ./users/danny
+            ./users/danny/nixos.nix
+
+            ./machines/nixos
             ./machines/nixos/celes
             ];
         };

@@ -41,39 +41,6 @@
     xkb.variant = "";
   };
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-  services.printing.enable = true;
-
-  sound.enable = true;
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-
-  };
-
-  programs.zsh = {
-    enable = true;
-    syntaxHighlighting.enable = true;
-    autosuggestions.enable = true;
-    enableCompletion = true;
-  };
-
-  users.users.danny = {
-    isNormalUser = true;
-    description = "Danny";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      firefox
-      kate
-    ];
-    shell = pkgs.zsh;
-  };
-
   nixpkgs.config.allowUnfree = true;
 
   system.stateVersion = "23.11"; # Did you read the comment?
