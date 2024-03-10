@@ -76,66 +76,6 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = with pkgs; [
-    bat
-    fzf
-    duf
-    vim
-    speedtest-cli
-    wget
-    curl
-    nmap
-    rsync
-    trash-cli
-    tldr
-    btop
-    ncdu
-    dosfstools
-    mtools
-    p7zip
-    unzip
-    zip
-    zsh
-    stow
-    tmux
-    neovim
-    fastfetch
-    git
-    lazygit
-    eza
-    zoxide
-    thefuck
-    fd
-    pavucontrol
-    audacious
-    bandwhich
-    pyenv
-    mpv
-    libreoffice-fresh
-    foliate
-    discord
-    ungoogled-chromium
-    calibre
-    obsidian
-    steam
-    evince
-    fontconfig
-    ferdium
-    fnm
-    github-desktop
-    nomachine-client
-    protonup-qt
-    spotify
-    stretchly
-    vscode
-    wezterm
-    zoom
-    hugo
-    corectrl
-    gcc
-    hexchat
-  ];
-
   system.stateVersion = "23.11"; # Did you read the comment?
 
 }
