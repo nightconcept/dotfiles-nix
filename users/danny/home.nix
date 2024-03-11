@@ -1,5 +1,9 @@
 { inputs, lib, pkgs,  ... }: 
 {
+  programs.home-manager.enable = true;
+
+  nixpkgs.config.allowUnfree = true;
+
   imports = [
       ../../dots/zsh
       ../../dots/vscode
@@ -11,7 +15,5 @@
     stateVersion = "23.11";
   };
 
-  nixpkgs.config.allowUnfree = true;
 
-  programs.home-manager.enable = true;
   }
