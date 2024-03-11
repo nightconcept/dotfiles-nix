@@ -17,7 +17,9 @@
 
   outputs = { self, nixpkgs, home-manager, nix-darwin, ... }@inputs:
     let
+      system = "x86_64-linux";
       lib = nixpkgs.lib;
+      pkgs = nixpkgs.legacyPackages.${system};
     in {
       nixosConfigurations = {
         celes = lib.nixosSystem {
@@ -92,5 +94,20 @@
           ];
         };
       };
-  };
+      homeConfigurations = {
+        danny = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = [ 
+            ./users/danny/home.nix 
+          {
+            home = {
+              username = "danny";
+              homeDirectory = "/home/danny";
+              stateVersion = "23.11";
+            };
+          }
+          ];
+        };
+      };
+    };
 }
