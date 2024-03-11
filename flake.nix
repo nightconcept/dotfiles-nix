@@ -79,8 +79,6 @@
             inherit inputs;
           };
           modules = [
-            ./modules/cli
-            ./modules/gui
             ./modules/fonts
 
             ./users/danny
@@ -88,14 +86,14 @@
             ./machines/darwin
             ./machines/darwin/waver
             
-            # setup home-manager
-            home-manager.darwinModules.home-manager
-            {
+            home-manager.darwinModules.home-manager {
               home-manager = {
-                # include the home-manager module
-                #users.danny = import ../home-manager/home.nix;
+                users.danny.home.stateVersion = "23.11";
+                useGlobalPkgs = false; # makes hm use nixos's pkgs value
+                users.danny.imports = [ 
+                  ./users/danny/darwin-home.nix                 
+                ];
               };
-              users.users.danny.home = "/Users/danny";
             }
           ];
         };
