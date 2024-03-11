@@ -10,7 +10,13 @@
 
     zsh = {
       enable = true;
-      oh-my-zsh.enable = true;
+      oh-my-zsh = {
+        enable = false;
+        extraConfig = ''
+          zstyle ':omz:update' mode auto # update automatically without asking
+          zstyle ':omz:update' frequency 13
+        '';
+      };
       zplug = {
         enable = true;
         plugins = [
@@ -73,39 +79,10 @@
             eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         fi
 
-        #########################
-        # oh-my-zsh configuration
-        #########################
-
-        # Path to your oh-my-zsh installation.
-
-        ZSH_THEME="powerlevel10k/powerlevel10k"
-
-        # Uncomment the following line to use case-sensitive completion.
-        # CASE_SENSITIVE="true"
-
-        # Uncomment the following line to use hyphen-insensitive completion.
-        # Case-sensitive completion must be off. _ and - will be interchangeable.
-        # HYPHEN_INSENSITIVE="true"
-
-        zstyle ':omz:update' mode auto      # update automatically without asking
-        # zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
-        # Uncomment the following line to change how often to auto-update (in days).
-        zstyle ':omz:update' frequency 13
-
-        # Uncomment the following line if pasting URLs and other text is messed up.
-        # DISABLE_MAGIC_FUNCTIONS="true"
-
-        # Uncomment the following line to enable command auto-correction.
-        # ENABLE_CORRECTION="true"
-
         # zsh plugins
         plugins=(
           git
         )
-
-        source $ZSH/oh-my-zsh.sh
 
         #########
         # Aliases
