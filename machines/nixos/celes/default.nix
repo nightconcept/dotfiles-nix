@@ -9,6 +9,9 @@
 
   networking.hostName = "celes"; # Define your hostname.
 
+  # Kernel specified at 6.1 to allow for power limit control
+  boot.kernelPackages = pkgs.linuxPackages_6_1;
+
   # Display settings
   services.xserver.enable = true;
   services.xserver.displayManager.sddm.enable = true;
