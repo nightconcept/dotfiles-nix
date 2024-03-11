@@ -99,13 +99,7 @@
           inherit pkgs;
           modules = [ 
             ./users/danny/home.nix 
-          {
-            home = {
-              username = "danny";
-              homeDirectory = "/home/danny";
-              stateVersion = "23.11";
-            };
-          }
+
           ];
         };
       };
