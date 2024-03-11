@@ -78,6 +78,7 @@
           specialArgs = {
             inherit inputs;
           };
+          
           modules = [
             ./modules/fonts
 
@@ -85,14 +86,16 @@
 
             ./machines/darwin
             ./machines/darwin/waver
-            
+
             home-manager.darwinModules.home-manager {
+              users.users.danny.home = "/Users/danny";
               home-manager = {
                 users.danny.home.stateVersion = "23.11";
                 useGlobalPkgs = false; # makes hm use nixos's pkgs value
                 users.danny.imports = [ 
                   ./users/danny/darwin-home.nix                 
                 ];
+
               };
             }
           ];
