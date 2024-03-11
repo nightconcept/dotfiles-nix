@@ -1,13 +1,11 @@
-
 { config, pkgs, ... }:
-
 {
   imports =
     [
       ./hardware-configuration.nix
     ];
 
-  networking.hostName = "celes"; # Define your hostname.
+  networking.hostName = "celes";
 
   # Kernel specified at 6.1 to allow for power limit control
   boot.kernelPackages = pkgs.linuxPackages_6_1;
@@ -24,3 +22,4 @@
   # Do not touch
   system.stateVersion = "23.11";
 }
+ix 

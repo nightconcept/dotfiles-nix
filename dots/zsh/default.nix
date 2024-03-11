@@ -38,6 +38,10 @@
           file = "p10k.zsh";
         }       
       ];
+
+      shellAliases = {
+        home-rebuild = "home-manager switch --flake .#danny";
+      };
       
       initExtra = ''
         ########################
