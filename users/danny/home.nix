@@ -2,6 +2,7 @@
 {
   imports = [
       ../../dots/zsh
+      ../../dots/vscode
   ];
 
   home = {
