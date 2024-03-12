@@ -5,7 +5,10 @@
       ./hardware-configuration.nix
     ];
 
-  networking.hostName = "cloud"; # Define your hostname.
+  # Kernel specified at 6.6 for the latest LTS
+  boot.kernelPackages = pkgs.linuxPackages_6_6;
+
+  networking.hostName = "cloud";
 
   services.xserver.enable = true;
   services.xserver.displayManager.sddm.enable = true;
