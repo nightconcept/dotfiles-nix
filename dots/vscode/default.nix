@@ -6,13 +6,8 @@
       extensions = with pkgs.vscode-extensions; [
         yzhang.markdown-all-in-one
         bbenoist.nix
+        emroussel.atomize-atom-one-dark-theme
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-      {
-        name = "solarized-osaka";
-        publisher = "sherloach";
-        version = "0.1.1";
-        sha256 = "sha256-HYkzht8jPYBwE3bHHvyU4amNYunsfayPTWBiBVyY+1g=";
-      }
       {
         name = "where-am-i";
         publisher = "antfu";
@@ -27,7 +22,7 @@
       }
       ];
       userSettings = {
-        "workbench.colorTheme" = "Solarized Osaka";
+        "workbench.colorTheme" = "Atomize";
         "editor.fontFamily" = "'FiraMono Nerd Font', 'monospace', monospace";
         "editor.fontSize" = 16;
         "editor.fontLigatures" = false;
