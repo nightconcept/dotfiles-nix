@@ -20,7 +20,7 @@
 
   environment.systemPackages = with pkgs; [
     acpi
-    tlp
+    powertop
   ];
 
   # Do not touch
