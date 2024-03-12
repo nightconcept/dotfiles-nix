@@ -10,6 +10,7 @@
 
     zsh = {
       enable = true;
+      dotDir = ".config/zsh";
       oh-my-zsh = {
         enable = false;
         plugins = [
@@ -49,8 +50,7 @@
       shellAliases = {
         home-rebuild = "home-manager switch --flake .#danny";
       };
-      
-      initExtra = ''
+      initExtraFirst = ''
         ########################
         # Headers (do not touch)
         ########################
@@ -63,6 +63,9 @@
         fi
 
         gh auth setup-git
+      '';
+      initExtra = ''
+
 
         ###################
         # Exports and evals
