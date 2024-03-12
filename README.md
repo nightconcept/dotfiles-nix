@@ -21,4 +21,5 @@ flake - Main entry point
 ```sh
 nix-env -i powerlevel10k
 ```
+
 [Reference]([Using an external oh-my-zsh theme with zsh in nix? - Help - NixOS Discourse](https://discourse.nixos.org/t/using-an-external-oh-my-zsh-theme-with-zsh-in-nix/6142)
