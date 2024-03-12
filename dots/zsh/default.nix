@@ -12,11 +12,18 @@
       enable = true;
       oh-my-zsh = {
         enable = false;
+        plugins = [
+          "brew"
+          "fzf"
+          "gh"
+          "git"
+        ];
         extraConfig = ''
           zstyle ':omz:update' mode auto # update automatically without asking
           zstyle ':omz:update' frequency 13
         '';
       };
+      
       zplug = {
         enable = true;
         plugins = [
@@ -85,11 +92,6 @@
             eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         fi
 
-        # zsh plugins
-        plugins=(
-          git
-        )
-
         #########
         # Aliases
         #########
@@ -148,6 +150,7 @@
           alias rebuild="darwin-rebuild switch"
           alias flake-rebuild="darwin-rebuild switch --flake"
         fi
+        
 
         ########################
         # Footers (do not touch)
