@@ -22,7 +22,7 @@
       }
       ];
       userSettings = {
-        
+        "editor.accessibilitySupport" = "off";
         "editor.guides.bracketPairs" = true;
         "editor.fontFamily" = "'FiraMono Nerd Font', Consolas, Meslo, 'monospace', monospace";
         "editor.fontSize" = 16;
@@ -39,6 +39,7 @@
         "git.autofetch" = true;
         "git.defaultBranchName" = "main";
         "telemetry.telemetryLevel" = "off";
+        "terminal.integrated.fontSize" = 14;
         "workbench.colorTheme" = "Atomize";
         "workbench.iconTheme" = "material-icon-theme";
       };
