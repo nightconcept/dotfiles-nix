@@ -15,6 +15,7 @@
     gcc
     gh
     git
+    home-manager
     lazygit
     wget
     ncdu
