@@ -10,13 +10,21 @@
 
     zsh = {
       enable = true;
+      dotDir = ".config/zsh";
       oh-my-zsh = {
         enable = false;
+        plugins = [
+          "brew"
+          "fzf"
+          "gh"
+          "git"
+        ];
         extraConfig = ''
           zstyle ':omz:update' mode auto # update automatically without asking
           zstyle ':omz:update' frequency 13
         '';
       };
+      
       zplug = {
         enable = true;
         plugins = [
@@ -38,8 +46,11 @@
           file = "p10k.zsh";
         }       
       ];
-      
-      initExtra = ''
+
+      shellAliases = {
+        home-rebuild = "home-manager switch --flake .#danny";
+      };
+      initExtraFirst = ''
         ########################
         # Headers (do not touch)
         ########################
@@ -50,6 +61,12 @@
         if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
           source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
         fi
+
+        gh auth setup-git
+      '';
+      
+      initExtra = ''
+
 
         ###################
         # Exports and evals
@@ -78,11 +95,6 @@
         if [ -d "/home/linuxbrew/" ]; then
             eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         fi
-
-        # zsh plugins
-        plugins=(
-          git
-        )
 
         #########
         # Aliases
@@ -142,6 +154,7 @@
           alias rebuild="darwin-rebuild switch"
           alias flake-rebuild="darwin-rebuild switch --flake"
         fi
+        
 
         ########################
         # Footers (do not touch)
