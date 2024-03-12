@@ -41,6 +41,7 @@
       "mos"
       "nomachine"
       "notunes"
+      "plex"
       "raycast"
       "rectangle"
       "spotify"
@@ -66,35 +67,32 @@
     bat
     btop
     curl
-    dosfstools
-    duf
-    eza
-    fastfetch
-    fd
-    fnm
-    fzf
+    gcc
     gh
     git
     home-manager
-    lazygit
     wget
-    ncdu
-    neovim
-    nmap
-    pyenv
-    rsync
-    speedtest-cli
-    stow
-    thefuck
-    tldr
-    tmux
-    trash-cli
     vim
     wget
-    zip
-    zoxide
     zsh
   ];
+
+  system = {
+    defaults = {
+      finder = {
+        FXDefaultSearchScope = "SCcf";
+        AppleShowAllExtensions = true;
+        FXEnableExtensionChangeWarning = false;
+        ShowStatusBar = true;
+      };
+    };
+    activationScripts.postUserActivation.text = ''
+# Following line should allow us to avoid a logout/login cycle
+      /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+      launchctl stop com.apple.Dock.agent
+      launchctl start com.apple.Dock.agent
+      '';
+  };
 
   system.stateVersion = 4;
 

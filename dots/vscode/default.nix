@@ -30,7 +30,7 @@
       userSettings = {
         "editor.accessibilitySupport" = "off";
         "editor.guides.bracketPairs" = true;
-        "editor.fontFamily" = "'FiraMono Nerd Font', Consolas, Meslo, 'monospace', monospace";
+        "editor.fontFamily" = "'FiraMono Nerd Font', 'FiraCode Nerd Font', Consolas, Meslo, 'monospace', monospace";
         "editor.fontSize" = 16;
         "editor.fontLigatures" = true;
         "editor.rulers" = [
