@@ -47,6 +47,23 @@
     pulse.enable = true;
   };
 
+  # System available packages
+  environment.systemPackages = with pkgs; [
+    bat
+    btop
+    curl
+    gcc
+    gh
+    git
+    home-manager
+    wget
+    vim
+    wget
+    zsh
+
+    firefox
+  ];
+
   # Set zsh defaults
   programs.zsh = {
     enable = true;
@@ -54,6 +71,5 @@
     autosuggestions.enable = true;
     enableCompletion = true;
   };
-
 
 }
