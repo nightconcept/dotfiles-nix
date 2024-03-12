@@ -95,18 +95,17 @@
                 users.danny.imports = [ 
                   ./users/danny/darwin-home.nix                 
                 ];
-
               };
             }
           ];
         };
       };
+      
       homeConfigurations = {
         danny = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [ 
             ./users/danny/home.nix 
-
           ];
         };
       };

@@ -7,6 +7,12 @@
         yzhang.markdown-all-in-one
         bbenoist.nix
         emroussel.atomize-atom-one-dark-theme
+        #withfig.fig
+        eamodio.gitlens
+        #ms-python.vscode-pylance
+        #ms-python.pylint
+        #ms-python.python
+        #ms-python.debugpy
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
       {
         name = "where-am-i";
