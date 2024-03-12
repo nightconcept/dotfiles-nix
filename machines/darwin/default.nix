@@ -73,7 +73,9 @@
     fd
     fnm
     fzf
+    gh
     git
+    home-manager
     lazygit
     wget
     ncdu

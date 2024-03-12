@@ -22,10 +22,24 @@
       }
       ];
       userSettings = {
-        "workbench.colorTheme" = "Atomize";
-        "editor.fontFamily" = "'FiraMono Nerd Font', 'monospace', monospace";
+        
+        "editor.guides.bracketPairs" = true;
+        "editor.fontFamily" = "'FiraMono Nerd Font', Consolas, Meslo, 'monospace', monospace";
         "editor.fontSize" = 16;
-        "editor.fontLigatures" = false;
+        "editor.fontLigatures" = true;
+        "editor.rulers" = [
+          {
+            "color" = "#808080";
+            "column" = 100;
+          }
+        ];
+        "editor.tabSize" = 2;
+        "editor.wordWrap" = "on";
+        "extensions.ignoreRecommendations" = true;
+        "git.autofetch" = true;
+        "git.defaultBranchName" = "main";
+        "telemetry.telemetryLevel" = "off";
+        "workbench.colorTheme" = "Atomize";
         "workbench.iconTheme" = "material-icon-theme";
       };
     };
