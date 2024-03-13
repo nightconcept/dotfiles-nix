@@ -22,18 +22,17 @@
 
   # Use homebrew to install casks and Mac App Store apps
   homebrew = {
-    enable = false;
+    enable = true;
     onActivation = {
-      autoUpdate = false;
-      cleanup = "uninstall";
-      upgrade = false;
+      autoUpdate = true;
+      cleanup = "zap";
+      upgrade = true;
     };
 
     casks = [
       "calibre"
       "eloston-chromium"
       "ferdium"
-      "fig"
       "firefox"
       "github"
       "hiddenbar"
