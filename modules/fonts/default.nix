@@ -1,7 +1,9 @@
 { inputs, pkgs, lib, ... }:
 {
+
   fonts = {
-    packages = with pkgs; [
+    fontconfig.enable = true;
+    fonts = with pkgs; [
       (nerdfonts.override
         { fonts = [ 
             "DroidSansMono"
