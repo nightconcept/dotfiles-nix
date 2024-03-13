@@ -28,6 +28,13 @@
     wget
     zip
     zoxide
+
+    alt-tab-macos
+    discord
+    hugo
+    karabiner-elements
+    mpv
+    obsidian
   ];
 
   imports = [
