@@ -22,11 +22,11 @@
 
   # Use homebrew to install casks and Mac App Store apps
   homebrew = {
-    enable = true;
+    enable = false;
     onActivation = {
-      autoUpdate = true;
-      cleanup = "zap";
-      upgrade = true;
+      autoUpdate = false;
+      cleanup = "uninstall";
+      upgrade = false;
     };
 
     casks = [
