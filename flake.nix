@@ -76,7 +76,7 @@
           };
           
           modules = [
-            ./modules/fonts
+            ./modules/fonts/darwin-fonts.nix
 
             ./users/danny
 
@@ -103,7 +103,7 @@
           };
           
           modules = [
-            ./modules/fonts
+            ./modules/fonts/darwin-fonts.nix
 
             ./users/danny
 
