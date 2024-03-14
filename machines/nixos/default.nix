@@ -60,8 +60,6 @@
     vim
     wget
     zsh
-
-    firefox
   ];
 
   # Set zsh defaults
