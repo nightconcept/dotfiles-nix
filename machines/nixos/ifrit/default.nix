@@ -54,6 +54,9 @@
     zsh
   ];
 
+  virtualisation.docker.enable = true;
+  users.extraGroups.docker.members = [ "danny" ];
+
   # Set zsh defaults
   programs.zsh = {
     enable = true;
