@@ -70,6 +70,7 @@
           system = "x86_64-linux";
           modules = [
             ./users/danny
+            ./users/danny/nixos.nix
 
             ./machines/nixos/ifrit
 
