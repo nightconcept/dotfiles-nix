@@ -17,130 +17,64 @@
 
   outputs = { self, nixpkgs, home-manager, nix-darwin, ... }@inputs:
     let
-      system = "x86_64-linux";
       lib = nixpkgs.lib;
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+      mkNixos = pkgs: hostname:
+        pkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./modules
+            ./users/danny
+            ./users/danny/nixos.nix
+            ./machines/nixos
+            ./machines/nixos/${hostname}
+
+            home-manager.nixosModules.home-manager {
+              home-manager = {
+                users.danny.home.stateVersion = "23.11";
+                useGlobalPkgs = true;
+                users.danny.imports = [ 
+                  ./users/danny/home.nix                 
+                ];
+              };
+            }
+          ];
+        };
+      mkDarwin = pkgs: hostname:
+        nix-darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          specialArgs = {
+            inherit inputs;
+          };
+          
+          modules = [
+            ./modules/darwin.nix
+            ./users/danny
+            ./machines/darwin
+            ./machines/darwin/${hostname}
+
+            home-manager.darwinModules.home-manager {
+              users.users.danny.home = "/Users/danny";
+              home-manager = {
+                users.danny.home.stateVersion = "23.11";
+                useGlobalPkgs = false; # makes hm use nixos's pkgs value
+                users.danny.imports = [ 
+                  ./users/danny/darwin-home.nix                 
+                ];
+              };
+            }
+          ];
+        };
     in {
       nixosConfigurations = {
-        celes = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./modules/fonts
-
-            ./users/danny
-            ./users/danny/nixos.nix
-
-            ./machines/nixos
-            ./machines/nixos/celes
-
-            home-manager.nixosModules.home-manager {
-              home-manager = {
-                users.danny.home.stateVersion = "23.11";
-                useGlobalPkgs = false; # makes hm use nixos's pkgs value
-                users.danny.imports = [ 
-                  ./users/danny/home.nix                 
-                ];
-              };
-            }
-          ];
-        };
-        cloud = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./modules/fonts
-
-            ./users/danny
-            ./users/danny/nixos.nix
-
-            ./machines/nixos
-            ./machines/nixos/cloud
-
-            home-manager.nixosModules.home-manager {
-              home-manager = {
-                users.danny.home.stateVersion = "23.11";
-                useGlobalPkgs = false; # makes hm use nixos's pkgs value
-                users.danny.imports = [ 
-                  ./users/danny/home.nix                 
-                ];
-              };
-            }
-          ];
-        };
-      ifrit = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            ./users/danny
-            ./users/danny/nixos.nix
-
-            ./machines/nixos/ifrit
-
-            home-manager.nixosModules.home-manager {
-              home-manager = {
-                users.danny.home.stateVersion = "23.11";
-                useGlobalPkgs = false; # makes hm use nixos's pkgs value
-                users.danny.imports = [ 
-                  ./users/danny/home-server.nix                 
-                ];
-              };
-            }
-          ];
-        };
+        celes = mkNixos inputs.nixpkgs "celes";
+        cloud = mkNixos inputs.nixpkgs "cloud";
+        ifrit = mkNixos inputs.nixpkgs "ifrit";
       };
 
       darwinConfigurations = {
-        waver = nix-darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
-          specialArgs = {
-            inherit inputs;
-          };
-          
-          modules = [
-            ./modules/fonts/darwin-fonts.nix
-
-            ./users/danny
-
-            ./machines/darwin
-            ./machines/darwin/waver
-
-            home-manager.darwinModules.home-manager {
-              users.users.danny.home = "/Users/danny";
-              home-manager = {
-                users.danny.home.stateVersion = "23.11";
-                useGlobalPkgs = false; # makes hm use nixos's pkgs value
-                users.danny.imports = [ 
-                  ./users/danny/darwin-home.nix                 
-                ];
-              };
-            }
-          ];
-        };
-
-        merlin = nix-darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
-          
-          specialArgs = {
-            inherit inputs;
-          };
-          
-          modules = [
-            ./modules/fonts/darwin-fonts.nix
-
-            ./users/danny
-
-            ./machines/darwin
-
-            home-manager.darwinModules.home-manager {
-              users.users.danny.home = "/Users/danny";
-              home-manager = {
-                users.danny.home.stateVersion = "23.11";
-                useGlobalPkgs = false; # makes hm use nixos's pkgs value
-                users.danny.imports = [ 
-                  ./users/danny/darwin-home.nix                 
-                ];
-              };
-            }
-          ];
-        };
+        waver = mkDarwin inputs.nixpkgs "waver";
+        merlin = mkDarwin inputs.nixpkgs "merlin";
       };
       
       homeConfigurations = {
