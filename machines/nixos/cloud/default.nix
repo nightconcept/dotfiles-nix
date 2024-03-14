@@ -20,6 +20,7 @@
 
   environment.systemPackages = with pkgs; [
     acpi
+    firefox
     powertop
   ];
 
