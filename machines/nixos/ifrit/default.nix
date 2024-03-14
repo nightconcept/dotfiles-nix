@@ -42,10 +42,12 @@
     bat
     btop
     curl
+    docker
     gcc
     gh
     git
     home-manager
+    lazydocker
     wget
     vim
     wget
