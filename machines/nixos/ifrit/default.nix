@@ -50,28 +50,6 @@
     vim
     wget
     zsh
-
-    duf
-    eza
-    fd
-    fnm
-    fzf
-    lazygit
-    ncdu
-    neofetch
-    neovim
-    nmap
-    pyenv
-    rsync
-    speedtest-cli
-    thefuck
-    tldr
-    tmux
-    trash-cli
-    vim
-    wget
-    zip
-    zoxide
   ];
 
   # Set zsh defaults
