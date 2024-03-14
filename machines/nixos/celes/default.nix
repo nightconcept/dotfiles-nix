@@ -19,6 +19,11 @@
     xkb.variant = "";
   };
 
+  # System available packages
+  environment.systemPackages = with pkgs; [
+    firefox
+  ];
+
   # Do not touch
   system.stateVersion = "23.11";
 }
