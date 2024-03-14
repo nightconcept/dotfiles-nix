@@ -66,6 +66,24 @@
             }
           ];
         };
+      ifrit = lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./users/danny
+
+            ./machines/nixos/ifrit
+
+            home-manager.nixosModules.home-manager {
+              home-manager = {
+                users.danny.home.stateVersion = "23.11";
+                useGlobalPkgs = false; # makes hm use nixos's pkgs value
+                users.danny.imports = [ 
+                  ./users/danny/home-server.nix                 
+                ];
+              };
+            }
+          ];
+        };
       };
 
       darwinConfigurations = {
