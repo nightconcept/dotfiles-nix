@@ -2,7 +2,6 @@
 {
   programs.home-manager.enable = true;
   nixpkgs.config.allowUnfree = true;
-  useGlobalPkgs = true;
 
   nix = {
     package = pkgs.nix;
