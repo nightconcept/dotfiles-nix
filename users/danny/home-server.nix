@@ -39,7 +39,7 @@
   ];
 
   imports = [
-      #../../dots/zsh
+      ../../dots/zsh
   ];
 
   home = {
