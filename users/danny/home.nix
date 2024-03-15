@@ -67,6 +67,4 @@
     homeDirectory = "/home/danny";
     stateVersion = "23.11";
   };
-
-
   }

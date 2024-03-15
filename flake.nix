@@ -59,7 +59,7 @@
                 users.danny.home.stateVersion = "23.11";
                 useGlobalPkgs = false; # makes hm use nixos's pkgs value
                 users.danny.imports = [ 
-                  ./users/danny/darwin-home.nix                 
+                  ./users/danny/home-darwin.nix                 
                 ];
               };
             }
