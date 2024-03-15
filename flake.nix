@@ -65,6 +65,12 @@
             }
           ];
         };
+      mkHome = pkgs: username: module:
+        home-manager.lib.homeManagerConfiguration {
+          modules = [ 
+            ./users/${username}/${module}.nix 
+          ];
+        };
     in {
       nixosConfigurations = {
         celes = mkNixos inputs.nixpkgs "celes";
@@ -78,12 +84,8 @@
       };
       
       homeConfigurations = {
-        danny = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [ 
-            ./users/danny/home.nix 
-          ];
-        };
+        danny = mkHome inputs.nixpkgs "danny" "home";
+        danny-server = mkHome inputs.nixpkgs "danny" "home-server";
       };
     };
 }
