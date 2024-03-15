@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# only configured for Ubuntu
+
+# resources:
+# https://install.determinate.systems/
+# https://nix-community.github.io/home-manager/
+
 # install zsh
 sudo apt-get install zsh -y
 
