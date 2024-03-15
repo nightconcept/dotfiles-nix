@@ -6,6 +6,9 @@
   nix = {
     package = pkgs.nix;
     settings.experimental-features = [ "nix-command" "flakes" ];
+    extraOptions = ''
+      warn-dirty = false
+    '';
   };
 
   home.packages = with pkgs; [
