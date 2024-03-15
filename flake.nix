@@ -67,6 +67,7 @@
         };
       mkHome = pkgs: username: module:
         home-manager.lib.homeManagerConfiguration {
+          inherit pkgs
           modules = [ 
             ./users/${username}/${module}.nix 
           ];
