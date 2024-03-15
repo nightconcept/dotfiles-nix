@@ -1,10 +1,7 @@
 { inputs, lib, pkgs,  ... }: 
 {
   programs.home-manager.enable = true;
-
   nixpkgs.config.allowUnfree = true;
-
-  fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
     duf
@@ -12,6 +9,8 @@
     fd
     fnm
     fzf
+    git
+    gh
     lazygit
     ncdu
     neofetch
