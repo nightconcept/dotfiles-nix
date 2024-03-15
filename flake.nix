@@ -56,7 +56,6 @@
             home-manager.darwinModules.home-manager {
               users.users.danny.home = "/Users/danny";
               home-manager = {
-                users.danny.home.stateVersion = "23.11";
                 useGlobalPkgs = false; # makes hm use nixos's pkgs value
                 users.danny.imports = [ 
                   ./users/danny/home-darwin.nix                 
@@ -86,6 +85,7 @@
       
       homeConfigurations = {
         danny = mkHome "x86_64-linux" "danny" "home";
+        danny-darwin = mkHome "aarch64-darwin" "danny" "home-darwin";
         danny-server = mkHome "x86_64-linux" "danny" "home-server";
       };
     };
