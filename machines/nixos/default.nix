@@ -10,9 +10,21 @@
     };
   };
 
-
-  # Nix settings
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  # Nix settings, auto cleanup and enable flakes
+  nix = {
+    settings.auto-optimise-store = true;
+    settings.allowed-users = [ "danny" ];
+    gc = {
+      automatic = true;
+      user = "danny";
+      options = "--delete-older-than 7d";
+    };
+    extraOptions = ''
+      warn-dirty = false
+      keep-outputs = true
+      keep-derivations = true
+      '';
+  };
   nixpkgs.config.allowUnfree = true;
 
   # Networking settings
