@@ -7,6 +7,8 @@ My dotfiles for Nix, NixOS, and Nix-Darwin.
 - Shell: zsh
 - Editor: nvim and vscode
 
+More uses [here](https://www.solivan.dev/blog/uses/).
+
 ## Structure
 flake - Main entry point
 
