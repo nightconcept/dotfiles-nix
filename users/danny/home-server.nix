@@ -12,6 +12,7 @@
   };
 
   home.packages = with pkgs; [
+    btop
     duf
     eza
     fastfetch
