@@ -67,7 +67,7 @@
         };
       mkHome = inputpkgs: username: module:
         home-manager.lib.homeManagerConfiguration {
-          pkgs = inputpkgs;
+          pkgs = inputs.nixpkgs;
           modules = [ 
             ./users/${username}/${module}.nix 
           ];
