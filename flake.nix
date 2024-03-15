@@ -65,9 +65,9 @@
             }
           ];
         };
-      mkHome = inputpkgs: username: module:
+      mkHome = system: username: module:
         home-manager.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs;
+          pkgs = import nixpkgs { system = "${system}"; };
           modules = [ 
             ./users/${username}/${module}.nix 
           ];
@@ -85,8 +85,8 @@
       };
       
       homeConfigurations = {
-        danny = mkHome inputs.nixpkgs "danny" "home";
-        danny-server = mkHome inputs.nixpkgs "danny" "home-server";
+        danny = mkHome "x86_64-linux" "danny" "home";
+        danny-server = mkHome "x86_64-linux" "danny" "home-server";
       };
     };
 }
