@@ -11,20 +11,20 @@
   home.packages = with pkgs; [
     duf
     eza
+    fastfetch
     fd
     fnm
     fzf
     git
     gh
+    lazydocker
     lazygit
     ncdu
-    neofetch
     neovim
     nmap
     pyenv
     rsync
     speedtest-cli
-    stow
     thefuck
     tldr
     tmux
