@@ -3,6 +3,8 @@
 { 
   imports = [
     inputs.impermanence.nixosModules.home-manager.impermanence
+    ../../dots/zsh
+    ../../dots/vscode
   ];
 
   programs.home-manager.enable = true;
@@ -61,14 +63,6 @@
     wezterm
     zoom
   ];
-
-  imports = [
-      ../../dots/zsh
-      ../../dots/vscode
-  ];
-
-  home.stateVersion = "23.11"; # Please read the comment before changing.
-
   home.persistence."/persist/home" = {
     directories = [
       "Downloads"
@@ -93,4 +87,7 @@
     ];
     allowOther = true;
   };
+
+  # Do not touch
+  home.stateVersion = "23.11";
 }
