@@ -72,6 +72,7 @@
   home.persistence."/persist/home" = {
     directories = [
       "Downloads"
+      "git"
       "Music"
       "Pictures"
       "Documents"
