@@ -16,7 +16,6 @@
     settings.allowed-users = [ "danny" ];
     gc = {
       automatic = true;
-      user = "danny";
       options = "--delete-older-than 7d";
     };
     extraOptions = ''
@@ -67,7 +66,6 @@
     gcc
     gh
     git
-    home-manager
     wget
     vim
     wget

@@ -22,6 +22,7 @@
   # System available packages
   environment.systemPackages = with pkgs; [
     firefox
+    home-manager
   ];
 
   # Do not touch
