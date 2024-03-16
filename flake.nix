@@ -63,15 +63,6 @@
             (import ./machines/nixos/disko.nix { device = "/dev/nvme0n1"; }) # TODO change me
             inputs.home-manager.nixosModules.default
             inputs.impermanence.nixosModules.impermanence
-            home-manager.nixosModules.home-manager {
-              home-manager = {
-                users.danny.home.stateVersion = "23.11";
-                useGlobalPkgs = true;
-                users.danny.imports = [ 
-                  ./users/danny/home-persist.nix                 
-                ];
-              };
-            }
           ];
         };
       mkDarwin = pkgs: hostname:
