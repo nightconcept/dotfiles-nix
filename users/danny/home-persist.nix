@@ -89,7 +89,7 @@
     allowOther = true;
   };
 
-    home.persistence."/persist/dotfiles-persist" = {
+    home.persistence."/persist/dotfiles" = {
       removePrefixDirectory = true;   # for GNU Stow styled dotfile folders
       allowOther = true;
       directories = [
@@ -102,7 +102,7 @@
     # because they're all just shoved into ~/.config and not into a single folder.
     # It's separate from the other dotfiles so I can write ".config"
     # instead of "Plasma/.config"
-    home.persistence."/persist/dotfiles-persist/Plasma" = {
+    home.persistence."/persist/dotfiles/Plasma" = {
       removePrefixDirectory = false;
       allowOther = true;
       directories = [
