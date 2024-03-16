@@ -13,6 +13,15 @@
       url = "github:LnL7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    impermanence = {
+      url = "github:nix-community/impermanence";
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, nix-darwin, ... }@inputs:
@@ -35,6 +44,31 @@
                 useGlobalPkgs = true;
                 users.danny.imports = [ 
                   ./users/danny/home.nix                 
+                ];
+              };
+            }
+          ];
+        };
+      mkNixosPersist  = pkgs: hostname:
+        pkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./modules
+            ./users/danny
+            ./users/danny/nixos.nix
+            ./machines/nixos
+            ./machines/nixos/persist.nix
+            ./machines/nixos/${hostname}
+            inputs.disko.nixosModules.default
+            (import ./machines/nixos/disko.nix { device = "/dev/nvme0n1"; }) # TODO change me
+            inputs.home-manager.nixosModules.default
+            inputs.impermanence.nixosModules.impermanence
+            home-manager.nixosModules.home-manager {
+              home-manager = {
+                users.danny.home.stateVersion = "23.11";
+                useGlobalPkgs = true;
+                users.danny.imports = [ 
+                  ./users/danny/home-persist.nix                 
                 ];
               };
             }
@@ -76,6 +110,7 @@
       nixosConfigurations = {
         celes = mkNixos inputs.nixpkgs "celes";
         cloud = mkNixos inputs.nixpkgs "cloud";
+        cloud = mkNixosPersist inputs.nixpkgs "cloud-next";
         ifrit = mkNixos inputs.nixpkgs "ifrit";
       };
 
