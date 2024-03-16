@@ -23,17 +23,7 @@
   environment.systemPackages = with pkgs; [
     acpi
     firefox
-    home-manager
     powertop
-    git
-    vim
-    gh
-    bat
-    zsh
-    gh
-    github-desktop
-    firefox
-    vscode
   ];
   
   # Do not touch
