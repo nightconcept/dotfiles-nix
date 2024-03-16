@@ -63,6 +63,7 @@
     wezterm
     zoom
   ];
+  
   home.persistence."/persist/home" = {
     directories = [
       "Downloads"

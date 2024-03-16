@@ -31,7 +31,9 @@
     hideMounts = true;
     directories = [
       "/etc/nixos"
+      "/etc/ssh"
       "/var/log"
+      "/var/lib/acme"
       "/var/lib/bluetooth"
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
@@ -40,6 +42,7 @@
     ];
     files = [
       "/etc/machine-id"
+      "/etc/nix/id_rsa"
       { file = "/var/keys/secret_file"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
     ];
   };
