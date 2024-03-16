@@ -42,4 +42,10 @@
       ../../dots/vscode
   ];
 
+  home = {
+    username = "danny";
+    homeDirectory = lib.mkForce "/Users/danny";
+    stateVersion = "23.11";
+  };
+
   }
