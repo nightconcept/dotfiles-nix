@@ -25,12 +25,6 @@
     firefox
     home-manager
     powertop
-  ];
-  
-  # Do not touch
-  system.stateVersion = "23.11";
-
-  environment.systemPackages = with pkgs; [
     git
     vim
     gh
@@ -41,4 +35,7 @@
     firefox
     vscode
   ];
+  
+  # Do not touch
+  system.stateVersion = "23.11";
 }
