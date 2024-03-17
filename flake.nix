@@ -71,7 +71,6 @@
           };
           
           modules = [
-            ./home
             ./hosts/darwin
             ./hosts/darwin/${hostname}
             home-manager.darwinModules.home-manager {
