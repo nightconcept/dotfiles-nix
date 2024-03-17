@@ -45,7 +45,7 @@
         "terminal.integrated.fontSize" = 14;
         "workbench.colorTheme" = "Atomize";
         "workbench.iconTheme" = "material-icon-theme";
-        "workbench.startupEditor": "none"
+        "workbench.startupEditor" = "none";
       };
     };
   };
