@@ -14,11 +14,13 @@
 
   #test later systemd.user.targets.hyprland-session.Unit.Wants = [ "xdg-desktop-autostart.target" ];
   wayland.windowManager.hyprland = {
+    enable = true;
     reloadConfig = true;
     recommendedEnvironment = true;
     systemdIntegration = true;
+    xwayland.enable = true;
 
-    config = {
+    settings = {
       input = {
         kb_layout = "us";
         touchpad = {
