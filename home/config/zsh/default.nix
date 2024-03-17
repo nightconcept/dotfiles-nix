@@ -3,49 +3,10 @@
 {
   programs = {
 
-    zoxide = {
-      enable = true;
-      enableZshIntegration = true;
-    };
-
     zsh = {
       enable = true;
-      dotDir = ".config/zsh";
-      oh-my-zsh = {
-        enable = false;
-        plugins = [
-          "brew"
-          "fzf"
-          "gh"
-          "git"
-        ];
-        extraConfig = ''
-          zstyle ':omz:update' mode auto # update automatically without asking
-          zstyle ':omz:update' frequency 13
-        '';
-      };
       
-      zplug = {
-        enable = true;
-        plugins = [
-          { name = "zsh-users/zsh-autosuggestions"; }
-          { name = "zsh-users/zsh-syntax-highlighting"; }
-          { name = "zsh-users/zsh-completions"; }
-          { name = "zsh-users/zsh-history-substring-search"; }
-        ];
-      };
-      plugins = [
-        {
-          name = "powerlevel10k";
-          src = pkgs.zsh-powerlevel10k;
-          file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-        }      
-      ];
-
-      shellAliases = {
-        home-rebuild = "home-manager switch --flake .#danny";
-      };
-      initExtraFirst = ''
+      shellInit = ''
         ########################
         # Headers (do not touch)
         ########################
@@ -56,12 +17,6 @@
         if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
           source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
         fi
-
-        gh auth setup-git
-      '';
-      
-      initExtra = ''
-
 
         ###################
         # Exports and evals
@@ -90,6 +45,44 @@
         if [ -d "/home/linuxbrew/" ]; then
             eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         fi
+
+        #########################
+        # oh-my-zsh configuration
+        #########################
+
+        # Path to your oh-my-zsh installation.
+
+        ZSH_THEME="powerlevel10k/powerlevel10k"
+
+        # Uncomment the following line to use case-sensitive completion.
+        # CASE_SENSITIVE="true"
+
+        # Uncomment the following line to use hyphen-insensitive completion.
+        # Case-sensitive completion must be off. _ and - will be interchangeable.
+        # HYPHEN_INSENSITIVE="true"
+
+        zstyle ':omz:update' mode auto      # update automatically without asking
+        # zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+
+        # Uncomment the following line to change how often to auto-update (in days).
+        zstyle ':omz:update' frequency 13
+
+        # Uncomment the following line if pasting URLs and other text is messed up.
+        # DISABLE_MAGIC_FUNCTIONS="true"
+
+        # Uncomment the following line to enable command auto-correction.
+        # ENABLE_CORRECTION="true"
+
+        # zsh plugins
+        plugins=(
+           git
+           zsh-autosuggestions
+           zsh-syntax-highlighting
+           zsh-history-substring-search
+           zsh-completions
+        )
+
+        source $ZSH/oh-my-zsh.sh
 
         #########
         # Aliases
@@ -149,13 +142,17 @@
           alias rebuild="darwin-rebuild switch"
           alias flake-rebuild="darwin-rebuild switch --flake"
         fi
-        
 
         ########################
         # Footers (do not touch)
         ########################
 
-        [[ ! -f ${./p10k-config/.p10k.zsh} ]] || source ${./p10k-config/.p10k.zsh}
+        # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+        [[ ! -f "$HOME/.config/powerlevel10k/.p10k.zsh" ]] || source "$HOME/.config/powerlevel10k/.p10k.zsh"
+
+        # Fig post block. Keep at the bottom of this file.
+        if [ -d "$HOME/.fig/" ]; then
+          fi
       '';                                       # Theming
     };
   };
