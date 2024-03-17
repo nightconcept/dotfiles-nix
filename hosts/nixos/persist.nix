@@ -51,7 +51,7 @@
   home-manager = {
     extraSpecialArgs = {inherit inputs;};
     users = {
-      "danny" = import ../../users/danny/home-persist.nix;
+      "danny" = import ../../home/home-persist.nix;
     };
   };
 
