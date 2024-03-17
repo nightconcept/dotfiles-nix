@@ -22,6 +22,8 @@
     impermanence = {
       url = "github:nix-community/impermanence";
     };
+
+    hyprland.url = "github:hyprwm/Hyprland";
   };
 
   outputs = { self, nixpkgs, home-manager, nix-darwin, ... }@inputs:
@@ -35,8 +37,8 @@
             ./modules
             ./users/danny
             ./users/danny/nixos.nix
-            ./machines/nixos
-            ./machines/nixos/${hostname}
+            ./hosts/nixos
+            ./hosts/nixos/${hostname}
 
             home-manager.nixosModules.home-manager {
               home-manager = {
@@ -59,11 +61,11 @@
             ./modules
             ./users/danny
             ./users/danny/nixos.nix
-            ./machines/nixos
-            ./machines/nixos/persist.nix
-            ./machines/nixos/${hostname}
+            ./hosts/nixos
+            ./hosts/nixos/persist.nix
+            ./hosts/nixos/${hostname}
             inputs.disko.nixosModules.default
-            (import ./machines/nixos/disko.nix { device = "/dev/nvme0n1"; }) # TODO change me
+            (import ./hosts/nixos/disko.nix { device = "/dev/nvme0n1"; }) # TODO change me
             inputs.home-manager.nixosModules.default
             inputs.impermanence.nixosModules.impermanence
           ];
@@ -78,8 +80,8 @@
           modules = [
             ./modules/darwin.nix
             ./users/danny
-            ./machines/darwin
-            ./machines/darwin/${hostname}
+            ./hosts/darwin
+            ./hosts/darwin/${hostname}
 
             home-manager.darwinModules.home-manager {
               users.users.danny.home = "/Users/danny";
