@@ -39,10 +39,13 @@
         "extensions.ignoreRecommendations" = true;
         "git.autofetch" = true;
         "git.defaultBranchName" = "main";
+        "gitlens.showWelcomeOnInstall" = false;
+        "gitlens.showWhatsNewAfterUpgrades" = false;
         "telemetry.telemetryLevel" = "off";
         "terminal.integrated.fontSize" = 14;
         "workbench.colorTheme" = "Atomize";
         "workbench.iconTheme" = "material-icon-theme";
+        "workbench.startupEditor": "none"
       };
     };
   };

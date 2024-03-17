@@ -79,5 +79,4 @@
     autosuggestions.enable = true;
     enableCompletion = true;
   };
-
 }

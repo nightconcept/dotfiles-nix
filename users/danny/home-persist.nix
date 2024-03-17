@@ -3,8 +3,8 @@
 { 
   imports = [
     inputs.impermanence.nixosModules.home-manager.impermanence
-    ../../dots/zsh
-    ../../dots/vscode
+    ../../config/zsh
+    ../../config/vscode
   ];
 
   programs.home-manager.enable = true;

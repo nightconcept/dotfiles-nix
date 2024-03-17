@@ -58,8 +58,8 @@
   ];
 
   imports = [
-      ../../dots/zsh
-      ../../dots/vscode
+      ../../config/zsh
+      ../../config/vscode
   ];
 
   home = {
