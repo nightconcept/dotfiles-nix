@@ -5,6 +5,7 @@
     inputs.impermanence.nixosModules.home-manager.impermanence
     ./config/zsh
     ./config/vscode
+    ./conifg/hypr
   ];
 
   programs.home-manager.enable = true;
