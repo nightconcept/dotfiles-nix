@@ -1,6 +1,10 @@
 { config, pkgs, inputs, ... }:
 
 {
+  imports = [
+    ./users.nix
+  ];
+  
   # Bootloader settings
   boot = {
     tmp.cleanOnBoot = true;

@@ -1,5 +1,9 @@
 { inputs, pkgs, lib, ... }:
 {
+  imports = [
+    ./users.nix
+  ];
+
   # Nix settings, auto cleanup and enable flakes
   nix = {
     settings.auto-optimise-store = true;
