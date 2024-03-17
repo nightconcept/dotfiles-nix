@@ -155,7 +155,7 @@
         # Footers (do not touch)
         ########################
 
-        [[ ! -f ${./p10k-config/.p10k.zsh} ]] || source ${./p10k-config/.p10k.zsh}
+        [[ ! -f ${./p10k-config/p10k.zsh} ]] || source ${./p10k-config/p10k.zsh}
       '';                                       # Theming
     };
   };
