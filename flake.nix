@@ -34,17 +34,14 @@
         pkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
-            ./home
-            ./home/nixos.nix
             ./hosts/nixos
             ./hosts/nixos/${hostname}
-
             home-manager.nixosModules.home-manager {
               home-manager = {
                 users.danny.home.stateVersion = "23.11";
                 useGlobalPkgs = true;
                 users.danny.imports = [ 
-                  ./home/home.nix                 
+                  ./home               
                 ];
               };
             }
@@ -57,8 +54,6 @@
             inherit inputs;
           };
           modules = [
-            ./home
-            ./home/nixos.nix
             ./hosts/nixos
             ./hosts/nixos/persist.nix
             ./hosts/nixos/${hostname}
