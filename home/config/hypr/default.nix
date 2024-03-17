@@ -3,7 +3,7 @@
 {
   imports = [ 
     #./keybindings.nix
-    ./windowrules.nix
+    #./windowrules.nix
   ];
 
   home.packages = with pkgs; [ 
