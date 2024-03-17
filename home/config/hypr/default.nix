@@ -11,10 +11,6 @@
     swww
   ];
   
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-  };
 
   #test later systemd.user.targets.hyprland-session.Unit.Wants = [ "xdg-desktop-autostart.target" ];
   wayland.windowManager.hyprland = {
@@ -22,6 +18,7 @@
     reloadConfig = true;
     recommendedEnvironment = true;
     systemdIntegration = true;
+    xwayland.enable = true;
 
     config = {
       input = {
