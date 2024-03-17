@@ -40,7 +40,7 @@
   ];
 
   imports = [
-      ../../config/zsh
+      ./config/zsh
   ];
 
   home = {
