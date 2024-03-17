@@ -34,8 +34,9 @@
         pkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
-            ./home
-            ./home/nixos.nix
+            ./modules
+            ./users/danny
+            ./users/danny/nixos.nix
             ./hosts/nixos
             ./hosts/nixos/${hostname}
 
@@ -44,7 +45,7 @@
                 users.danny.home.stateVersion = "23.11";
                 useGlobalPkgs = true;
                 users.danny.imports = [ 
-                  ./home/home.nix                 
+                  ./users/danny/home.nix                 
                 ];
               };
             }
@@ -57,8 +58,9 @@
             inherit inputs;
           };
           modules = [
-            ./home
-            ./home/nixos.nix
+            ./modules
+            ./users/danny
+            ./users/danny/nixos.nix
             ./hosts/nixos
             ./hosts/nixos/persist.nix
             ./hosts/nixos/${hostname}
@@ -76,7 +78,8 @@
           };
           
           modules = [
-            ./home/home.nix
+            ./modules/darwin.nix
+            ./users/danny
             ./hosts/darwin
             ./hosts/darwin/${hostname}
 
@@ -85,7 +88,7 @@
               home-manager = {
                 useGlobalPkgs = false; # makes hm use nixos's pkgs value
                 users.danny.imports = [ 
-                  ./home/home-darwin.nix                 
+                  ./users/danny/home-darwin.nix                 
                 ];
               };
             }
@@ -95,7 +98,7 @@
         home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs { system = "${system}"; };
           modules = [ 
-            ./${module}.nix 
+            ./users/${username}/${module}.nix 
           ];
         };
     in {
