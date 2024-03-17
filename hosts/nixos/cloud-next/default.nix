@@ -20,16 +20,7 @@
     xkb.variant = "";
   };
 
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-  };
-
-  # Hint electron apps to use wayland
-  environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1";
-  };
-
+  # for hyprland
   services.dbus.enable = true;
   xdg.portal = {
     enable = true;
@@ -37,6 +28,10 @@
     extraPortals = [
       pkgs.xdg-desktop-portal-gtk
     ];
+  };
+  # Hint electron apps to use wayland
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
   };
 
   environment.systemPackages = with pkgs; [
