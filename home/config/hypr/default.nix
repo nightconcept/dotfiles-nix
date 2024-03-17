@@ -51,6 +51,6 @@
       exec_once = [
         #"${pkgs.waybar}/bin/waybar"
       ];
-    }
-  }
+    };
+  };
 }
