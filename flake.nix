@@ -54,7 +54,6 @@
             inherit inputs;
           };
           modules = [
-            ./hosts
             ./hosts/nixos
             ./hosts/nixos/persist.nix
             ./hosts/nixos/${hostname}
@@ -72,7 +71,6 @@
           };
           
           modules = [
-            ./hosts
             ./hosts/darwin
             ./hosts/darwin/${hostname}
             home-manager.darwinModules.home-manager {

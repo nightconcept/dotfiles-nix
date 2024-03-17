@@ -16,9 +16,21 @@
 
   # Nix settings, auto cleanup and enable flakes
   nix = {
+    settings.auto-optimise-store = true;
     settings.allowed-users = [ "danny" ];
+    settings.experimental-features = [ "nix-command" "flakes" ];
+    gc = {
+      automatic = true;
+      options = "--delete-older-than 7d";
+    };
+    extraOptions = ''
+      warn-dirty = false
+      keep-outputs = true
+      keep-derivations = true
+      '';
   };
-
+  nixpkgs.config.allowUnfree = true;
+  
   # Networking settings
   networking.networkmanager.enable = true;
 
