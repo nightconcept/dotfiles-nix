@@ -10,13 +10,8 @@ My dotfiles for Nix, NixOS, and Nix-Darwin.
 More uses [here](https://www.solivan.dev/blog/uses/).
 
 ## Structure
-flake - Main entry point
-
-- machines/$OS/$MACHINENAME
-    - OS specific configuration
-        - Machine specific hardware configuration
-- users/$USERNAME
-    - User specific configuration, then calls /dots. Only one user at this time, but more could be added.
+- `/home` - User settings, configurations, and apps.
+- `/hosts` - Host and OS specific software and hardware configuration
 
 ### Prerequisites?
 - Zsh needs powerlevel10k installed via `nix-env` like so:
