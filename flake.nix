@@ -74,7 +74,6 @@
             ./home
             ./hosts/darwin
             ./hosts/darwin/${hostname}
-
             home-manager.darwinModules.home-manager {
               users.users.danny.home = "/Users/danny";
               home-manager = {
