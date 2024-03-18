@@ -1,11 +1,15 @@
-{ config, pkgs, lib, inputs, ... }:
-
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-    ];
-  
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: {
+  imports = [
+    ./hardware-configuration.nix
+    inputs.disko.nixosModules.default
+    (import ./hosts/nixos/disko.nix {device = "/dev/nvme0n1";})
+  ];
 
   # Kernel specified at 6.6 for the latest LTS
   boot.kernelPackages = pkgs.linuxPackages_6_6;
@@ -15,7 +19,7 @@
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
-    services.xserver = {
+  services.xserver = {
     xkb.layout = "us";
     xkb.variant = "";
   };
@@ -50,11 +54,10 @@
     xdg-desktop-portal-hyprland
     xwayland
     waybar
-    wofi
     networkmanagerapplet
     dunst
   ];
-  
+
   # Do not touch
   system.stateVersion = "23.11";
 }

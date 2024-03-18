@@ -41,9 +41,9 @@
   ];
 
   imports = [
-    ./config/zsh
-    ./config/vscode
-    ./config/git
+    ./programs/git
+    ./programs/vscode
+    ./programs/zsh
   ];
 
   home = {

@@ -3,11 +3,6 @@
   pkgs,
   ...
 }: {
-  imports = [
-    #./keybindings.nix
-    #./windowrules.nix
-  ];
-
   home.packages = with pkgs; [
     waybar
     swww
