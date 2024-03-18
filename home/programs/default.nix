@@ -14,17 +14,15 @@
   home.packages = with pkgs; [
     duf
     eza
+    fastfetch
     fd
     fnm
     fzf
     ncdu
-    neofetch
     neovim
     nmap
     pyenv
     rsync
-    speedtest-cli
-    stow
     thefuck
     tldr
     tmux
