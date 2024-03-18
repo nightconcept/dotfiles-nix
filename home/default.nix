@@ -55,6 +55,7 @@
     stretchly
     ungoogled-chromium
     vscode
+    waybar
     wezterm
     zoom
   ];
