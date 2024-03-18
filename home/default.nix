@@ -63,7 +63,7 @@
   imports = [
       ./config/zsh
       ./config/vscode
-      ./config/hyprland
+      ./config/hypr
       ./config/dunst
       ./config/rofi
       ./config/waybar
