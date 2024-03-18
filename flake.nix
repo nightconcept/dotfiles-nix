@@ -68,8 +68,6 @@
           ./hosts/nixos
           ./hosts/nixos/persist.nix
           ./hosts/nixos/${hostname}
-          inputs.disko.nixosModules.default
-          (import ./hosts/nixos/disko.nix {device = "/dev/nvme0n1";}) # TODO change me
           inputs.home-manager.nixosModules.default
           inputs.impermanence.nixosModules.impermanence
         ];
