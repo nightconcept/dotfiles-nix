@@ -72,6 +72,7 @@
     ./config/rofi
     ./config/waybar
     ./config/wlogout
+    ./config/anyrun
   ];
 
   home = {
