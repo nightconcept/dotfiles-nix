@@ -7,7 +7,7 @@
   imports = [
     ./git.nix
     ./vscode
-    #./wezterm
+    ./wezterm
     ./zsh
   ];
 
@@ -53,7 +53,7 @@
     protonup-qt
     spotify
     ungoogled-chromium
-    wezterm
+    kitty
     zoom
   ];
 }
