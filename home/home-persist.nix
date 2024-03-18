@@ -1,11 +1,12 @@
-{ config, pkgs, inputs, ... }:
-
-{ 
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}: {
   imports = [
     inputs.impermanence.nixosModules.home-manager.impermanence
-    ./config/zsh
-    ./config/vscode
-    ./config/hypr
+    ./programs
   ];
 
   programs.home-manager.enable = true;
@@ -89,14 +90,14 @@
     allowOther = true;
   };
 
-    home.persistence."/persist/dotfiles" = {
-      removePrefixDirectory = true;   # for GNU Stow styled dotfile folders
-      allowOther = true;
-      directories = [
-        # fuse mounted from /nix/dotfiles/Firefox/.mozilla to /home/$USERNAME/.mozilla
-        "Firefox/.mozilla"
-      ];
-    };
+  home.persistence."/persist/dotfiles" = {
+    removePrefixDirectory = true; # for GNU Stow styled dotfile folders
+    allowOther = true;
+    directories = [
+      # fuse mounted from /nix/dotfiles/Firefox/.mozilla to /home/$USERNAME/.mozilla
+      "Firefox/.mozilla"
+    ];
+  };
 
   # Do not touch
   home.stateVersion = "23.11";
