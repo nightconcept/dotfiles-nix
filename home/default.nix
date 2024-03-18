@@ -64,19 +64,17 @@
   ];
 
   imports = [
-    ./config/zsh
-    ./config/vscode
-    ./config/hypr
-    ./config/dunst
-    ./config/rofi
-    ./config/waybar
-    ./config/wlogout
-    ./git.nix
+    ./programs
+    ./desktops/hyprland
   ];
 
   home = {
     username = "danny";
     homeDirectory = "/home/danny";
     stateVersion = "23.11";
+  };
+
+  news = {
+    display = "silent";
   };
 }
