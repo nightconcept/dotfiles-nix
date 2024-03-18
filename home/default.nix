@@ -67,6 +67,7 @@
       ./config/dunst
       ./config/rofi
       ./config/waybar
+      ./config/wlogout
   ];
 
   home = {

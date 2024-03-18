@@ -35,7 +35,7 @@
         drop_shadow = true;
         shadow_range = 4;
         shadow_render_power = 3;
-        col.shadow = rgba(1a1a1aee);
+        col.shadow = "gba(1a1a1aee)";
       };
 
       "$mod" = "SUPER";
@@ -57,12 +57,11 @@
         "$mod, mouse:272, movewindow"
         "$mod, mouse:273, resizewindow"
       ];
-
     };
 
     extraConfig = ''
       source = /home/danny/.config/hypr/colors
-    ''
+    '';
   };
 
   home.file.".config/hypr/colors".text = ''
@@ -85,6 +84,5 @@
     $color13 = rgba(7BC7DDee)
     $color14 = rgba(9CB4E3ee)
     $color15 = rgba(c3dde7ee)
-        '';
-    }
+  '';
 }
