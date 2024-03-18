@@ -1,5 +1,9 @@
-{ inputs, lib, pkgs,  ... }: 
 {
+  inputs,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.home-manager.enable = true;
 
   nixpkgs.config.allowUnfree = true;
@@ -61,13 +65,13 @@
   ];
 
   imports = [
-      ./config/zsh
-      ./config/vscode
-      ./config/hypr
-      ./config/dunst
-      ./config/rofi
-      ./config/waybar
-      ./config/wlogout
+    ./config/zsh
+    ./config/vscode
+    ./config/hypr
+    ./config/dunst
+    ./config/rofi
+    ./config/waybar
+    ./config/wlogout
   ];
 
   home = {
@@ -75,4 +79,4 @@
     homeDirectory = "/home/danny";
     stateVersion = "23.11";
   };
-  }
+}
