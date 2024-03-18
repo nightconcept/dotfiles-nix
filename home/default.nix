@@ -17,7 +17,6 @@
     fd
     fnm
     fzf
-    lazygit
     ncdu
     neofetch
     neovim
@@ -72,6 +71,7 @@
     ./config/rofi
     ./config/waybar
     ./config/wlogout
+    ./config/git.nix
   ];
 
   home = {

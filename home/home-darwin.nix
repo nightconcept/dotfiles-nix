@@ -1,5 +1,9 @@
-{ inputs, lib, pkgs,  ... }: 
 {
+  inputs,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.home-manager.enable = true;
 
   nixpkgs.config.allowUnfree = true;
@@ -12,7 +16,6 @@
     fd
     fnm
     fzf
-    lazygit
     ncdu
     neofetch
     neovim
@@ -38,8 +41,9 @@
   ];
 
   imports = [
-      ./config/zsh
-      ./config/vscode
+    ./config/zsh
+    ./config/vscode
+    ./config/git
   ];
 
   home = {
@@ -47,5 +51,4 @@
     homeDirectory = lib.mkForce "/Users/danny";
     stateVersion = "23.11";
   };
-
-  }
+}
