@@ -12,7 +12,7 @@
         excludesfile = "~/.gitnignore";
         editor = "nvim";
         pager = "delta";
-        ignorecase = "false[pull]";
+        ignorecase = false;
         rebase = false;
       };
 

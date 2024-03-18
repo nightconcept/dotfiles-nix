@@ -71,7 +71,7 @@
     ./config/rofi
     ./config/waybar
     ./config/wlogout
-    ./config/git.nix
+    ./git.nix
   ];
 
   home = {
