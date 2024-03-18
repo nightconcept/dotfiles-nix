@@ -82,6 +82,7 @@
         "$mod, Q, killactive"
         "$mod, V, togglefloating"
         "$mod, backspace, exec, wlogout --column-spacing 50 --row-spacing 50"
+        "$mod, a, exec, rofi -show drun -mode drun"
 
         # Switch workspaces with mod + [0-9]
       ];

@@ -1,10 +1,13 @@
-{ config, pkgs, inputs, ... }:
-
 {
+  config,
+  pkgs,
+  inputs,
+  ...
+}: {
   imports = [
     ./users.nix
   ];
-  
+
   # Bootloader settings
   boot = {
     tmp.cleanOnBoot = true;
@@ -17,8 +20,8 @@
   # Nix settings, auto cleanup and enable flakes
   nix = {
     settings.auto-optimise-store = true;
-    settings.allowed-users = [ "danny" ];
-    settings.experimental-features = [ "nix-command" "flakes" ];
+    settings.allowed-users = ["danny"];
+    settings.experimental-features = ["nix-command" "flakes"];
     gc = {
       automatic = true;
       options = "--delete-older-than 7d";
@@ -27,10 +30,10 @@
       warn-dirty = false
       keep-outputs = true
       keep-derivations = true
-      '';
+    '';
   };
   nixpkgs.config.allowUnfree = true;
-  
+
   # Networking settings
   networking.networkmanager.enable = true;
 
@@ -63,6 +66,17 @@
     pulse.enable = true;
   };
 
+  hardware = {
+    opengl = {
+      enable = true;
+      driSupport = true;
+      driSupport32Bit = true;
+      extraPackages = with pkgs; [
+        mesa
+      ];
+    };
+  };
+
   # System available packages
   environment.systemPackages = with pkgs; [
     bat
@@ -80,8 +94,10 @@
   fonts = {
     fontconfig.enable = true;
     packages = with pkgs; [
-      (nerdfonts.override
-        { fonts = [ 
+      (
+        nerdfonts.override
+        {
+          fonts = [
             "DroidSansMono"
             "FiraCode"
             "FiraMono"
@@ -90,7 +106,7 @@
             "Noto"
             "SourceCodePro"
             "Ubuntu"
-          ]; 
+          ];
         }
       )
     ];
