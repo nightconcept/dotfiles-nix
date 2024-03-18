@@ -1,10 +1,13 @@
 
 -- References: [dotfiles/.config/wezterm at main · aperum/dotfiles](https://github.com/aperum/dotfiles/tree/main/.config/wezterm)
-local wezterm = require('wezterm')
 local act = wezterm.action
 
 local config = {}
+if wezterm.config_builder then
+  config = wezterm.config_builder()
+end
 
+-- font.lua
 local function font_with_fallback(name, params)
 	local names = { name, "Hack Nerd Font Mono" }
 	return wezterm.font_with_fallback(names, params)
@@ -35,19 +38,16 @@ font = font_with_fallback(term_font, { bold = true }),
 },
 }
 
-config.color_scheme = "Solarized Osaka"
+-- colors.lua
+config.color_scheme = "Tokyo Night"
 config.window_background_opacity = 0.97
 
-
-if wezterm.config_builder then
-  config = wezterm.config_builder()
-end
-
+-- keybinds.lua
 config.keys = {
   { key = 't', mods = 'CTRL', action = act.SpawnTab('CurrentPaneDomain') },
   { key = 'w', mods = 'CTRL', action = act.CloseCurrentTab{ confirm = false } },
 }
-
+-- mousebinds.lua
 config.mouse_bindings = {
   -- Change the default click behavior so that it only selects
   -- text and doesn't open hyperlinks
