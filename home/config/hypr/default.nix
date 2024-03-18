@@ -1,22 +1,28 @@
-{ config, pkgs, ... }:
-
 {
-  imports = [ 
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [
     #./keybindings.nix
     #./windowrules.nix
   ];
 
-  home.packages = with pkgs; [ 
+  home.packages = with pkgs; [
     waybar
     swww
   ];
-   
+
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = true;
     xwayland.enable = true;
 
     settings = {
+      exec-once = [
+        "waybar"
+      ];
+
       input = {
         kb_layout = "us";
         touchpad = {
@@ -26,8 +32,45 @@
         sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
       };
 
+      general = {
+        gaps_in = 5;
+        gaps_out = 5;
+        border_size = 1;
+        "col.active_border" = "rgba(88888888)";
+        "col.inactive_border" = "rgba(00000088)";
+
+        allow_tearing = true;
+        resize_on_border = true;
+      };
+
       decoration = {
-        rounding = 5;
+        rounding = 16;
+        blur = {
+          enabled = true;
+          brightness = 1.0;
+          contrast = 1.0;
+          noise = 0.02;
+
+          passes = 3;
+          size = 10;
+        };
+
+        drop_shadow = true;
+        shadow_ignore_window = true;
+        shadow_offset = "0 2";
+        shadow_range = 20;
+        shadow_render_power = 3;
+        "col.shadow" = "rgba(00000055)";
+      };
+
+      animations = {
+        enabled = true;
+        animation = [
+          "border, 1, 2, default"
+          "fade, 1, 4, default"
+          "windows, 1, 3, default, popin 80%"
+          "workspaces, 1, 2, default, slide"
+        ];
       };
 
       "$mod" = "SUPER";
@@ -41,14 +84,25 @@
         "$mod, backspace, exec, wlogout --column-spacing 50 --row-spacing 50"
 
         # Switch workspaces with mod + [0-9]
-
-
       ];
 
       bindm = [
         "$mod, mouse:272, movewindow"
         "$mod, mouse:273, resizewindow"
       ];
+
+      misc = {
+        force_default_wallpaper = 0;
+
+        # disable dragging animation
+        animate_mouse_windowdragging = false;
+
+        # enable variable refresh rate (effective depending on hardware)
+        vrr = 1;
+
+        # we do, in fact, want direct scanout
+        no_direct_scanout = false;
+      };
     };
 
     extraConfig = ''

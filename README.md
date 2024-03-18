@@ -24,3 +24,4 @@ nix-env -i powerlevel10k
 ## Doftfile credits/inspiration
 - [hmajid2301/dotfiles](https://github.com/hmajid2301/dotfiles) - For hyprland config
 - [HeinzDev/Hyprland-dotfiles](https://github.com/HeinzDev/Hyprland-dotfiles) - For hyprland config
+- [fufexan/dotfiles](https://github.com/fufexan/dotfiles) - For hyprland config
