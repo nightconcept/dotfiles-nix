@@ -8,6 +8,7 @@
 
   home.packages = with pkgs; [
     duf
+    dunst
     eza
     fd
     fnm
@@ -18,6 +19,7 @@
     neovim
     nmap
     pyenv
+    rofi
     rsync
     speedtest-cli
     stow
@@ -60,6 +62,10 @@
   imports = [
       ./config/zsh
       ./config/vscode
+      ./config/hyprland
+      ./config/dunst
+      ./config/rofi
+      ./config/waybar
   ];
 
   home = {
