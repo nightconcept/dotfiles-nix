@@ -28,14 +28,6 @@
 
       decoration = {
         rounding = 5;
-        blur = true;
-        blur_size = 3;
-        blur_passes = 1;
-        
-        drop_shadow = true;
-        shadow_range = 4;
-        shadow_render_power = 3;
-        col.shadow = "gba(1a1a1aee)";
       };
 
       "$mod" = "SUPER";
@@ -44,9 +36,9 @@
         "$mod, F, exec, firefox"
         "$mod, E, exec, code"
         "$mod, R, exec, rofiWindow"
-        "$mod, E, exit"
         "$mod, Q, killactive"
         "$mod, V, togglefloating"
+        "$mod, backspace, exec, wlogout --column-spacing 50 --row-spacing 50"
 
         # Switch workspaces with mod + [0-9]
 
