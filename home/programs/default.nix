@@ -13,7 +13,6 @@
 
   home.packages = with pkgs; [
     duf
-    dunst
     eza
     fd
     fnm
@@ -23,7 +22,6 @@
     neovim
     nmap
     pyenv
-    rofi
     rsync
     speedtest-cli
     stow
@@ -36,9 +34,7 @@
     zoxide
 
     audacious
-    bandwhich
     corectrl
-    calibre
     discord
     foliate
     hugo
@@ -56,10 +52,7 @@
     pavucontrol
     protonup-qt
     spotify
-    stretchly
     ungoogled-chromium
-    vscode
-    waybar
     wezterm
     zoom
   ];
