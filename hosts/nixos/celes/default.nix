@@ -1,9 +1,13 @@
-{ config, pkgs, inputs, ... }:
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-    ];
+  config,
+  pkgs,
+  inputs,
+  lib,
+  ...
+}: {
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
   networking.hostName = "celes";
 
@@ -38,10 +42,18 @@
     NIXOS_OZONE_WL = "1";
   };
 
+  services.gvfs = {
+    enable = true;
+    package = lib.mkForce pkgs.gnome.gvfs;
+  };
+  services.tumbler.enable = true;
+  programs.xfconf.enable = true;
+
   # System available packages
   environment.systemPackages = with pkgs; [
     firefox
     home-manager
+    lxqt.lxqt-policykit
   ];
 
   # Do not touch
