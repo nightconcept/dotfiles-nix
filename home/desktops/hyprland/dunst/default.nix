@@ -1,7 +1,10 @@
-{ config, lib, pkgs, ... }:
-
 {
-services.dunst = {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
+  services.dunst = {
     enable = true;
     iconTheme = {
       name = "Papirus-Dark";
@@ -35,7 +38,7 @@ services.dunst = {
         always_run_script = true;
         corner_radius = 10;
         follow = "mouse";
-        font = "Source Sans Pro 10";
+        font = "FiraMono Nerd Font 12";
         format = "<b>%s</b>\\n%b"; #format = "<span foreground='#f3f4f5'><b>%s %p</b></span>\n%b"
         frame_color = "#232323";
         frame_width = 1;
@@ -54,7 +57,7 @@ services.dunst = {
         show_indicators = "yes";
         shrink = "no";
         word_wrap = "yes";
-        browser = "/usr/bin/env librewolf -new-tab";
+        browser = "/usr/bin/env firefox -new-tab";
       };
 
       fullscreen_delay_everything = {fullscreen = "delay";};
@@ -74,4 +77,3 @@ services.dunst = {
     };
   };
 }
-

@@ -27,6 +27,7 @@
       xfce.thunar-media-tags-plugin
       xfce.thunar-volman
       xfce.tumbler
+      xfce.xfconf
     ];
   };
 }
