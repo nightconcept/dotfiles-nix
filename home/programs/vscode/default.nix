@@ -28,6 +28,12 @@
             version = "4.34.0";
             sha256 = "sha256-xxOEUvMjqJbl8lONB/So2NoIAVPOxysTq2YQY3iHGqo=";
           }
+          {
+            name = "tokyo-night-henrikvilhelmberglund";
+            publisher = "henrikvilhelmberglund";
+            version = "1.1.0";
+            sha256 = "sha256-WEdmyIwmJ2uigNhksgzr6IH4PIWwthJvX5N1OG3JUZ4=";
+          }
         ];
       userSettings = {
         "editor.accessibilitySupport" = "off";
@@ -50,7 +56,7 @@
         "gitlens.showWhatsNewAfterUpgrades" = false;
         "telemetry.telemetryLevel" = "off";
         "terminal.integrated.fontSize" = 14;
-        "workbench.colorTheme" = "Atomize";
+        "workbench.colorTheme" = "Tokyo Night";
         "workbench.iconTheme" = "material-icon-theme";
         "workbench.startupEditor" = "none";
       };

@@ -16,6 +16,7 @@
 
       settings = {
         exec-once = [
+          "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
           "waybar"
         ];
 
@@ -81,6 +82,16 @@
           "$mod, a, exec, rofi -show drun -mode drun"
 
           # Switch workspaces with mod + [0-9]
+          "$mod, 1, workspace,01"
+          "$mod, 2, workspace,02"
+          "$mod, 3, workspace,03"
+          "$mod, 4, workspace,04"
+          "$mod, 5, workspace,05"
+          "$mod, 6, workspace,06"
+          "$mod, 7, workspace,07"
+          "$mod, 8, workspace,08"
+          "$mod, 9, workspace,09"
+          "$mod, 0, workspace,10"
         ];
 
         bindm = [
