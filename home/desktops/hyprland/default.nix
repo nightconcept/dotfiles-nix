@@ -20,8 +20,10 @@
 
     home.packages = with pkgs; [
       wl-clipboard
-
       xfce.thunar
+      xfce.thunar-archive-plugin
+      xfce.thunar-media-tags-plugin
+      xfce.thunar-volman
     ];
   };
 }

@@ -81,6 +81,7 @@
   environment.systemPackages = with pkgs; [
     bat
     btop
+    cifs-utils
     curl
     gcc
     gh
@@ -118,5 +119,32 @@
     syntaxHighlighting.enable = true;
     autosuggestions.enable = true;
     enableCompletion = true;
+  };
+
+  fileSystems."/mnt/gawain" = {
+    device = "//terra/gawain";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,user,users";
+    in ["${automount_opts},credentials=/etc/nixos/terra-secrets,uid=1000,gid=100"];
+  };
+
+  fileSystems."/mnt/lancelot" = {
+    device = "//terra/lancelot";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,user,users";
+    in ["${automount_opts},credentials=/etc/nixos/terra-secrets,uid=1000,gid=100"];
+  };
+
+  fileSystems."/mnt/titan" = {
+    device = "//mog/titan";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,user,users";
+    in ["${automount_opts},credentials=/etc/nixos/mog-secrets,uid=1000,gid=100"];
   };
 }
