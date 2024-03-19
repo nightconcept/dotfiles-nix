@@ -19,11 +19,14 @@
     };
 
     home.packages = with pkgs; [
+      gvfs
       wl-clipboard
+      # Thunar is very needy and needs all of these and gvfs to get it's full functional powers
       xfce.thunar
       xfce.thunar-archive-plugin
       xfce.thunar-media-tags-plugin
       xfce.thunar-volman
+      xfce.tumbler
     ];
   };
 }

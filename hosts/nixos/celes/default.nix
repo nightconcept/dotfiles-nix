@@ -17,7 +17,7 @@
   # Display settings
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  #services.xserver.desktopManager.plasma5.enable = true;
   services.xserver = {
     xkb.layout = "us";
     xkb.variant = "";
@@ -42,18 +42,10 @@
     NIXOS_OZONE_WL = "1";
   };
 
-  services.gvfs = {
-    enable = true;
-    package = lib.mkForce pkgs.gnome.gvfs;
-  };
-  services.tumbler.enable = true;
-  programs.xfconf.enable = true;
-
   # System available packages
   environment.systemPackages = with pkgs; [
     firefox
     home-manager
-    lxqt.lxqt-policykit
   ];
 
   # Do not touch

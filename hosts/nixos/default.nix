@@ -121,6 +121,9 @@
     enableCompletion = true;
   };
 
+  # Network mounts
+  # TODO: Relies on <SERVER>-secrets in /etc/nixos for now, change it later
+  # Source: https://nixos.wiki/wiki/Samba#CIFS_mount_configuration
   fileSystems."/mnt/gawain" = {
     device = "//terra/gawain";
     fsType = "cifs";
