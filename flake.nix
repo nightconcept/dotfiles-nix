@@ -104,8 +104,7 @@
   in {
     nixosConfigurations = {
       celes = mkNixos inputs.nixpkgs "celes";
-      cloud = mkNixos inputs.nixpkgs "cloud";
-      cloud-next = mkNixosPersist inputs.nixpkgs "cloud-next";
+      cloud = mkNixosPersist inputs.nixpkgs "cloud";
       ifrit = mkNixos inputs.nixpkgs "ifrit";
     };
 
