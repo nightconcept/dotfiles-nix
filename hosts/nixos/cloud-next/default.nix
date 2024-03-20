@@ -8,7 +8,7 @@
   imports = [
     ./hardware-configuration.nix
     inputs.disko.nixosModules.default
-    (import ./hosts/nixos/disko.nix {device = "/dev/nvme0n1";})
+    (import ../disko.nix {device = "/dev/nvme0n1";})
   ];
 
   # Kernel specified at 6.6 for the latest LTS
