@@ -12,7 +12,7 @@
   ];
 
   # Kernel specified at 6.6 for the latest LTS
-  boot.kernelPackages = pkgs.linuxPackages_6_6;
+  boot.kernelPackages = pkgs.linuxPackages_6_7;
 
   networking.hostName = "cloud";
 
