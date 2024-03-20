@@ -7,6 +7,7 @@
   imports = [
     inputs.impermanence.nixosModules.home-manager.impermanence
     ./programs
+    ./desktops/hyprland
   ];
 
   programs.home-manager.enable = true;
