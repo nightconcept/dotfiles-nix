@@ -1,11 +1,15 @@
-{ inputs, lib, pkgs,  ... }: 
 {
+  inputs,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.home-manager.enable = true;
   nixpkgs.config.allowUnfree = true;
 
   nix = {
     package = pkgs.nix;
-    settings.experimental-features = [ "nix-command" "flakes" ];
+    settings.experimental-features = ["nix-command" "flakes"];
     extraOptions = ''
       warn-dirty = false
     '';
@@ -40,7 +44,7 @@
   ];
 
   imports = [
-      ./programs/zsh
+    ./programs/zsh
   ];
 
   home = {
@@ -48,6 +52,4 @@
     homeDirectory = lib.mkForce "/home/danny";
     stateVersion = "23.11";
   };
-
-
-  }
+}
