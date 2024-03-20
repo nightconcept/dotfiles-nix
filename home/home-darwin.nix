@@ -41,8 +41,9 @@
   ];
 
   imports = [
-    ./programs/git
+    ./programs/git.nix
     ./programs/vscode
+    ./programs/wezterm
     ./programs/zsh
   ];
 
