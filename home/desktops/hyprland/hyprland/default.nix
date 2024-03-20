@@ -3,6 +3,10 @@
   pkgs,
   ...
 }: {
+  imports = [
+    ./hyprland-environment.nix
+  ];
+
   config = {
     home.packages = with pkgs; [
       waybar
@@ -107,6 +111,9 @@
 
           # enable variable refresh rate (effective depending on hardware)
           vrr = 1;
+
+          # lower the amount of sent frames when nothing is happening on-screen
+          vfr = true;
 
           # we do, in fact, want direct scanout
           no_direct_scanout = false;
