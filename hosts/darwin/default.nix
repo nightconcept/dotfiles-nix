@@ -1,5 +1,9 @@
-{ inputs, pkgs, lib, ... }:
 {
+  inputs,
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ./users.nix
   ];
@@ -7,18 +11,20 @@
   # Nix settings, auto cleanup and enable flakes
   nix = {
     settings.auto-optimise-store = true;
-    settings.allowed-users = [ "danny" ];
+    settings.allowed-users = ["danny"];
     gc = {
       automatic = true;
       user = "danny";
       options = "--delete-older-than 7d";
     };
-    extraOptions = ''
-      experimental-features = nix-command flakes
-      keep-outputs = true
-      keep-derivations = true
-      '' + lib.optionalString (pkgs.system == "aarch64-darwin") ''
-      extra-platforms = x86_64-darwin aarch64-darwin
+    extraOptions =
+      ''
+        experimental-features = nix-command flakes
+        keep-outputs = true
+        keep-derivations = true
+      ''
+      + lib.optionalString (pkgs.system == "aarch64-darwin") ''
+        extra-platforms = x86_64-darwin aarch64-darwin
       '';
   };
 
@@ -53,7 +59,6 @@
       "typora"
       "visual-studio-code"
       "vlc"
-      "wezterm"
       "zoom"
     ];
   };
@@ -82,8 +87,10 @@
 
   fonts = {
     fonts = with pkgs; [
-      (nerdfonts.override
-        { fonts = [ 
+      (
+        nerdfonts.override
+        {
+          fonts = [
             "DroidSansMono"
             "FiraCode"
             "FiraMono"
@@ -92,7 +99,7 @@
             "Noto"
             "SourceCodePro"
             "Ubuntu"
-          ]; 
+          ];
         }
       )
     ];
@@ -110,5 +117,4 @@
   };
 
   system.stateVersion = 4;
-
 }
