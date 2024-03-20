@@ -48,14 +48,7 @@
     acpi
     firefox
     powertop
-    hyprland
-    swww
-    xdg-desktop-portal-gtk
-    xdg-desktop-portal-hyprland
-    xwayland
-    waybar
     networkmanagerapplet
-    dunst
   ];
 
   # Do not touch
