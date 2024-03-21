@@ -6,27 +6,15 @@
 }: {
   imports = [
     ./bootloader.nix
+    ./hardware.nix
     ./fonts.nix
     ./locale.nix
     ./network.nix
+    ./opengl.nix
     ./nix.nix
     ./sound.nix
     ./users.nix
   ];
-
-  # Printing settings
-  services.printing.enable = true;
-
-  hardware = {
-    opengl = {
-      enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-      extraPackages = with pkgs; [
-        mesa
-      ];
-    };
-  };
 
   # System available packages
   environment.systemPackages = with pkgs; [
@@ -42,6 +30,11 @@
     wget
     zsh
   ];
+
+  services = {
+    fwupd.enable = true;
+    gvfs.enable = true;
+  }
 
   # Set zsh defaults
   programs.zsh = {
