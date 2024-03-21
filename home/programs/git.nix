@@ -10,7 +10,7 @@
       };
       core = {
         excludesfile = "~/.gitnignore";
-        editor = "nvim";
+        editor = "code";
         pager = "delta";
         ignorecase = false;
         rebase = false;
