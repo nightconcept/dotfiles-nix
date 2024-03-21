@@ -5,6 +5,7 @@
   ...
 }: {
   imports = [
+    ./direnv.nix
     ./git.nix
     ./vscode
     ./wezterm
@@ -14,7 +15,6 @@
   home.packages = with pkgs; [
     duf
     eza
-    fastfetch
     fd
     fnm
     fzf
