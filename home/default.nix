@@ -12,9 +12,12 @@
   fonts.fontconfig.enable = true;
 
   imports = [
-    ./programs
+    inputs.nix-colors.homeManagerModules.default
     ./desktops/hyprland
+    ./programs
   ];
+
+  config.colorScheme = inputs.nix-colors.colorSchemes.tokyo-night-terminal-dark;
 
   home = {
     username = "danny";

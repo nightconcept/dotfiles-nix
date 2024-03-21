@@ -19,6 +19,17 @@
       MOZ_ENABLE_WAYLAND = 1;
     };
 
+    my.settings ={
+      default = {
+        shell = "zsh";
+        terminal = "wezterm";
+        browser = "firefox";
+        editor = "code";
+      };
+      fonts.monospace = "FiraCode Nerd Font Mono";   
+
+    }
+
     home.packages = with pkgs; [
       brightnessctl
       grimblast
