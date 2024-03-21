@@ -16,6 +16,7 @@
     eza
     fd
     fzf
+    git-crypt
     ncdu
     neovim
     nmap
