@@ -8,6 +8,7 @@
   imports = [
     ./dunst
     ./hyprland
+    ./kanshi.nix
     ./rofi
     ./waybar
     ./wlogout
