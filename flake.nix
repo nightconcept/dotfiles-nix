@@ -51,6 +51,7 @@
               users.danny.imports = [
                 ./home
               ];
+              extraSpecialArgs = {inherit inputs;};
             };
           }
         ];
