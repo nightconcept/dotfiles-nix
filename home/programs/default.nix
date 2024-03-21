@@ -33,7 +33,6 @@
     corectrl
     discord
     foliate
-    hugo
     obsidian
     steam
     evince

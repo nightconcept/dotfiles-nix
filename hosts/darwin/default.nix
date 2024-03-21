@@ -57,7 +57,6 @@
       "stretchly"
       "the-unarchiver"
       "typora"
-      "visual-studio-code"
       "vlc"
       "zoom"
     ];
