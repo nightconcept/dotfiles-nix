@@ -3,7 +3,7 @@
   config,
   ...
 }: let
-  inherit (config.colorscheme) colors;
+  inherit (config.colorScheme) colors;
 in {
   programs.swaylock = {
     enable = true;

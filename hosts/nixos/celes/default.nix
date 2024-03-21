@@ -17,11 +17,6 @@
   # Display settings
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
-  #services.xserver.desktopManager.plasma5.enable = true;
-  services.xserver = {
-    xkb.layout = "us";
-    xkb.variant = "";
-  };
 
   # hyprland
   programs.hyprland = {
@@ -47,13 +42,6 @@
     firefox
     home-manager
   ];
-
-  services.udev.enable = true;
-  # Automount USB drives
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEMS=="usb", SUBSYSTEM=="block", ENV{ID_FS_USAGE}=="filesystem",
-    RUN{program} += "${pkgs.systemd}/bin/systemd-mount --no-block --automount=yes --collect $devnode /media
-  '';
 
   # Do not touch
   system.stateVersion = "23.11";

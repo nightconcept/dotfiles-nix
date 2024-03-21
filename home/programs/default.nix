@@ -23,8 +23,6 @@
     nmap
     pyenv
     rsync
-    thefuck
-    tldr
     tmux
     trash-cli
     wget

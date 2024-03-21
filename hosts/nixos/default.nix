@@ -34,7 +34,7 @@
   services = {
     fwupd.enable = true;
     gvfs.enable = true;
-  }
+  };
 
   # Set zsh defaults
   programs.zsh = {
@@ -43,11 +43,4 @@
     autosuggestions.enable = true;
     enableCompletion = true;
   };
-
-  # Automount USB drives
-  services.udev.enable = true;
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEMS=="usb", SUBSYSTEM=="block", ENV{ID_FS_USAGE}=="filesystem",
-    RUN{program} += "${pkgs.systemd}/bin/systemd-mount --no-block --automount=yes --collect $devnode /media
-  '';
 }

@@ -15,15 +15,13 @@
           "tray"
         ];
         modules-center = [
-          "custom/notification"
-          "clock"
           "idle_inhibitor"
         ];
         modules-right = [
-          "backlight"
           "battery"
           "pulseaudio"
           "network"
+          "clock"
         ];
         "hyprland/workspaces" = {
           format = "{icon}";

@@ -12,10 +12,10 @@
       warn-dirty = false;
       keep-outputs = true;
       keep-derivations = true;
-      gc = {
-        automatic = true;
-        options = "--delete-older-than 7d";
-      };
+    };
+    gc = {
+      automatic = true;
+      options = "--delete-older-than 7d";
     };
   };
 
