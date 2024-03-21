@@ -150,4 +150,11 @@
       automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,user,users";
     in ["${automount_opts},credentials=/etc/nixos/mog-secrets,uid=1000,gid=100"];
   };
+
+  # Automount USB drives
+  services.udev.enable = true;
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEMS=="usb", SUBSYSTEM=="block", ENV{ID_FS_USAGE}=="filesystem",
+    RUN{program} += "${pkgs.systemd}/bin/systemd-mount --no-block --automount=yes --collect $devnode /media
+  '';
 }
