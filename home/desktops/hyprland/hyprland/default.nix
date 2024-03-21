@@ -64,6 +64,7 @@ in {
     home.packages = with pkgs; [
       waybar
       swww
+      slurp
     ];
 
     wayland.windowManager.hyprland = {
