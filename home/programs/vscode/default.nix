@@ -11,7 +11,6 @@
         [
           yzhang.markdown-all-in-one
           bbenoist.nix
-          emroussel.atomize-atom-one-dark-theme
           eamodio.gitlens
           kamadorueda.alejandra
         ]
