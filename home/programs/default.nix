@@ -13,6 +13,7 @@
   ];
 
   home.packages = with pkgs; [
+    delta
     duf
     eza
     fd
