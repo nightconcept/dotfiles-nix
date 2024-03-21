@@ -55,7 +55,6 @@
       "rectangle"
       "spotify"
       "stretchly"
-      "the-unarchiver"
       "typora"
       "vlc"
       "zoom"
