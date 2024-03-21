@@ -1,8 +1,10 @@
-{ inputs, pkgs, lib, ... }:
-
 {
+  inputs,
+  pkgs,
+  lib,
+  ...
+}: {
   programs = {
-
     zoxide = {
       enable = true;
       enableZshIntegration = true;
@@ -24,14 +26,15 @@
           zstyle ':omz:update' frequency 13
         '';
       };
-      
+
       zplug = {
         enable = true;
         plugins = [
-          { name = "zsh-users/zsh-autosuggestions"; }
-          { name = "zsh-users/zsh-syntax-highlighting"; }
-          { name = "zsh-users/zsh-completions"; }
-          { name = "zsh-users/zsh-history-substring-search"; }
+          {name = "zsh-users/zsh-autosuggestions";}
+          {name = "zsh-users/zsh-syntax-highlighting";}
+          {name = "zsh-users/zsh-completions";}
+          {name = "zsh-users/zsh-history-substring-search";}
+          {name = "chisui/zsh-nix-shell";}
         ];
       };
       plugins = [
@@ -39,7 +42,7 @@
           name = "powerlevel10k";
           src = pkgs.zsh-powerlevel10k;
           file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-        }      
+        }
       ];
 
       shellAliases = {
@@ -57,7 +60,7 @@
           source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
         fi
       '';
-      
+
       initExtra = ''
 
 
@@ -71,20 +74,13 @@
 
         export PATH="$PATH:/opt/nvim-linux64/bin"
 
-        export PYENV_ROOT="$HOME/.pyenv"
-        [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-
         export LANG=en_US.UTF-8
         export ZSH="$HOME/.oh-my-zsh"
 
         export EDITOR=nvim
         export VISUAL=nvim
 
-
-        eval "$(pyenv init -)"
-        eval "$(fnm env --use-on-cd)"
         eval "$(zoxide init zsh)"
-        eval "$(thefuck --alias)"
         if [ -d "/home/linuxbrew/" ]; then
             eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         fi
@@ -147,14 +143,14 @@
           alias rebuild="darwin-rebuild switch"
           alias flake-rebuild="darwin-rebuild switch --flake"
         fi
-        
+
 
         ########################
         # Footers (do not touch)
         ########################
 
         [[ ! -f ${./p10k-config/p10k.zsh} ]] || source ${./p10k-config/p10k.zsh}
-      '';                                       # Theming
+      ''; # Theming
     };
   };
 }

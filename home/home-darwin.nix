@@ -14,18 +14,12 @@
     duf
     eza
     fd
-    fnm
     fzf
     ncdu
-    neofetch
     neovim
     nmap
-    pyenv
     rsync
     speedtest-cli
-    stow
-    thefuck
-    tldr
     tmux
     trash-cli
     wget
@@ -40,6 +34,7 @@
   ];
 
   imports = [
+    ./programs/direnv.nix
     ./programs/git.nix
     ./programs/vscode
     ./programs/wezterm
