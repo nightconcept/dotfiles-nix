@@ -7,6 +7,7 @@
   imports = [
     ./direnv.nix
     ./git.nix
+    ./ssh.nix
     ./vscode
     ./wezterm
     ./zsh
