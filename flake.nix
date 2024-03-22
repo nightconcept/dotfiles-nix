@@ -64,7 +64,7 @@
         };
         modules = [
           ./systems/nixos
-          ./systemsnixos/persist.nix
+          ./systems/nixos/persist.nix
           ./hosts/nixos/${hostname}
           inputs.home-manager.nixosModules.default
           inputs.impermanence.nixosModules.impermanence
@@ -96,7 +96,7 @@
       home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {system = "${system}";};
         modules = [
-          ./${module}.nix
+          ./home/${module}.nix
         ];
       };
   in {
