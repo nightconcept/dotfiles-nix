@@ -6,7 +6,7 @@
     enable = true;
     font = {
       size = 14;
-    }
+    };
     iconTheme = {
       name = "Papirus-Dark";
       package = pkgs.papirus-folders;
