@@ -17,6 +17,10 @@ More uses [here](https://www.solivan.dev/blog/uses/).
 - `/systems` - System (NixOS and Darwin) specific configuration.
 
 ## Dotfile credits/inspiration
-- [hmajid2301/dotfiles](https://github.com/hmajid2301/dotfiles) - For hyprland config
-- [HeinzDev/Hyprland-dotfiles](https://github.com/HeinzDev/Hyprland-dotfiles) - For hyprland config
-- [fufexan/dotfiles](https://github.com/fufexan/dotfiles) - For hyprland config
+- [hmajid2301/dotfiles](https://github.com/hmajid2301/dotfiles)
+- [HeinzDev/Hyprland-dotfiles](https://github.com/HeinzDev/Hyprland-dotfiles)
+- [fufexan/dotfiles](https://github.com/fufexan/dotfiles)
+- [nzbr/nixos](https://github.com/nzbr/nixos)
+- [notusknot/dotfiles-nix](https://github.com/notusknot/dotfiles-nix)
+- [NobbZ/nixos-config](https://github.com/NobbZ/nixos-config)
+- [notthebee/nix-config](https://github.com/notthebee/nix-config)
