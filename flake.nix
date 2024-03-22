@@ -41,7 +41,7 @@
       pkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./hosts/nixos
+          ./nixos
           ./hosts/nixos/${hostname}
           home-manager.nixosModules.home-manager
           {
@@ -63,8 +63,8 @@
           inherit inputs;
         };
         modules = [
-          ./hosts/nixos
-          ./hosts/nixos/persist.nix
+          ./systems/nixos
+          ./systemsnixos/persist.nix
           ./hosts/nixos/${hostname}
           inputs.home-manager.nixosModules.default
           inputs.impermanence.nixosModules.impermanence
@@ -78,7 +78,7 @@
         };
 
         modules = [
-          ./hosts/darwin
+          ./systems/darwin
           ./hosts/darwin/${hostname}
           home-manager.darwinModules.home-manager
           {
