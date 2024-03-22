@@ -1,8 +1,4 @@
 { pkgs, ... }: {
-  home.packages = with pkgs; [
-    # ... other packages
-  ];
-
   home.pointerCursor = {
     package = pkgs.bibata-cursors;
     name = "Bibata-Modern-Classic";
