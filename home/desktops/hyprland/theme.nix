@@ -5,6 +5,7 @@
   gtk = {
     enable = true;
     font = {
+      name = "Fira Sans";
       size = 14;
     };
     iconTheme = {
