@@ -4,9 +4,12 @@
   ];
   gtk = {
     enable = true;
+    font = {
+      size = 14;
+    }
     iconTheme = {
-      name = "Yaru-magenta-dark";
-      package = pkgs.yaru-theme;
+      name = "Papirus-Dark";
+      package = pkgs.papirus-folders;
     };
 
     theme = {

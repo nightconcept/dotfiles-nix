@@ -26,6 +26,7 @@
     theme = ./tokyonight.rasi;
   };
 
+  /* https://github.com/w8ste/Tokyonight-rofi-theme/blob/main/tokyonight_big1.rasi */
   home.file.".config/rofi/tokyonight.rasi".text = ''
 /*
  * Tokyonight colorscheme (big icons) for rofi
