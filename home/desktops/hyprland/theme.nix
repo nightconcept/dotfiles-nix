@@ -19,5 +19,4 @@
       package = pkgs.bibata-cursors;
     };
   };
-  };
 }
