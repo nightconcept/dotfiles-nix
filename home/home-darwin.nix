@@ -38,6 +38,7 @@
   imports = [
     ./programs/direnv.nix
     ./programs/git.nix
+    ./programs/ssh.nix
     ./programs/vscode
     ./programs/wezterm
     ./programs/zsh
