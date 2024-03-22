@@ -8,9 +8,9 @@
   imports = [
     ./dunst
     ./hyprland
-    ./gtk.nix
     ./kanshi.nix
     ./rofi
+    ./theme
     ./waybar
     ./wlogout
   ];
