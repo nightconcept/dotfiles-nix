@@ -1,15 +1,3 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
-  programs.rofi = {
-    enable = true;
-    theme = ./tokyonight.rasi
-  };
-
-  /* https://github.com/Flippette/rofi-tokyonight */
-  home.file.".config/rofi/tokyonight.rasi".text = ''
 * {
 	scrollbar: false;
 
@@ -176,7 +164,4 @@ textbox-prompt-sep {
 element-text, element-icon {
     background-color: inherit;
     text-color:       inherit;
-}
-
-  '';
 }
