@@ -8,6 +8,7 @@
     fontconfig.enable = true;
     packages = with pkgs; [
       (
+        fira
         nerdfonts.override
         {
           fonts = [
