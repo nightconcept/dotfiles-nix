@@ -16,12 +16,6 @@
   ];
 
   config = {
-    home.sessionVariables.GST_PLUGIN_SYSTEM_PATH_1_0 = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" (with pkgs.gst_all_1; [
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gst-libav
-    ]);
 
     home.packages = with pkgs; [
       brightnessctl
@@ -35,13 +29,8 @@
       # xfce.thunar-volman
       # xfce.tumbler
       # xfce.xfconf
-      gnome.gnome-power-manager
-
-      gnome.nautilus
+      kdePackages.dolphin
       ffmpegthumbnailer # thumbnails
-      gnome.nautilus-python # enable plugins
-      gst_all_1.gst-libav # thumbnails
-      nautilus-open-any-terminal # terminal-context-entry
     ];
   };
 }
