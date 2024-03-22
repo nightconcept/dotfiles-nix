@@ -1,27 +1,22 @@
 # dotfiles-nix
 
-My dotfiles for Nix, NixOS, and Nix-Darwin.
+My dotfiles for Nix, NixOS, and Nix-Darwin. NixOS has both a non-persisting and [persisting](https://grahamc.com/blog/erase-your-darlings/) configuration without encryption. I plan to add encryption next.
 
 ## Uses
-- Desktop Environment (Linux): Plasma
+- Desktop Environment (Linux): Hyprland
+- Bar: waybar
 - Shell: zsh
-- Editor: nvim and vscode
+- Terminal: wezterm
+- Editor: vscode
 
 More uses [here](https://www.solivan.dev/blog/uses/).
 
 ## Structure
-- `/home` - User settings, configurations, and apps.
-- `/hosts` - Host and OS specific software and hardware configuration
+- `/home` - User programs, configuration, and desktop.
+- `/hosts` - Host specific software and hardware configuration
+- `/systems` - System (NixOS and Darwin) specific configuration.
 
-### Prerequisites?
-- Zsh needs powerlevel10k installed via `nix-env` like so:
-```sh
-nix-env -i powerlevel10k
-```
-
-[Reference]([Using an external oh-my-zsh theme with zsh in nix? - Help - NixOS Discourse](https://discourse.nixos.org/t/using-an-external-oh-my-zsh-theme-with-zsh-in-nix/6142)
-
-## Doftfile credits/inspiration
+## Dotfile credits/inspiration
 - [hmajid2301/dotfiles](https://github.com/hmajid2301/dotfiles) - For hyprland config
 - [HeinzDev/Hyprland-dotfiles](https://github.com/HeinzDev/Hyprland-dotfiles) - For hyprland config
 - [fufexan/dotfiles](https://github.com/fufexan/dotfiles) - For hyprland config
