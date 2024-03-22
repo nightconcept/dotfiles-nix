@@ -105,7 +105,7 @@ listview {
     //spacing: 5px;
     padding: 8px;
     lines: 7;
-    columns: 2;
+    columns: 1;
     border: 0px 3px 3px 3px; 
     border-radius: 0px 0px 6px 6px;
     border-color: @primary;
