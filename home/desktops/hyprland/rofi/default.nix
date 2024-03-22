@@ -26,174 +26,143 @@
     theme = ./tokyonight.rasi;
   };
 
-  /* https://github.com/Flippette/rofi-tokyonight */
   home.file.".config/rofi/tokyonight.rasi".text = ''
-    * {
-      scrollbar: false;
+/*
+ * Tokyonight colorscheme (big icons) for rofi
+ * User: w8ste
+ */
 
-      bg: #24283b;
-      bg-dark: #1f2335;
-      bg-highlight: #292e42;
-      fg: #c0caf5;
-      fg-dark: #3b4261;
-      red-dark: #db4b4b;
-      red-light: #f7768e;
-      yellow: #e0af68;
-      orange: #ff9e64;
-      gray: #565f89;
 
-      background: @bg-dark;
-      background-color: @background;
-      foreground: @fg;
-      border-color: @gray;
-      separatorcolor: @border-color;
-      scrollbar-handle: @border-color;
+// define colors etc.
+* {
+    bg: #24283b;
+    hv: #9274ca; 
+    primary: #C5C8C6; 
+    ug: #0B2447;
+    font: "Monospace 11";
+    background-color: @bg;
+    //dark: @bg;
+    border: 0px;
+    kl: #7aa2f7;
+    black: #000000;
 
-      normal-background: @background;
-      normal-foreground: @foreground;
-      alternate-normal-background: @bg-dark;
-      alternate-normal-foreground: @fg;
-      selected-normal-background: @bg-highlight;
-      selected-normal-foreground: @fg;
+    transparent: rgba(46,52,64,0);
+}
 
-      active-background: @orange;
-      active-foreground: @bg;
-      alternate-active-background: @active-background;
-      alternate-active-foreground: @active-foreground;
-      selected-active-background: @yellow;
-      selected-active-foreground: @active-foreground;
+// defines different aspects of the window
+window {
+    width: 700;
+    /*since line wont work with height, i comment it out 
+    if you rather control the size via height
+    just comment it out */
+    //height: 500;
 
-      urgent-background: @red-dark;
-      urgent-foreground: @background;
-      alternate-urgent-background: @urgent-background;
-      alternate-urgent-foreground: @urgent-foreground;
-      selected-urgent-background: @red-dark;
-      selected-urgent-foreground: @urgent-foreground;
-    }
+    orientation: horizontal;
+    location: center;
+    anchor: center;
+    transparency: "screenshot";
+    border-color: @transparent;   
+    border: 0px;
+    border-radius: 6px;
+    spacing: 0;
+    children: [ mainbox ];
+}
 
-    window {
-        background-color: @background;
-        border:           2;
-        padding:          2;
-    }
+mainbox {
+    spacing: 0;
+    children: [ inputbar, message, listview ];
+}
 
-    mainbox {
-        border:  0;
-        padding: 0;
-    }
+inputbar {
+    color: @kl;
+    padding: 11px;
+    border: 3px 3px 2px 3px;
+    border-color: @primary;
+    border-radius: 6px 6px 0px 0px;
+}
 
-    message {
-        border:       2px 0 0;
-        border-color: @separatorcolor;
-        padding:      1px;
-    }
+message {
+    padding: 0;
+    border-color: @primary;
+    border: 0px 1px 1px 1px;
+}
 
-    textbox {
-        highlight:  @bg-highlight;
-        text-color: @foreground;
-    }
+entry, prompt, case-indicator {
+    text-font: inherit;
+    text-color: inherit;
+}
 
-    listview {
-        border:       2px solid 0 0;
-        padding:      2px 0 0;
-        border-color: @separatorcolor;
-        spacing:      2px;
-        scrollbar:    @scrollbar;
-    }
+entry {
+    cursor: pointer;
+}
 
-    element {
-        border:  0;
-        padding: 2px;
-    }
+prompt {
+    margin: 0px 5px 0px 0px;
+}
 
-    element.normal.normal {
-        background-color: @normal-background;
-        text-color:       @normal-foreground;
-    }
+listview {
+    layout: vertical;
+    //spacing: 5px;
+    padding: 8px;
+    lines: 7;
+    columns: 2;
+    border: 0px 3px 3px 3px; 
+    border-radius: 0px 0px 6px 6px;
+    border-color: @primary;
+    dynamic: false;
+}
 
-    element.normal.urgent {
-        background-color: @urgent-background;
-        text-color:       @urgent-foreground;
-    }
+element {
+    padding: 2px;
+    vertical-align: 1;
+    color: @kl;
+    font: inherit;
+}
 
-    element.normal.active {
-        background-color: @active-background;
-        text-color:       @active-foreground;
-    }
+element-text {
+    background-color: inherit;
+    text-color: inherit;
+    vertical-align: 0.5;
+}
 
-    element.selected.normal {
-        background-color: @selected-normal-background;
-        text-color:       @selected-normal-foreground;
-    }
+element selected.normal {
+    color: @black;
+    background-color: @hv;
+}
 
-    element.selected.urgent {
-        background-color: @selected-urgent-background;
-        text-color:       @selected-urgent-foreground;
-    }
+element normal active {
+    background-color: @hv;
+    color: @black;
+}
 
-    element.selected.active {
-        background-color: @selected-active-background;
-        text-color:       @selected-active-foreground;
-    }
+element-icon {
+    background-color: inherit;
+    text-color: inherit;
+    size: 2.5em;
+}
 
-    element.alternate.normal {
-        background-color: @alternate-normal-background;
-        text-color:       @alternate-normal-foreground;
-    }
+element normal urgent {
+    background-color: @primary;
+}
 
-    element.alternate.urgent {
-        background-color: @alternate-urgent-background;
-        text-color:       @alternate-urgent-foreground;
-    }
+element selected active {
+    background: @hv;
+    foreground: @bg;
+}
 
-    element.alternate.active {
-        background-color: @alternate-active-background;
-        text-color:       @alternate-active-foreground;
-    }
+button {
+    padding: 6px;
+    color: @primary;
+    horizonatal-align: 0.5;
 
-    scrollbar {
-        width:        4px;
-        border:       0;
-        handle-color: @scrollbar-handle;
-        handle-width: 8px;
-        padding:      0;
-    }
+    border: 2px 0px 2px 2px;
+    border-radius: 4px 0px 0px 4px;
+    border-color: @primary;
+}
 
-    mode-switcher {
-        border:       2px 0 0;
-        border-color: @separatorcolor;
-    }
-
-    inputbar {
-        spacing:    0;
-        text-color: @normal-foreground;
-        padding:    2px;
-        children:   [ prompt, textbox-prompt-sep, entry, case-indicator ];
-    }
-
-    case-indicator,
-    entry,
-    prompt,
-    button {
-        spacing:    0;
-        text-color: @normal-foreground;
-    }
-
-    button.selected {
-        background-color: @selected-normal-background;
-        text-color:       @selected-normal-foreground;
-    }
-
-    textbox-prompt-sep {
-        expand:     false;
-        str:        ":";
-        text-color: @normal-foreground;
-        margin:     0 0.3em 0 0;
-    }
-
-    element-text, element-icon {
-        background-color: inherit;
-        text-color:       inherit;
-    }
+button selected normal {
+    border: 2px 0px 2px 2px;
+    border-color: @primary;
+}
   '';
 }
