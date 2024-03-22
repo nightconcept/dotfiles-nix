@@ -9,8 +9,11 @@ in {
   imports = [
     ./hardware-configuration.nix
     inputs.disko.nixosModules.default
-    (import ${nixos-path}/disko.nix {device = "/dev/nvme0n1";})
-    ${nixos-path}/wireless.nix
+    ${nixos-path}
+    /disko.nix
+    {device = "/dev/nvme0n1";}
+    ${nixos-path}
+    /wireless.nix
   ];
 
   # Kernel specified at 6.6 for the latest LTS
