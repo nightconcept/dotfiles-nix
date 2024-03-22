@@ -23,7 +23,7 @@
       display-window = "   Window";
       display-Network = " 󰤨  Network";
     };
-    theme = ./tokyonight.rasi
+    theme = ./tokyonight.rasi;
   };
 
   /* https://github.com/Flippette/rofi-tokyonight */
