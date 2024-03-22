@@ -21,7 +21,6 @@
     eza
     fastfetch
     fd
-    fnm
     fzf
     git
     gh
@@ -30,11 +29,8 @@
     ncdu
     neovim
     nmap
-    pyenv
     rsync
     speedtest-cli
-    thefuck
-    tldr
     tmux
     trash-cli
     vim
