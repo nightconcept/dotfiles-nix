@@ -5,6 +5,11 @@
     userEmail = "dark@nightconcept.net";
 
     extraConfig = {
+      url = {
+        "https://oauth2:test@github.com" = {
+          insteadOf = "https://github.com";
+        };
+      };
       github = {
         user = "nightconcept";
       };
