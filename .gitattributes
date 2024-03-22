@@ -1,1 +1,2 @@
 home/programs/git.nix filter=git-crypt diff=git-crypt
+home/programs/ssh.nix filter=git-crypt diff=git-crypt
