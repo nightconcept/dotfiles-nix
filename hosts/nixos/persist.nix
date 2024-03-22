@@ -52,7 +52,7 @@
     files = [
       "/etc/machine-id"
       "/etc/nix/id_rsa"
-      #"/var/lib/alsa/asound.state"
+      "/var/lib/alsa/asound.state"
       {
         file = "/var/keys/secret_file";
         parentDirectory = {mode = "u=rwx,g=,o=";};

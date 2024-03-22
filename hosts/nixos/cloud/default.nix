@@ -9,6 +9,7 @@
     ./hardware-configuration.nix
     inputs.disko.nixosModules.default
     (import ../disko.nix {device = "/dev/nvme0n1";})
+    ../wireless.nix
   ];
 
   # Kernel specified at 6.6 for the latest LTS

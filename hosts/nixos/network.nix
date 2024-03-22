@@ -4,7 +4,10 @@
   inputs,
   ...
 }: {
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    unmanaged = ["*" "except:type:wwan" "except:type:gsm"];
+  };
 
   # Network mounts
   # TODO: Relies on <SERVER>-secrets in /etc/nixos for now, change it later
