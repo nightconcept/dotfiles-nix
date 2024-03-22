@@ -1,15 +1,16 @@
 {
   config,
   pkgs,
-  lib,
   inputs,
   ...
-}: {
+}: let
+  nixos-path = "../../../systems/nixos";
+in {
   imports = [
     ./hardware-configuration.nix
     inputs.disko.nixosModules.default
-    (import ../disko.nix {device = "/dev/nvme0n1";})
-    ../wireless.nix
+    (import ${nixos-path}/disko.nix {device = "/dev/nvme0n1";})
+    ${nixos-path}/wireless.nix
   ];
 
   # Kernel specified at 6.6 for the latest LTS
