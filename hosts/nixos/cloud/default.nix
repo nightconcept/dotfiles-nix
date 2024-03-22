@@ -3,11 +3,12 @@
   pkgs,
   inputs,
   ...
-}: 
+}: {
   imports = [
     ./hardware-configuration.nix
     inputs.disko.nixosModules.default
-    ../../../systems/nixos/disko.nix {device = "/dev/nvme0n1";}
+    ../../../systems/nixos/disko.nix
+    {device = "/dev/nvme0n1";}
     ../../../systems/nixos/wireless.nix
   ];
 
