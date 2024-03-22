@@ -40,6 +40,9 @@
   ];
 
   imports = [
+    ./programs/direnv.nix
+    ./programs/git.nix
+    ./programs/ssh.nix
     ./programs/zsh
   ];
 
