@@ -10,6 +10,7 @@
     ./hyprland
     ./kanshi.nix
     ./rofi
+    ./theme.nix
     ./waybar
     ./wlogout
   ];
