@@ -23,7 +23,6 @@
     home.packages = with pkgs; [
       brightnessctl
       grimblast
-      gvfs
       pamixer
       wl-clipboard
       # Thunar is very needy and needs all of these and gvfs to get it's full functional powers
