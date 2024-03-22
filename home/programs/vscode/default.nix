@@ -55,6 +55,7 @@
         "gitlens.showWhatsNewAfterUpgrades" = false;
         "telemetry.telemetryLevel" = "off";
         "terminal.integrated.fontSize" = 14;
+        "update.mode" = "none";
         "workbench.colorTheme" = "Tokyo Night";
         "workbench.iconTheme" = "material-icon-theme";
         "workbench.startupEditor" = "none";
