@@ -1,0 +1,3 @@
+[submodule "systems/nixos/fonts/sf-mono-nerd-font"]
+	path = systems/nixos/fonts/sf-mono-nerd-font
+	url = git@github.com:nightconcept/SF-Mono-Nerd-Font.git
