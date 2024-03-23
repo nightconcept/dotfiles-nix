@@ -7,6 +7,7 @@
   nixpkgs.config.joypixels.acceptLicense = true;
   fonts = {
     packages = with pkgs; [
+      ./fonts
       (
         nerdfonts.override
         {
