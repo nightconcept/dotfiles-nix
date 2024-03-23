@@ -15,6 +15,7 @@
           "hyprland/workspaces"
           "tray"
         ];
+        
         modules-right = [
           "idle_inhibitor"
           "battery"
@@ -28,19 +29,30 @@
           sort-by-number = true;
           active-only = false;
           format-icons = {
-            "1" = "  ";
-            "2" = " 󰎞 ";
-            "3" = " 󰲌 ";
-            "4" = "  ";
-            "5" = "  ";
-            "6" = " 󰺵 ";
-            "7" = "  ";
+            "1" = "一";
+            "2" = "二";
+            "3" = "三";
+            "4" = "四";
+            "5" = "五";
+            "6" = "六";
+            "7" = "七";
+            "8" = "八";
+            "9" = "九";
+            "10" = "十";
+            # "1" = "  ";
+            # "2" = " 󰎞 ";
+            # "3" = " 󰲌 ";
+            # "4" = "  ";
+            # "5" = "  ";
+            # "6" = " 󰺵 ";
+            # "7" = "  ";
             urgent = "  ";
             focused = "  ";
             default = "  ";
           };
           on-click = "activate";
         };
+
         clock = {
           format = "{:%a %d %b %I:%M %p}";
           interval = 1;
@@ -53,13 +65,15 @@
             "on-click-right" = "mode";
           };
         };
-        "idle_inhibitor" = {
+
+        idle_inhibitor = {
           format = "{icon}";
           format-icons = {
             activated = "  ";
             deactivated = "  ";
           };
         };
+
         battery = {
           states = {
             good = 80;
@@ -69,13 +83,15 @@
           format = "{icon} {capacity}%";
           format-alt = "{time}";
           format-charging = "  {capacity}%";
-          format-icons = ["󰁻 " "󰁽 " "󰁿 " "󰂁 " "󰂂 "];
+          format-icons = ["󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
         };
+
         network = {
           interval = 1;
           format-wifi = " ";
           format-ethernet = "󰈀";
-          format-disconnected = "󱚵";
+          format-disconnected = "󰤭";
+          format-icons = ["󰤯" "󰤟" "󰤢" "󰤥" "󰤨"];
           tooltip-format = ''
             Network: {essid}
             {ifname}
@@ -85,8 +101,10 @@
             Down: {bandwidthDownBits}
           '';
         };
+
         pulseaudio = {
           scroll-step = 2;
+          on-click = "pavucontrol";
           format = "{icon} {volume}%";
           format-bluetooth = " {icon} {volume}%";
           format-muted = "󰖁";
@@ -95,8 +113,9 @@
             headset = "";
             default = ["" "" "󰕾"];
           };
-          "tooltip-format" = "{volume}% volume";
+          tooltip-format = "{volume}% volume";
         };
+
         tray = {
           icon-size = 16;
           spacing = 10;
