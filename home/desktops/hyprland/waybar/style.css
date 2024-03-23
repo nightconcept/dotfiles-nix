@@ -30,9 +30,9 @@
 @define-color rosewater #f5e0dc;
 
 * {
-    font-family: Cantarell, Symbols Nerd Font;
+    font-family: Fira Sans, Symbols Nerd Font;
     font-weight: bolder;
-    font-size: 14px;
+    font-size: 18px;
 }
 
 window#waybar {
