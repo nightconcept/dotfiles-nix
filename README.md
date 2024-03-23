@@ -25,3 +25,4 @@ More uses [here](https://www.solivan.dev/blog/uses/).
 - [NobbZ/nixos-config](https://github.com/NobbZ/nixos-config)
 - [notthebee/nix-config](https://github.com/notthebee/nix-config)
 - [ericmurphyxyz/dotfiles](https://github.com/ericmurphyxyz/dotfiles)
+- [sane1090x/dotfiles](https://github.com/sane1090x/dotfiles)
