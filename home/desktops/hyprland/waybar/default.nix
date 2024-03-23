@@ -93,7 +93,7 @@
           format-icons = {
             headphone = "";
             headset = "";
-            default = ["", "", "󰕾"];
+            default = ["" "" "󰕾"];
           };
           "tooltip-format" = "{volume}% volume";
         };
