@@ -3,6 +3,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../../systems/nixos/wireless.nix
     ];
 
   # Kernel specified at 6.6 for the latest LTS

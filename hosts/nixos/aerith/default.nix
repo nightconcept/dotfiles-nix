@@ -7,6 +7,7 @@
 }: {
   imports = [
     ./hardware-configuration.nix
+    ../../../systems/nixos/network.nix
   ];
 
   networking.hostName = "aerith";
