@@ -25,6 +25,9 @@
     user = "danny";
   };
 
+  # Enable the OpenSSH daemon.
+  services.openssh.enable = true;
+
   # System available packages
   environment.systemPackages = with pkgs; [
     firefox
