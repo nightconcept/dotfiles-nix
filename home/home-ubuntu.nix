@@ -5,22 +5,21 @@
   ...
 }: {
   programs.home-manager.enable = true;
+  nixpkgs.config.allowUnfree = true;
 
-  news = {
-    display = "silent";
-  };
-
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      allowUnfreePredicate = _: true;
-    };
+  nix = {
+    package = pkgs.nix;
+    settings.experimental-features = ["nix-command" "flakes"];
+    extraOptions = ''
+      warn-dirty = false
+    '';
   };
 
   home.packages = with pkgs; [
     btop
     duf
     eza
+    fastfetch
     fd
     fzf
     git
