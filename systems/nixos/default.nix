@@ -9,7 +9,7 @@
     ./hardware.nix
     ./fonts.nix
     ./locale.nix
-    ./network.nix
+    ./network-drives.nix
     ./opengl.nix
     ./nix.nix
     ./sound.nix
