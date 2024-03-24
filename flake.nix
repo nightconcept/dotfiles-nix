@@ -41,7 +41,7 @@
       pkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./nixos
+          ./systems/nixos
           ./hosts/nixos/${hostname}
           home-manager.nixosModules.home-manager
           {
@@ -74,7 +74,7 @@
       pkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./nixos
+          ./systems/nixos
           ./hosts/nixos/${hostname}
           home-manager.nixosModules.home-manager
           {
