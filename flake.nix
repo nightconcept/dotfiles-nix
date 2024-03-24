@@ -70,6 +70,25 @@
           inputs.impermanence.nixosModules.impermanence
         ];
       };
+    mkNixosServer = pkgs: hostname:
+      pkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./nixos
+          ./hosts/nixos/${hostname}
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              users.danny.home.stateVersion = "23.11";
+              useGlobalPkgs = true;
+              users.danny.imports = [
+                ./home/home-server.nix
+              ];
+              extraSpecialArgs = {inherit inputs;};
+            };
+          }
+        ];
+      };
     mkDarwin = pkgs: hostname:
       nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
@@ -104,6 +123,7 @@
       celes = mkNixos inputs.nixpkgs "celes";
       cloud = mkNixosPersist inputs.nixpkgs "cloud";
       ifrit = mkNixos inputs.nixpkgs "ifrit";
+      aerith = mkNixosServer inputs.nixpkgs "aerith";
     };
 
     darwinConfigurations = {
@@ -114,7 +134,7 @@
     homeConfigurations = {
       danny = mkHome "x86_64-linux" "home";
       danny-darwin = mkHome "aarch64-darwin" "home-darwin";
-      danny-server = mkHome "x86_64-linux" "home-server";
+      danny-server = mkHome "x86_64-linux" "home-ubuntu";
     };
   };
 }
