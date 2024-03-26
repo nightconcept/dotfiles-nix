@@ -7,7 +7,7 @@
 }: {
   imports = [
     ./dunst
-    ./hyprl
+    ./hypr
     ./kanshi.nix
     ./rofi
     ./theme
