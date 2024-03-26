@@ -12,14 +12,13 @@
     ../../../systems/nixos/wireless.nix
   ];
 
-  # Kernel specified at 6.6 for the latest LTS
   boot.kernelPackages = pkgs.linuxPackages_6_7;
 
   networking.hostName = "cloud";
 
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
   services.xserver = {
+    displayManager.gdm.enable = true;
+    enable = true;
     xkb.layout = "us";
     xkb.variant = "";
   };
