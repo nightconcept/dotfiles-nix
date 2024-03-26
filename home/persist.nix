@@ -17,6 +17,8 @@
       ".nixops"
       ".zplug" # faster just so plugins don't need to be redownloaded very single time
       ".vscode" # retain plugins, keep save history
+      ".config/Code"
+      ".config/obsidian"
       ".local/share/keyrings"
       {
         directory = ".local/share/Steam";
