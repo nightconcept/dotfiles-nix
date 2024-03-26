@@ -7,7 +7,7 @@
 }: {
   imports = [
     ./dunst
-    ./hyprland
+    ./hyprl
     ./kanshi.nix
     ./rofi
     ./theme
@@ -16,8 +16,6 @@
   ];
 
   config = {
-
-
     home.packages = with pkgs; [
       brightnessctl
       grimblast
