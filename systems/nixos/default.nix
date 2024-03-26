@@ -32,7 +32,6 @@
   ];
 
   services = {
-    fwupd.enable = true;
     gvfs.enable = true;
   };
 
