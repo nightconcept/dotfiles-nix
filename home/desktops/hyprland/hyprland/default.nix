@@ -57,7 +57,9 @@
   '';
 in {
   imports = [
-    ./hyprland-environment.nix
+    # stuck into zsh sessionVariables because of incompatibility with running in wayland
+    # https://github.com/nix-community/home-manager/issues/2659
+    # ./hyprland-environment.nix
   ];
 
   config = {

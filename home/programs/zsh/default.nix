@@ -48,6 +48,13 @@
       shellAliases = {
         home-rebuild = "home-manager switch --flake .#danny";
       };
+
+      sessionVariables = {
+        EDITOR = "nvim";
+        BROWSER = "firefox";
+        TERMINAL = "wezterm";
+      };
+
       initExtraFirst = ''
         ########################
         # Headers (do not touch)
@@ -77,7 +84,6 @@
         export LANG=en_US.UTF-8
         export ZSH="$HOME/.oh-my-zsh"
 
-        export EDITOR=nvim
         export VISUAL=nvim
 
         eval "$(zoxide init zsh)"
@@ -143,7 +149,6 @@
           alias rebuild="darwin-rebuild switch"
           alias flake-rebuild="darwin-rebuild switch --flake"
         fi
-
 
         ########################
         # Footers (do not touch)
