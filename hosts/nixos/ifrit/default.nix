@@ -1,10 +1,13 @@
-{ config, pkgs, ... }:
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ../../../systems/nixos/wireless.nix
-    ];
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ../../../systems/nixos/wireless.nix
+  ];
 
   # Kernel specified at 6.6 for the latest LTS
   boot.kernelPackages = pkgs.linuxPackages_6_6;
@@ -17,7 +20,7 @@
   networking.hostName = "ifrit";
 
   # Nix settings
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
   nixpkgs.config.allowUnfree = true;
 
   # Networking settings
@@ -56,8 +59,8 @@
   ];
 
   virtualisation.docker.enable = true;
-  users.extraGroups.docker.members = [ "danny" ];
-  networking.firewall.allowedTCPPorts = [ 8211 ];
+  users.extraGroups.docker.members = ["danny"];
+  networking.firewall.allowedTCPPorts = [8211];
 
   # Set zsh defaults
   programs.zsh = {

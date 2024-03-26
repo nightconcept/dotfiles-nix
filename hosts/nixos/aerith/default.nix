@@ -25,7 +25,7 @@
     openFirewall = true;
     user = "danny";
   };
-  networking.firewall.allowedTCPPorts = [ 
+  networking.firewall.allowedTCPPorts = [
     32400
     1900
     5353

@@ -9,6 +9,7 @@
     inputs.disko.nixosModules.default
     (import ../../../systems/nixos/disko.nix
       {device = "/dev/nvme0n1";})
+    ../../../systems/nixos/desktops/hyprland
     ../../../systems/nixos/wireless.nix
   ];
 
@@ -21,26 +22,6 @@
     enable = true;
     xkb.layout = "us";
     xkb.variant = "";
-  };
-
-  # hyprland
-  programs.hyprland = {
-    enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
-    xwayland.enable = true;
-  };
-  # for hyprland
-  services.dbus.enable = true;
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-    ];
-  };
-  # Hint electron apps to use wayland
-  environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1";
   };
 
   environment.systemPackages = with pkgs; [
