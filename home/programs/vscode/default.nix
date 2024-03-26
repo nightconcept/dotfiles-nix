@@ -56,6 +56,7 @@
         "telemetry.telemetryLevel" = "off";
         "terminal.integrated.fontSize" = 14;
         "update.mode" = "none";
+        "window.zoomLevel" = 1;
         "workbench.colorTheme" = "Tokyo Night";
         "workbench.iconTheme" = "material-icon-theme";
         "workbench.startupEditor" = "none";
