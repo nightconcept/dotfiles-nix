@@ -12,7 +12,7 @@
       {device = "/dev/nvme0n1";})
     ../../../systems/nixos/desktops/hyprland
     ../../../systems/nixos/wireless.nix
-    ../options.nix
+    ./options.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_6_7;
