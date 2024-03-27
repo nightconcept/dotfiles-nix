@@ -1,28 +1,28 @@
-{
-  lib,
-  config,
-  ...
-}: {
+{lib, ...}: let
+  mkOpt = lib.mkOption;
+  types = lib.types;
+in {
   # Declare what settings a user of this "options.nix" module CAN SET.
   options.host = {
     settings = {
       monitor = {
-        count = mkOption {
+        count = mkOpt {
           type = types.int;
           default = 1;
-          description = "count of monitors"
+          description = "count of monitors";
         };
         # Not expecting more than 2 monitors
-        resolution-primary = mkOption {
+        resolution-primary = mkOpt {
           type = types.str;
           default = "1920x1080";
           description = "resolution of primary monitor";
         };
-        resolution-secondary = mkOption {
+        resolution-secondary = mkOpt {
           type = types.str;
           default = "1920x1080";
           description = "resolution of secondary monitor";
-        };        
+        };
+      };
     };
   };
 }
