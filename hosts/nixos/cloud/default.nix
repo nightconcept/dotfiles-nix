@@ -2,7 +2,6 @@
   config,
   pkgs,
   inputs,
-  options,
   ...
 }: {
   imports = [
@@ -18,8 +17,6 @@
   boot.kernelPackages = pkgs.linuxPackages_6_7;
 
   networking.hostName = "cloud";
-
-  options.host.monitor.count = 1;
 
   services.xserver = {
     displayManager.gdm.enable = true;
