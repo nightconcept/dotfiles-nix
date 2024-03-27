@@ -27,4 +27,8 @@ More uses [here](https://www.solivan.dev/blog/uses/).
 - [ericmurphyxyz/dotfiles](https://github.com/ericmurphyxyz/dotfiles)
 - [sane1090x/dotfiles](https://github.com/sane1090x/dotfiles)
 - [gh0stzk/dotfiles](https://github.com/gh0stzk/dotfiles)
-- 
+- [Frost-Phoenix/nixos-config](https://github.com/Frost-Phoenix/nixos-config/tree/main)
+- [BirdeeHub/birdeeSystems)](https://github.com/BirdeeHub/birdeeSystems)
+- [LongerHV/nixos-configuration](https://github.com/LongerHV/nixos-configuration)
+- [badele/nix-homelab](https://github.com/badele/nix-homelab/tree/main?tab=readme-ov-file)
+- [SomeGuyNamedMay/users](https://github.com/SomeGuyNamedMay/users)
