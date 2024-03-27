@@ -12,8 +12,7 @@
 
   networking.hostName = "celes";
 
-  # Kernel specified at 6.1 to allow for GPU power limit control
-  boot.kernelPackages = pkgs.linuxPackages_6_1;
+  boot.kernelPackages = pkgs.linuxPackages_6_7;
 
   # Display settings
   services.xserver.enable = true;

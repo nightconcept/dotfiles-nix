@@ -7,6 +7,7 @@
 }: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
+    ./amd-gpu.nix
   ];
 
   boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod"];
@@ -40,5 +41,6 @@
 
   networking.useDHCP = lib.mkDefault true;
 
+  # settings from nixos-hardware/common/cpu/amd/default.nix
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
