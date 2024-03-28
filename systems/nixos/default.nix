@@ -13,6 +13,7 @@
     ./opengl.nix
     ./nix.nix
     ./sound.nix
+    ./stylix.nix
     ./users.nix
   ];
 

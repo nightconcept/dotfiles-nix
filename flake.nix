@@ -35,6 +35,8 @@
     nixpkgs,
     home-manager,
     nix-darwin,
+    stylix,
+    impermanence,
     ...
   } @ inputs: let
     lib = nixpkgs.lib;
@@ -56,6 +58,7 @@
               extraSpecialArgs = {inherit inputs;};
             };
           }
+          stylix.nixosModules.stylix
         ];
       };
     mkNixosPersist = pkgs: hostname:
@@ -68,8 +71,9 @@
           ./systems/nixos
           ./systems/nixos/persist.nix
           ./hosts/nixos/${hostname}
-          inputs.home-manager.nixosModules.default
-          inputs.impermanence.nixosModules.impermanence
+          home-manager.nixosModules.default
+          impermanence.nixosModules.impermanence
+          stylix.nixosModules.stylix
         ];
       };
     mkNixosServer = pkgs: hostname:
