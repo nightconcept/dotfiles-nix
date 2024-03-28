@@ -36,7 +36,14 @@
       popups = 0.50;
       desktop = 0.95;
     };
+    cursor = {
+      package = pkgs.bibata-cursors;
+      name = "Bibata-Modern-Classic";
+      size = 16;
+    };
     targets = {
+      gnome.enable = true;
+      gtk.enable = true;
       waybar.enableLeftBackColors = true;
       waybar.enableRightBackColors = true;
     };
