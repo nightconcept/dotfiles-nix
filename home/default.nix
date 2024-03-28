@@ -19,6 +19,7 @@
 
   imports = [
     inputs.nix-colors.homeManagerModules.default
+    inputs.stylix.nixosModules.stylix
     ./desktops/hyprland
     ./programs
   ];

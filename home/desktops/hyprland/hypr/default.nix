@@ -77,7 +77,7 @@ in {
       settings = {
         exec-once = [
           "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-          "swww init && sleep 0.1 && swww img ~/git/dotfiles-nix/home/desktops/wallpaper/main.jpg"
+          #"swww init && sleep 0.1 && swww img ~/git/dotfiles-nix/home/desktops/wallpaper/main.jpg"
           "waybar"
           "kanshi"
           "hyprctl keyword monitor eDP-1, ,preferred, auto, 1"
