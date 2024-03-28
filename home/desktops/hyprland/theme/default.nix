@@ -1,6 +1,6 @@
 {
   imports = [
-    ./gtk.nix
-    ./stylix.nix
+    #./gtk.nix
+    #./stylix.nix
   ];
 }

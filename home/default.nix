@@ -18,8 +18,6 @@
   };
 
   imports = [
-    inputs.nix-colors.homeManagerModules.default
-    inputs.stylix.nixosModules.stylix
     ./desktops/hyprland
     ./programs
   ];
@@ -35,7 +33,6 @@
   #     fonts.monospace = "FiraCode Nerd Font Mono";
   #   };
 
-  colorScheme = inputs.nix-colors.colorSchemes.tokyo-night-terminal-dark;
   # };
 
   #config.colorScheme = inputs.nix-colors.colorSchemes.tokyo-night-terminal-dark;
