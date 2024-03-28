@@ -37,7 +37,7 @@
       userSettings = {
         "editor.accessibilitySupport" = "off";
         "editor.guides.bracketPairs" = true;
-        "editor.fontFamily" = "'FiraCode Nerd Font', Consolas, Meslo, 'monospace', monospace";
+        "editor.fontFamily" = lib.mkForce "'FiraCode Nerd Font', Consolas, Meslo, 'monospace', monospace";
         "editor.fontSize" = 16;
         "editor.fontLigatures" = true;
         "editor.rulers" = [
@@ -57,7 +57,7 @@
         "terminal.integrated.fontSize" = 14;
         "update.mode" = "none";
         "window.zoomLevel" = 1;
-        "workbench.colorTheme" = "Tokyo Night";
+        "workbench.colorTheme" = lib.mkForce "Tokyo Night";
         "workbench.iconTheme" = "material-icon-theme";
         "workbench.startupEditor" = "none";
       };

@@ -24,7 +24,7 @@
         progress_bar = true;
         transparency = 0;
         text_icon_padding = 0;
-        separator_color = "frame";
+        #separator_color = "frame";
         sort = "yes";
         idle_threshold = 120;
         line_height = 0;
@@ -38,7 +38,7 @@
         always_run_script = true;
         corner_radius = 10;
         follow = "mouse";
-        font = "FiraMono Nerd Font 12";
+        #font = "FiraMono Nerd Font 12";
         format = "<b>%s</b>\\n%b"; #format = "<span foreground='#f3f4f5'><b>%s %p</b></span>\n%b"
         frame_color = "#232323";
         frame_width = 1;
@@ -62,18 +62,18 @@
 
       fullscreen_delay_everything = {fullscreen = "delay";};
 
-      urgency_critical = {
-        background = "#d64e4e";
-        foreground = "#f0e0e0";
-      };
-      urgency_low = {
-        background = "#232323";
-        foreground = "#2596be";
-      };
-      urgency_normal = {
-        background = "#1e1e2a";
-        foreground = "#2596be";
-      };
+      # urgency_critical = {
+      #   background = "#d64e4e";
+      #   foreground = "#f0e0e0";
+      # };
+      # urgency_low = {
+      #   background = "#232323";
+      #   foreground = "#2596be";
+      # };
+      # urgency_normal = {
+      #   background = "#1e1e2a";
+      #   foreground = "#2596be";
+      # };
     };
   };
 }

@@ -10,7 +10,6 @@
     ./hypr
     ./kanshi.nix
     ./rofi
-    ./stylix.nix
     ./theme
     ./waybar
     ./wlogout

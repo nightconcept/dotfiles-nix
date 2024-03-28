@@ -53,12 +53,12 @@
               users.danny.home.stateVersion = "23.11";
               useGlobalPkgs = true;
               users.danny.imports = [
+                stylix.homeManagerModules.stylix
                 ./home
               ];
               extraSpecialArgs = {inherit inputs;};
             };
           }
-          stylix.nixosModules.stylix
         ];
       };
     mkNixosPersist = pkgs: hostname:
@@ -73,7 +73,6 @@
           ./hosts/nixos/${hostname}
           home-manager.nixosModules.default
           impermanence.nixosModules.impermanence
-          stylix.nixosModules.stylix
         ];
       };
     mkNixosServer = pkgs: hostname:

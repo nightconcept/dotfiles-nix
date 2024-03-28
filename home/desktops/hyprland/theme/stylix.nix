@@ -5,10 +5,9 @@
   ...
 }: {
   stylix = {
-    wallpaper = config.lib.stylix.mkAnimation {
-      animation = ../../desktops/main.jpg;
-      polarity = "dark";
-    };
+    image = ../../wallpaper/main.jpg;
+    polarity = "dark";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
     fonts = {
       serif = {
         package = pkgs.nerdfonts;
@@ -43,8 +42,8 @@
     targets = {
       gnome.enable = true;
       gtk.enable = true;
-      waybar.enableLeftBackColors = true;
-      waybar.enableRightBackColors = true;
+      waybar.enableLeftBackColors = false;
+      waybar.enableRightBackColors = false;
     };
   };
 }
