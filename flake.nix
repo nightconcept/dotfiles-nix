@@ -64,10 +64,10 @@
         };
         modules = [
           ./systems/nixos
-          ./systems/nixos/persist.nix
           ./hosts/nixos/${hostname}
-          inputs.home-manager.nixosModules.default
-          inputs.impermanence.nixosModules.impermanence
+          disko.nixosModules.disko
+          home-manager.nixosModules.home-manager
+          impermanence.nixosModules.impermanence
         ];
       };
     mkNixosServer = pkgs: hostname:

@@ -1,9 +1,12 @@
 {
   config,
+  lib,
   pkgs,
   inputs,
   ...
 }: {
+
+  
   home.persistence."/persist/home" = {
     directories = [
       "Downloads"
