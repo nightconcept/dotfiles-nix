@@ -8,7 +8,7 @@
     ./direnv.nix
     ./git.nix
     ./ssh.nix
-    ./vscode
+    ./vscode.nix
     ./wezterm
     ./zsh
   ];
