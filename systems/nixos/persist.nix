@@ -5,11 +5,11 @@
   inputs,
   ...
 }: {
-  options.nixos.persist = {
+  options.persist = {
     enable = lib.mkEnableOption "Enables impermanence";
   };
 
-  config = lib.mkIf config.nixos.persist.enable {
+  config = lib.mkIf config.persist.enable {
     boot.initrd.postDeviceCommands = lib.mkAfter ''
       mkdir /btrfs_tmp
       mount /dev/root_vg/root /btrfs_tmp
