@@ -8,9 +8,13 @@
     ./hardware-configuration.nix
   ];
 
-  networking.hostName = "celes";
+  config = {
+    hyprland.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_6_7;
+    networking.hostName = "celes";
 
-  system.stateVersion = "23.11";
+    boot.kernelPackages = pkgs.linuxPackages_6_7;
+
+    system.stateVersion = "23.11";
+  };
 }
