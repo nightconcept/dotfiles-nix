@@ -1,11 +1,7 @@
-# 
 {
-  device ? throw "Set this to your disk device, e.g. /dev/sda",
-  ...
-}: {
   disko.devices = {
     disk.main = {
-      inherit device;
+      device = "/dev/nvme0n1";
       type = "disk";
       content = {
         type = "gpt";

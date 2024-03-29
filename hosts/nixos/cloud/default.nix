@@ -6,32 +6,24 @@
 }: {
   imports = [
     ./hardware-configuration.nix
-    inputs.disko.nixosModules.default
-    (import ../../../systems/nixos/disko.nix
-      {device = "/dev/nvme0n1";})
-    ../../../systems/nixos/desktops/hyprland
-    ../../../systems/nixos/wireless.nix
-    ./options.nix
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_6_7;
+  config = {
+    hyprland.enable = true;
+    persist.enable = true;
+    wireless.enable = true;
 
-  networking.hostName = "cloud";
+    networking.hostName = "cloud";
 
-  services.xserver = {
-    displayManager.gdm.enable = true;
-    enable = true;
-    xkb.layout = "us";
-    xkb.variant = "";
+    boot.kernelPackages = pkgs.linuxPackages_6_7;
+
+    # host-specific packages
+    environment.systemPackages = with pkgs; [
+      acpi
+      powertop
+      networkmanagerapplet
+    ];
+
+    system.stateVersion = "23.11";
   };
-
-  environment.systemPackages = with pkgs; [
-    acpi
-    firefox
-    powertop
-    networkmanagerapplet
-  ];
-
-  # Do not touch
-  system.stateVersion = "23.11";
 }
