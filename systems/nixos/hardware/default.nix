@@ -7,7 +7,6 @@
   imports = [
     ./amd-gpu.nix
     #./amd-pstate.nix
-    ./hardware.nix
   ];
 
   services.printing.enable = true;

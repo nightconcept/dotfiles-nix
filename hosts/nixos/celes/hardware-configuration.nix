@@ -16,6 +16,9 @@
   boot.kernelModules = ["kvm-amd"];
   boot.extraModulePackages = [];
 
+  hardware.amdgpu.loadInInitrd = true;
+  hardware.amdgpu.opencl = true;
+
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/d73a450a-16b5-4f71-956e-95c1a697dc93";
     fsType = "ext4";
