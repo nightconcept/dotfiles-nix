@@ -33,6 +33,8 @@
     nixpkgs,
     home-manager,
     nix-darwin,
+    disko,
+    impermanence,
     ...
   } @ inputs: let
     lib = nixpkgs.lib;

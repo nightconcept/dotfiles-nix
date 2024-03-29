@@ -1,11 +1,11 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: {
-
   options.nixos.hyprland = {
-    enable = lib.mkEnableOption "enables hyprland desktop environment";
+    enable = lib.mkEnableOption "Enables hyprland desktop environment";
   };
 
   config = lib.mkIf config.nixos.hyprland.enable {

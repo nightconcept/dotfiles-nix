@@ -8,16 +8,22 @@
     ./hardware-configuration.nix
   ];
 
-  networking.hostName = "cloud";
+  config = {
+    nixos.hyprland.enable = true;
+    nixos.persist.enable = true;
+    nixos.wireless.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_6_7;
+    networking.hostName = "cloud";
 
-  # host-specific packages
-  environment.systemPackages = with pkgs; [
-    acpi
-    powertop
-    networkmanagerapplet
-  ];
+    boot.kernelPackages = pkgs.linuxPackages_6_7;
 
-  system.stateVersion = "23.11";
+    # host-specific packages
+    environment.systemPackages = with pkgs; [
+      acpi
+      powertop
+      networkmanagerapplet
+    ];
+
+    system.stateVersion = "23.11";
+  };
 }
