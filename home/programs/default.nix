@@ -18,13 +18,11 @@
     duf
     eza
     fd
-    fnm
     fzf
     git-crypt
     ncdu
     neovim
     nmap
-    pyenv
     rsync
     tmux
     trash-cli
@@ -41,8 +39,6 @@
     evince
     fontconfig
     ferdium
-    fnm
-    github-desktop
     hexchat
     libreoffice-fresh
     mpv
@@ -51,7 +47,6 @@
     protonup-qt
     spotify
     ungoogled-chromium
-    kitty
     zoom
   ];
 }
