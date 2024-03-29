@@ -5,8 +5,6 @@
   inputs,
   ...
 }: {
-
-  
   home.persistence."/persist/home" = {
     directories = [
       "Downloads"
