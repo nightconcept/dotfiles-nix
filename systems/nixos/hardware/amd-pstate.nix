@@ -7,6 +7,7 @@
 in {
   # Enables the amd cpu scaling https://www.kernel.org/doc/html/latest/admin-guide/pm/amd-pstate.html
   # On recent AMD CPUs this can be more energy efficient.
+  # TODO: get options for this
 
   imports = [./.];
   boot = lib.mkMerge [
