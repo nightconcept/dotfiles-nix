@@ -4,11 +4,11 @@
   lib,
   ...
 }: {
-  options.nixos.hyprland = {
+  options.hyprland = {
     enable = lib.mkEnableOption "Enables hyprland desktop environment";
   };
 
-  config = lib.mkIf config.nixos.hyprland.enable {
+  config = lib.mkIf config.hyprland.enable {
     services.xserver.enable = true;
     services.xserver.displayManager.gdm.enable = true;
 

@@ -17,5 +17,6 @@
     ./nix.nix
     ./sound.nix
     ./users.nix
+    ./wireless.nix
   ];
 }

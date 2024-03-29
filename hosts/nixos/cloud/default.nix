@@ -9,9 +9,9 @@
   ];
 
   config = {
-    nixos.hyprland.enable = true;
-    nixos.persist.enable = true;
-    nixos.wireless.enable = true;
+    hyprland.enable = true;
+    persist.enable = true;
+    wireless.enable = true;
 
     networking.hostName = "cloud";
 
