@@ -1,10 +1,4 @@
 {
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    enableSyntaxHighlighting = true;
-  };
-
   environment.systemPackages = with pkgs; [
     bat
     btop
@@ -16,6 +10,12 @@
     wget
     vim
     wget
-    zsh
   ];
+
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    enableSyntaxHighlighting = true;
+  };
+
 }
