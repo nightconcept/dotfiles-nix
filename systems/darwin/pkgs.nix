@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   environment.systemPackages = with pkgs; [
     bat
     btop
@@ -17,5 +17,4 @@
     enableCompletion = true;
     enableSyntaxHighlighting = true;
   };
-
 }
