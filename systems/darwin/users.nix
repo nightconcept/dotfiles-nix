@@ -1,4 +1,4 @@
-{ config, pkgs, lib, vars, ... }: 
+{ config, ... }: 
 {
   users.users.danny = {
     description = "Danny";
