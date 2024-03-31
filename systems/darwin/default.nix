@@ -1,9 +1,4 @@
 {
-  inputs,
-  pkgs,
-  lib,
-  ...
-}: {
   imports = [
     ./fonts.nix
     ./homebrew.nix

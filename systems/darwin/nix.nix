@@ -1,4 +1,8 @@
 {
+  pkgs,
+  lib,
+  ...
+}: {
   nix = {
     settings.auto-optimise-store = true;
     settings.allowed-users = ["danny"];
