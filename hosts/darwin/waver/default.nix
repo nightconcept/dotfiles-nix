@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: {
+{pkgs, ...}: {
   # System specific packages
   environment.systemPackages = with pkgs; [
     aldente
