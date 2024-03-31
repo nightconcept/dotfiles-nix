@@ -3,7 +3,6 @@
   pkgs,
   ...
 }: {
-
   # System available packages
   environment.systemPackages = with pkgs; [
     bat
@@ -13,7 +12,6 @@
     gh
     git
     home-manager
-    wget
     vim
     wget
   ];
