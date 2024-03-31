@@ -11,23 +11,6 @@
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
-    delta
-    duf
-    eza
-    fd
-    fzf
-    git-crypt
-    ncdu
-    neovim
-    nmap
-    rsync
-    speedtest-cli
-    tmux
-    trash-cli
-    wget
-    zip
-    zoxide
-
     alt-tab-macos
     discord
     karabiner-elements
@@ -36,6 +19,7 @@
   ];
 
   imports = [
+    ./programs/common.nix
     ./programs/direnv.nix
     ./programs/git.nix
     ./programs/ssh.nix

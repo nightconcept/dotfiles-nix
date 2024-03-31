@@ -5,7 +5,9 @@
   ...
 }: {
   imports = [
+    ./common.nix
     ./direnv.nix
+    ./gaming.nix
     ./git.nix
     ./ssh.nix
     ./vscode.nix
@@ -14,28 +16,9 @@
   ];
 
   home.packages = with pkgs; [
-    delta
-    duf
-    eza
-    fd
-    fzf
-    git-crypt
-    ncdu
-    neovim
-    nmap
-    rsync
-    tmux
-    trash-cli
-    wget
-    zip
-    zoxide
-
     audacious
-    corectrl
-    discord
     foliate
     obsidian
-    steam
     evince
     fontconfig
     ferdium
@@ -44,7 +27,6 @@
     mpv
     nomachine-client
     pavucontrol
-    protonup-qt
     spotify
     ungoogled-chromium
     zoom
