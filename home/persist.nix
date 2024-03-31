@@ -7,20 +7,20 @@
 }: {
   home.persistence."/persist/home" = {
     directories = [
+      ".config/Code"
+      ".config/obsidian"
+      ".gnupg"
+      ".local/share/keyrings"
+      ".nixops"
+      ".ssh"
+      ".vscode" # retain plugins, keep save historyq
+      ".zplug" # faster just so plugins don't need to be redownloaded very single time
       "Downloads"
       "git"
       "Music"
       "Pictures"
       "Documents"
       "Videos"
-      ".gnupg"
-      ".ssh"
-      ".nixops"
-      ".zplug" # faster just so plugins don't need to be redownloaded very single time
-      ".vscode" # retain plugins, keep save history
-      ".config/Code"
-      ".config/obsidian"
-      ".local/share/keyrings"
       {
         directory = ".local/share/Steam";
         method = "symlink";
