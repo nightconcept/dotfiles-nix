@@ -1,14 +1,9 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   services.dunst = {
     enable = true;
     iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
+      name = "Fluent-Standard";
+      package = pkgs.fluent-icon-theme;
     };
     settings = {
       global = {
@@ -38,9 +33,9 @@
         always_run_script = true;
         corner_radius = 10;
         follow = "mouse";
-        font = "FiraMono Nerd Font 12";
+        font = "Fira Sans 12";
         format = "<b>%s</b>\\n%b"; #format = "<span foreground='#f3f4f5'><b>%s %p</b></span>\n%b"
-        frame_color = "#232323";
+        frame_color = "#1a1b26";
         frame_width = 1;
         offset = "15x15";
         horizontal_padding = 10;
@@ -63,16 +58,19 @@
       fullscreen_delay_everything = {fullscreen = "delay";};
 
       urgency_critical = {
-        background = "#d64e4e";
-        foreground = "#f0e0e0";
+        background = "#292e42";
+        foreground = "#db4b4b";
+        frame_color = "#db4b4b";
       };
       urgency_low = {
-        background = "#232323";
-        foreground = "#2596be";
+        background = "#16161e";
+        foreground = "#c0caf5";
+        frame_color = "#c0caf5";
       };
       urgency_normal = {
-        background = "#1e1e2a";
-        foreground = "#2596be";
+        background = "#1a1b26";
+        foreground = "#c0caf5";
+        frame_color = "#c0caf5";
       };
     };
   };
