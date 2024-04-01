@@ -12,6 +12,7 @@
     ./ssh.nix
     ./vscode.nix
     ./wezterm
+    ./xdg.nix
     ./zsh
   ];
 

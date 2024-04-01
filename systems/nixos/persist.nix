@@ -58,8 +58,8 @@
         "/etc/machine-id"
         "/etc/nix/id_rsa"
         "/var/lib/alsa/asound.state"
-        "/tmp/secret.key"
-        "/tmp/additionalSecret.key"
+        # "/tmp/secret.key"
+        # "/tmp/additionalSecret.key"
         {
           file = "/var/keys/secret_file";
           parentDirectory = {mode = "u=rwx,g=,o=";};
