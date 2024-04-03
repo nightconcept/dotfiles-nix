@@ -25,6 +25,7 @@
       "spotify"
       "stretchly"
       "typora"
+      "vial"
       "vlc"
       "zoom"
     ];
