@@ -20,6 +20,12 @@
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
+            name = "where-am-i";
+            publisher = "antfu";
+            version = "0.2.0";
+            sha256 = "sha256-M9TCILD6KKLHCDBP0mBR5soeYb2MFuBAmyKPlKbl1tg=";
+          }
+          {
             name = "tokyo-night-henrikvilhelmberglund";
             publisher = "henrikvilhelmberglund";
             version = "1.1.0";
