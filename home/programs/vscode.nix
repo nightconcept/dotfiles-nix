@@ -7,12 +7,16 @@
   programs = {
     vscode = {
       enable = true;
+      enableUpdateCheck = false;
+      enableExtensionUpdateCheck = false;
+      mutableExtensionsDir = false;
       extensions = with pkgs.vscode-extensions;
         [
           yzhang.markdown-all-in-one
           bbenoist.nix
           eamodio.gitlens
-          kamadorueda.alejandra
+          kamikillerto.vscode-colorize
+          pkief.material-icon-theme
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
@@ -22,12 +26,6 @@
             sha256 = "sha256-M9TCILD6KKLHCDBP0mBR5soeYb2MFuBAmyKPlKbl1tg=";
           }
           {
-            name = "material-icon-theme";
-            publisher = "PKief";
-            version = "4.34.0";
-            sha256 = "sha256-xxOEUvMjqJbl8lONB/So2NoIAVPOxysTq2YQY3iHGqo=";
-          }
-          {
             name = "tokyo-night-henrikvilhelmberglund";
             publisher = "henrikvilhelmberglund";
             version = "1.1.0";
@@ -35,6 +33,10 @@
           }
         ];
       userSettings = {
+        "colorize.languages" = [
+            "nix"
+            "rasi"
+        ];
         "editor.accessibilitySupport" = "off";
         "editor.guides.bracketPairs" = true;
         "editor.fontFamily" = "'FiraCode Nerd Font', Consolas, Meslo, 'monospace', monospace";
