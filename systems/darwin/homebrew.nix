@@ -9,6 +9,7 @@
     };
 
     casks = [
+      "beeper"
       "calibre"
       "eloston-chromium"
       "ferdium"
