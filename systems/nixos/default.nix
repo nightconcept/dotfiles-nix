@@ -8,7 +8,7 @@
     ./network.nix
     ./network-drives.nix
     ./opengl.nix
-    ./persist.nix
+    #./persist.nix
     ./pkgs.nix
     ./nix.nix
     ./sound.nix
