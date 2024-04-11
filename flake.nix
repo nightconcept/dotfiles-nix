@@ -45,6 +45,7 @@
         modules = [
           ./systems/nixos
           ./hosts/nixos/${hostname}
+          disko.nixosModules.disko
           home-manager.nixosModules.home-manager
           {
             home-manager = {
@@ -123,7 +124,7 @@
   in {
     nixosConfigurations = {
       celes = mkNixos inputs.nixpkgs "celes";
-      cloud = mkNixosPersist inputs.nixpkgs "cloud";
+      cloud = mkNixos inputs.nixpkgs "cloud";
       ifrit = mkNixos inputs.nixpkgs "ifrit";
       aerith = mkNixosServer inputs.nixpkgs "aerith";
     };
