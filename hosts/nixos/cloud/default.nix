@@ -10,7 +10,7 @@
 
   config = {
     hyprland.enable = true;
-    persist.enable = true;
+    #persist.enable = true;
     wireless.enable = true;
 
     networking.hostName = "cloud";
