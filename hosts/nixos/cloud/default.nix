@@ -9,8 +9,7 @@
   ];
 
   config = {
-    hyprland.enable = true;
-    #persist.enable = true;
+    plasma5.enable = true;
     wireless.enable = true;
 
     networking.hostName = "cloud";
