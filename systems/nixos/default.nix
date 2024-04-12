@@ -3,6 +3,7 @@
     ./bootloader.nix
     ./hardware
     ./desktops/hyprland
+    ./desktops/plasma5
     ./fonts.nix
     ./locale.nix
     ./network.nix
@@ -13,6 +14,5 @@
     ./nix.nix
     ./sound.nix
     ./users.nix
-    ./wireless.nix
   ];
 }
