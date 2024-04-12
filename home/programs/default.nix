@@ -18,11 +18,13 @@
 
   home.packages = with pkgs; [
     audacious
+    beeper
     foliate
     obsidian
     evince
     fontconfig
     ferdium
+    github-desktop
     hexchat
     libreoffice-fresh
     mpv

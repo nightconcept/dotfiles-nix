@@ -9,13 +9,11 @@
   ];
 
   config = {
-    hyprland.enable = true;
-    #persist.enable = true;
-    wireless.enable = true;
+    plasma5.enable = true;
 
     networking.hostName = "cloud";
 
-    boot.kernelPackages = pkgs.linuxPackages_6_7;
+    boot.kernelPackages = pkgs.linuxPackages_6_8;
 
     # host-specific packages
     environment.systemPackages = with pkgs; [
