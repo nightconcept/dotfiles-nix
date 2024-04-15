@@ -1,10 +1,10 @@
 # dotfiles-nix
 
-My dotfiles for Nix, NixOS, and Nix-Darwin. NixOS has both a non-persisting and [persisting](https://grahamc.com/blog/erase-your-darlings/) configuration without encryption. I plan to add encryption next.
+My dotfiles for Nix, NixOS, and Nix-Darwin.
 
 ## Uses
-- Desktop Environment (Linux): Hyprland
-- Bar: waybar
+- Desktop Environment (Linux): Hyprland or Plasma 5
+- Bar: waybar (Hyprland only)
 - Shell: zsh
 - Terminal: wezterm
 - Editor: vscode
