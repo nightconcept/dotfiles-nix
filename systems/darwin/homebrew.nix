@@ -12,7 +12,6 @@
       "beeper"
       "calibre"
       "eloston-chromium"
-      "ferdium"
       "firefox"
       "github"
       "hiddenbar"
@@ -26,7 +25,6 @@
       "spotify"
       "stretchly"
       "typora"
-      "vial"
       "vlc"
       "zoom"
     ];
