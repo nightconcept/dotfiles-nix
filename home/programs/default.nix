@@ -23,7 +23,6 @@
     obsidian
     evince
     fontconfig
-    ferdium
     github-desktop
     hexchat
     libreoffice-fresh
