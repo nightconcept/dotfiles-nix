@@ -135,7 +135,7 @@
     };
 
     homeConfigurations.ubuntu = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {system = "$x86_64-linux";};
+        pkgs = import nixpkgs {system = "x86_64-linux";};
         modules = [
           ./home/home-ubuntu.nix
         ];
