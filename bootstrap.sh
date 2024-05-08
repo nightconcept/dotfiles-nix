@@ -6,8 +6,9 @@
 # https://install.determinate.systems/
 # https://nix-community.github.io/home-manager/
 
-# install zsh
+# install zsh and set as default shell
 sudo apt-get install zsh -y
+chsh -s /bin/zsh
 
 # install nix
 curl --proto '=https' --tlsv1.2 -sSf -L \
@@ -20,3 +21,4 @@ nix-shell '<home-manager>' -A install
 
 # get dotfiles
 git clone https://github.com/nightconcept/dotfiles-nix
+
