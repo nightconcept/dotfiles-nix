@@ -22,3 +22,5 @@ nix-shell '<home-manager>' -A install
 # get dotfiles
 git clone https://github.com/nightconcept/dotfiles-nix
 
+# run home-manager to install
+home-manager switch --flake .#ubuntu
