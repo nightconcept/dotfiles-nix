@@ -134,10 +134,11 @@
       merlin = mkDarwin inputs.nixpkgs "merlin";
     };
 
-    homeConfigurations = {
-      danny = mkHome "x86_64-linux" "home";
-      danny-darwin = mkHome "aarch64-darwin" "home-darwin";
-      danny-server = mkHome "x86_64-linux" "home-ubuntu";
-    };
+    homeConfigurations.ubuntu = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {system = "$x86_64-linux";};
+        modules = [
+          ./home/home-ubuntu.nix
+        ];
+      };
   };
 }
