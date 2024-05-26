@@ -13,7 +13,7 @@
 
     networking.hostName = "cloud";
 
-    boot.kernelPackages = pkgs.linuxPackages_6_8;
+    boot.kernelPackages = pkgs.linuxPackages_6_9;
 
     # host-specific packages
     environment.systemPackages = with pkgs; [
