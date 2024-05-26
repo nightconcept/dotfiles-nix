@@ -51,6 +51,7 @@
             home-manager = {
               users.danny.home.stateVersion = "23.11";
               useGlobalPkgs = true;
+              backupFileExtension = "backup";
               users.danny.imports = [
                 ./home
               ];
