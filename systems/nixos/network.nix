@@ -6,7 +6,6 @@
 }: {
   networking.networkmanager = {
     enable = true;
-    unmanaged = ["*" "except:type:wwan" "except:type:gsm"];
   };
 
   # Network mounts
