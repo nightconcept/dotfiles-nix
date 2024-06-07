@@ -128,6 +128,7 @@
       cloud = mkNixos inputs.nixpkgs "cloud";
       ifrit = mkNixos inputs.nixpkgs "ifrit";
       aerith = mkNixosServer inputs.nixpkgs "aerith";
+      phoenix = mkNixosServer inputs.nixpkgs "phoenix";
     };
 
     darwinConfigurations = {
