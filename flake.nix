@@ -39,6 +39,7 @@
     nix-darwin,
     disko,
     impermanence,
+    vscode-server,
     ...
   } @ inputs: let
     lib = nixpkgs.lib;
