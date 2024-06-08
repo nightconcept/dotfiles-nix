@@ -26,6 +26,10 @@
       url = "github:LnL7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    vscode-server = {
+      url = "github:nix-community/nixos-vscode-server";
+    };
   };
 
   outputs = {
@@ -91,6 +95,10 @@
               extraSpecialArgs = {inherit inputs;};
             };
           }
+          vscode-server.nixosModules.default
+          ({ config, pkgs, ... }: {
+            services.vscode-server.enable = true;
+          }) 
         ];
       };
     mkDarwin = pkgs: hostname:
