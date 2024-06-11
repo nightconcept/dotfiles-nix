@@ -19,7 +19,6 @@
     alt-tab-macos
     discord
     karabiner-elements
-    mpv
     obsidian
   ];
 
