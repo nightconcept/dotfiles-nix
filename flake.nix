@@ -51,7 +51,10 @@
             home-manager = {
               users.danny.home.stateVersion = "23.11";
               useGlobalPkgs = true;
+              # not working
+              # see: https://discourse.nixos.org/t/nixos-rebuild-fails-on-backup-up-config-file-by-home-manager/45992
               backupFileExtension = "backup";
+
               users.danny.imports = [
                 ./home
               ];

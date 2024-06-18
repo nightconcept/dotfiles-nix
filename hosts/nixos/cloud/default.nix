@@ -18,6 +18,7 @@
     # host-specific packages
     environment.systemPackages = with pkgs; [
       acpi
+      godot_4
       powertop
       networkmanagerapplet
     ];
