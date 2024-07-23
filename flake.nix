@@ -26,6 +26,10 @@
       url = "github:LnL7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    vscode-server = {
+      url = "github:nix-community/nixos-vscode-server";
+    };
   };
 
   outputs = {
@@ -35,6 +39,7 @@
     nix-darwin,
     disko,
     impermanence,
+    vscode-server,
     ...
   } @ inputs: let
     lib = nixpkgs.lib;
@@ -91,6 +96,10 @@
               extraSpecialArgs = {inherit inputs;};
             };
           }
+          vscode-server.nixosModules.default
+          ({ config, pkgs, ... }: {
+            services.vscode-server.enable = true;
+          }) 
         ];
       };
     mkDarwin = pkgs: hostname:
@@ -128,6 +137,7 @@
       cloud = mkNixos inputs.nixpkgs "cloud";
       ifrit = mkNixos inputs.nixpkgs "ifrit";
       aerith = mkNixosServer inputs.nixpkgs "aerith";
+      phoenix = mkNixosServer inputs.nixpkgs "phoenix";
     };
 
     darwinConfigurations = {
