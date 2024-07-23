@@ -16,6 +16,14 @@ More uses [here](https://www.solivan.dev/blog/uses/).
 - `/hosts` - Host specific software and hardware configuration
 - `/systems` - System (NixOS and Darwin) specific configuration.
 
+### Usage
+
+#### NixOS
+
+1. A fresh install of NixOS does not have git installed. It is best to add git (and particularly any other pre-requisites needed for the installation) to the configuration.nix file in /etc/nixos/configuration.nix and then run `nixos-rebuild switch`. Using `nix-shell -p git` may not always provide "enough" pre-requisites based off the configuration.
+
+2. Run `nixos-rebuild switch --flake .#<CONFIG-NAME> --experimental-feature "nix-command flakes" to switch over to the configuration in the flake.
+
 ## Dotfile credits/inspiration
 - [hmajid2301/dotfiles](https://github.com/hmajid2301/dotfiles)
 - [HeinzDev/Hyprland-dotfiles](https://github.com/HeinzDev/Hyprland-dotfiles)
