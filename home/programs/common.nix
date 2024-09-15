@@ -11,6 +11,7 @@
     ncdu
     neovim
     nmap
+    poetry
     rsync
     wget
     zip
