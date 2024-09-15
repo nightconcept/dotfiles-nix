@@ -9,13 +9,12 @@
     };
 
     casks = [
-      "beeper"
       "calibre"
       "eloston-chromium"
+      "ferdium"
       "firefox"
       "github"
       "hiddenbar"
-      "libreoffice"
       "mos"
       "nomachine"
       "notunes"
@@ -24,7 +23,6 @@
       "rectangle"
       "spotify"
       "stretchly"
-      "typora"
       "vlc"
       "zoom"
     ];
