@@ -17,6 +17,7 @@
           eamodio.gitlens
           kamikillerto.vscode-colorize
           pkief.material-icon-theme
+          ms-python.python
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
