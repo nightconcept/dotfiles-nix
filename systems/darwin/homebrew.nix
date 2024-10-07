@@ -8,6 +8,11 @@
       upgrade = true;
     };
 
+    brews = [
+      "gettext"
+      "pyenv"
+    ];
+
     casks = [
       "calibre"
       "eloston-chromium"
