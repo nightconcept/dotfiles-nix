@@ -24,6 +24,7 @@
       "spotify"
       "stretchly"
       "vlc"
+      "wezterm@nightly"
       "zoom"
     ];
   };

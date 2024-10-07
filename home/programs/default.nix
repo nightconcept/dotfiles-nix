@@ -18,7 +18,6 @@
 
   home.packages = with pkgs; [
     audacious
-    beeper
     foliate
     obsidian
     evince
