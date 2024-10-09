@@ -1,5 +1,8 @@
 
 -- References: [dotfiles/.config/wezterm at main · aperum/dotfiles](https://github.com/aperum/dotfiles/tree/main/.config/wezterm)
+
+-- Pull in the wezterm API
+local wezterm = require 'wezterm'
 local act = wezterm.action
 
 local config = {}
