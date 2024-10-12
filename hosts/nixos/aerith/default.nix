@@ -37,7 +37,7 @@
     32469
   ];
 
-  # Enable the OpenSSH daemon.
+# Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
   # System available packages
