@@ -18,6 +18,8 @@
           kamikillerto.vscode-colorize
           pkief.material-icon-theme
           ms-python.python
+          vscode-extensions.ms-vscode-remote.remote-ssh
+          vscode-extensions.ms-vscode-remote.remote-ssh-edit
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
@@ -30,6 +32,11 @@
             name = "tokyo-night-henrikvilhelmberglund";
             publisher = "henrikvilhelmberglund";
             version = "1.1.0";
+            sha256 = "sha256-WEdmyIwmJ2uigNhksgzr6IH4PIWwthJvX5N1OG3JUZ4=";
+          }
+            name = "ms-vscode.remote-explorer";
+            publisher = "Microsoft";
+            version = " 	0.5.2024081309";
             sha256 = "sha256-WEdmyIwmJ2uigNhksgzr6IH4PIWwthJvX5N1OG3JUZ4=";
           }
         ];
