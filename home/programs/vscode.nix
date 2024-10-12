@@ -37,7 +37,7 @@
           {
             name = "remote-explorer";
             publisher = "Microsoft";
-            version = " 	0.5.2024081309";
+            version = "0.5.2024081309";
             sha256 = "sha256-WEdmyIwmJ2uigNhksgzr6IH4PIWwthJvX5N1OG3JUZ4=";
           }
         ];
