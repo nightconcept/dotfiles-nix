@@ -26,7 +26,6 @@
       "plex"
       "raycast"
       "rectangle"
-      "spotify"
       "stretchly"
       "vlc"
       "wezterm@nightly"
