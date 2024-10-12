@@ -34,6 +34,7 @@
             version = "1.1.0";
             sha256 = "sha256-WEdmyIwmJ2uigNhksgzr6IH4PIWwthJvX5N1OG3JUZ4=";
           }
+          {
             name = "ms-vscode.remote-explorer";
             publisher = "Microsoft";
             version = " 	0.5.2024081309";
