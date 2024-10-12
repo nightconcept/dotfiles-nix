@@ -18,7 +18,6 @@
           kamikillerto.vscode-colorize
           pkief.material-icon-theme
           ms-python.python
-          ms-vscode-remote.remote-ssh
           ms-vscode-remote.remote-ssh-edit
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
@@ -36,9 +35,15 @@
           }
           {
             name = "remote-explorer";
-            publisher = "Microsoft";
+            publisher = "ms-vscode";
             version = "0.5.2024081309";
-            sha256 = "sha256-WEdmyIwmJ2uigNhksgzr6IH4PIWwthJvX5N1OG3JUZ4=";
+            sha256 = "sha256-YExf9Yyo7Zp0Nfoap8Vvtas11W9Czslt55X9lb/Ri3s=";
+          }
+          {
+            name = "remote-ssh";
+            publisher = "ms-vscode-remote";
+            version = "0.116.2024100715";
+            sha256 = "sha256-Mo11BGA27Bi62JRPU6INOq3SXTsp5ASYzd8ihlV3ZZY=";
           }
         ];
       userSettings = {
