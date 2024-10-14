@@ -10,11 +10,11 @@
 
   boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/f169d75c-8c68-4531-9685-1c79d0fffa70";
+    { device = "/dev/disk/by-uuid/013673ed-5fa0-4291-840d-ae66e8847e9a";
       fsType = "ext4";
     };
 
