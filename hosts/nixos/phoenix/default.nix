@@ -12,12 +12,15 @@
 
   networking.hostName = "phoenix";
 
-  boot.kernelPackages = pkgs.linuxPackages_6_9;
+  boot.kernelPackages = pkgs.linuxPackages_6_11;
 
   # Display settings
   services.xserver.enable = true;
-  services.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
+
+  virtualisation.docker.enable = true;
+  users.extraGroups.docker.members = ["danny"];
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
