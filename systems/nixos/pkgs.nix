@@ -12,6 +12,7 @@
     gh
     git
     home-manager
+    pyenv
     vim
     wget
   ];
