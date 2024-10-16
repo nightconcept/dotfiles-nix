@@ -19,6 +19,7 @@
           pkief.material-icon-theme
           ms-python.python
           ms-vscode-remote.remote-ssh-edit
+          rust-lang.rust-analyzer
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
