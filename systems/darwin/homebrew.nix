@@ -11,6 +11,7 @@
     brews = [
       "gettext"
       "pyenv"
+      "xz"
     ];
 
     casks = [
