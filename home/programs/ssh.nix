@@ -10,6 +10,11 @@
         Port 443
         User git
         IdentityFile=${config.home.homeDirectory}/.ssh/id_sdev
+
+    Host siren.nclabs.net
+      HostName siren.nclabs.net
+      User danny
+      IdentityFile=${config.home.homeDirectory}/.ssh/id_sdev
     '';
   };
 }
