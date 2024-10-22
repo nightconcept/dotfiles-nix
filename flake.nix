@@ -145,11 +145,19 @@
       merlin = mkDarwin inputs.nixpkgs "merlin";
     };
 
-    homeConfigurations.ubuntu = home-manager.lib.homeManagerConfiguration {
+    homeConfigurations = {
+      ubuntu = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {system = "x86_64-linux";};
         modules = [
           ./home/home-ubuntu.nix
         ];
       };
+      desktop = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {system = "x86_64-linux";};
+        modules = [
+          ./home/home-desktop.nix
+        ];
+      };
+    };
   };
 }
