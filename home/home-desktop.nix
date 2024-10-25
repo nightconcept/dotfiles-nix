@@ -17,6 +17,8 @@
 
   home.packages = with pkgs; [
     discord
+    fastfetch
+    ferdium
     fira
     fira-go
     fira-code-nerdfont
@@ -26,6 +28,7 @@
     noto-fonts-cjk
     noto-fonts-emoji
     obsidian
+    pyenv
     source-serif
     work-sans
   ];
