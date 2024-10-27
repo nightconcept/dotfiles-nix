@@ -6,16 +6,14 @@
 # https://install.determinate.systems/
 # https://nix-community.github.io/home-manager/
 
-# install zsh and set as default shell
-sudo apt-get install zsh -y
-chsh -s /bin/zsh
-
 # install nix
-#curl --proto '=https' --tlsv1.2 -sSf -L \
-#  https://install.determinate.systems/nix | sh -s -- install
+curl --proto '=https' --tlsv1.2 -sSf -L \
+  https://install.determinate.systems/nix | sh -s -- install
 
 # this might be better? this is working on wsl2 on w11 and ubuntu 22.04, the above command is not
 # sh <(curl -L https://nixos.org/nix/install) --no-daemon
+
+#TODO call script to make nix active in shell
 
 # install home manager standalone
 nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
@@ -26,4 +24,4 @@ nix-shell '<home-manager>' -A install
 #git clone https://github.com/nightconcept/dotfiles-nix
 
 # run home-manager to install
-home-manager switch --flake .#ubuntu
+home-manager switch --flake .#desktop
