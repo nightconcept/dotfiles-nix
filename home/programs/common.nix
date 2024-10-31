@@ -7,7 +7,6 @@
     fd
     fzf
     gh
-    git-crypt
     ncdu
     neovim
     nmap
