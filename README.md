@@ -1,10 +1,9 @@
 # dotfiles-nix
 
-My dotfiles for Nix, NixOS, and Nix-Darwin.
+My dotfiles for Nix, NixOS, and Nix-Darwin. Nix-only configurations complement my automatic-os-setup repo.
 
 ## Uses
-- Desktop Environment (Linux): Hyprland or Plasma 5
-- Bar: waybar (Hyprland only)
+- Desktop Environment (Linux): Plasma 6
 - Shell: zsh
 - Terminal: wezterm
 - Editor: vscode
