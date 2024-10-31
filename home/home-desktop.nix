@@ -16,7 +16,6 @@
   };
 
   home.packages = with pkgs; [
-    discord
     fastfetch
     ferdium
     fira
@@ -31,6 +30,7 @@
     pyenv
     source-serif
     work-sans
+    zoom
   ];
 
   #xdg.mime.enable = false;
@@ -38,6 +38,7 @@
   imports = [
     ./programs/common.nix
     ./programs/direnv.nix
+    ./programs/gaming.nix
     ./programs/git.nix
     ./programs/ssh.nix
     ./programs/vscode.nix

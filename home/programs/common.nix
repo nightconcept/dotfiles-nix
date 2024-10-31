@@ -8,7 +8,6 @@
     fzf
     gh
     ncdu
-    neovim
     nmap
     poetry
     rsync
