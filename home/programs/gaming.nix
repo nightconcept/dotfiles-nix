@@ -1,6 +1,6 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
-    lact
+    #lact
     protonup-qt
   ];
 }
