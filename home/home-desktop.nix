@@ -42,7 +42,7 @@
     ./programs/git.nix
     ./programs/ssh.nix
     ./programs/vscode.nix
-    ./programs/wezterm
+    #./programs/wezterm
     ./programs/zsh
   ];
 

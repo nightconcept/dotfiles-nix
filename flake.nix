@@ -14,12 +14,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    hyprland.url = "github:hyprwm/Hyprland";
-
-    impermanence = {
-      url = "github:nix-community/impermanence";
-    };
-
     nix-colors.url = "github:misterio77/nix-colors";
 
     nix-darwin = {
@@ -37,8 +31,6 @@
     nixpkgs,
     home-manager,
     nix-darwin,
-    disko,
-    impermanence,
     vscode-server,
     ...
   } @ inputs: let
@@ -50,7 +42,6 @@
         modules = [
           ./systems/nixos
           ./hosts/nixos/${hostname}
-          disko.nixosModules.disko
           home-manager.nixosModules.home-manager
           {
             home-manager = {
@@ -63,20 +54,6 @@
               extraSpecialArgs = {inherit inputs;};
             };
           }
-        ];
-      };
-    mkNixosPersist = pkgs: hostname:
-      pkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {
-          inherit inputs;
-        };
-        modules = [
-          ./systems/nixos
-          ./hosts/nixos/${hostname}
-          disko.nixosModules.disko
-          home-manager.nixosModules.home-manager
-          impermanence.nixosModules.impermanence
         ];
       };
     mkNixosServer = pkgs: hostname:
@@ -146,10 +123,10 @@
     };
 
     homeConfigurations = {
-      ubuntu = home-manager.lib.homeManagerConfiguration {
+      cli = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {system = "x86_64-linux";};
         modules = [
-          ./home/home-ubuntu.nix
+          ./home/home-cli.nix
         ];
       };
       desktop = home-manager.lib.homeManagerConfiguration {
