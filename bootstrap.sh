@@ -13,7 +13,7 @@ curl --proto '=https' --tlsv1.2 -sSf -L \
 # this might be better? this is working on wsl2 on w11 and ubuntu 22.04, the above command is not
 # sh <(curl -L https://nixos.org/nix/install) --no-daemon
 
-#TODO call script to make nix active in shell
+. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 
 # install home manager standalone
 nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
