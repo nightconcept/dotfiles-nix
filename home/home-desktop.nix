@@ -16,6 +16,7 @@
   };
 
   home.packages = with pkgs; [
+    btrfs-assistant
     fastfetch
     ferdium
     fira
