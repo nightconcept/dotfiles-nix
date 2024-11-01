@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# only configured for Ubuntu
+# Configured for Linux servers
 
 # resources:
 # https://install.determinate.systems/
@@ -20,8 +20,5 @@ nix-channel --add https://github.com/nix-community/home-manager/archive/master.t
 nix-channel --update
 nix-shell '<home-manager>' -A install
 
-# get dotfiles
-#git clone https://github.com/nightconcept/dotfiles-nix
-
 # run home-manager to install
-home-manager switch --flake .#desktop
+home-manager switch --flake .#cli

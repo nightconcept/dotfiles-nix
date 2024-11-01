@@ -31,9 +31,6 @@
     neovim
     nmap
     rsync
-    speedtest-cli
-    tmux
-    trash-cli
     vim
     wget
     zip
@@ -41,7 +38,6 @@
   ];
 
   imports = [
-    ./programs/direnv.nix
     ./programs/git.nix
     ./programs/ssh.nix
     ./programs/zsh
