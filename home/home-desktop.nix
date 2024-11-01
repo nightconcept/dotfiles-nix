@@ -23,12 +23,14 @@
     fira-code-nerdfont
     fira-code-symbols
     github-desktop
+    nomachine-client
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
     obsidian
     pyenv
     source-serif
+    vlc
     work-sans
     zoom
   ];
