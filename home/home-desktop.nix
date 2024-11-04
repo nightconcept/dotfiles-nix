@@ -24,6 +24,7 @@
     fira-code-nerdfont
     fira-code-symbols
     github-desktop
+    nerdfonts
     nomachine-client
     noto-fonts
     noto-fonts-cjk

@@ -22,3 +22,6 @@ nix-shell '<home-manager>' -A install
 
 # run home-manager to install
 home-manager switch --flake .#cli
+
+# required for zshrc
+curl https://pyenv.run | bash
