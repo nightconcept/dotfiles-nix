@@ -21,7 +21,6 @@
     ferdium
     fira
     fira-go
-    fira-code-nerdfont
     fira-code-symbols
     github-desktop
     nerdfonts
