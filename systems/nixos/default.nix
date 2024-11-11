@@ -2,7 +2,6 @@
   imports = [
     ./bootloader.nix
     ./hardware
-    ./desktops/hyprland
     ./desktops/plasma5
     ./fonts.nix
     ./locale.nix
