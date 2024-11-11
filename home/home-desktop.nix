@@ -26,7 +26,7 @@
     nerdfonts
     nomachine-client
     noto-fonts
-    noto-fonts-cjk
+    noto-fonts-cjk-sans
     noto-fonts-emoji
     obsidian
     pyenv
