@@ -25,7 +25,7 @@
       fira-code-symbols
       joypixels
       noto-fonts
-      noto-fonts-cjk
+      noto-fonts-cjk-sans
       noto-fonts-emoji
       source-serif
       work-sans
