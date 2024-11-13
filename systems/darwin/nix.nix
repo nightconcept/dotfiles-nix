@@ -4,7 +4,7 @@
   ...
 }: {
   nix = {
-    settings.auto-optimise-store = true;
+    optimise.automatic = true;
     settings.allowed-users = ["danny"];
     gc = {
       automatic = true;

@@ -7,7 +7,6 @@
     fd
     fzf
     gh
-    ncdu
     nmap
     poetry
     rsync
