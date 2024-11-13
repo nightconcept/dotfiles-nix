@@ -19,6 +19,7 @@
     btrfs-assistant
     fastfetch
     ferdium
+    filezilla
     fira
     fira-go
     fira-code-symbols
