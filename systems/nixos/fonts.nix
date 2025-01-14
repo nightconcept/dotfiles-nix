@@ -7,22 +7,13 @@
   nixpkgs.config.joypixels.acceptLicense = true;
   fonts = {
     packages = with pkgs; [
-      (
-        nerdfonts.override
-        {
-          fonts = [
-            "FiraCode"
-            "FiraMono"
-            "SourceCodePro"
-            "Ubuntu"
-            "UbuntuMono"
-          ];
-        }
-      )
       fira
+      fira-mono
       fira-go
       fira-code-symbols
       joypixels
+      nerd-fonts.fira-code
+      nerd-fonts.fira-mono
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-emoji
