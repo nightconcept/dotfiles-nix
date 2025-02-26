@@ -20,19 +20,15 @@
     fastfetch
     ferdium
     filezilla
-    fira
-    fira-go
-    fira-code-symbols
     github-desktop
-    nerdfonts
+    nerd-fonts.fira-code
+    nerd-fonts.fira-mono
     noto-fonts
     noto-fonts-cjk-sans
     noto-fonts-emoji
     obsidian
     pyenv
-    source-serif
     vlc
-    work-sans
     zoom
   ];
 
