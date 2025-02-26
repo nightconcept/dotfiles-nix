@@ -7,10 +7,11 @@
   programs = {
     vscode = {
       enable = true;
-      enableUpdateCheck = false;
-      enableExtensionUpdateCheck = false;
       mutableExtensionsDir = false;
-      extensions = with pkgs.vscode-extensions;
+      profiles.default = {
+        enableUpdateCheck = false;
+        enableExtensionUpdateCheck = false;
+        extensions = with pkgs.vscode-extensions;
         [
           yzhang.markdown-all-in-one
           bbenoist.nix
@@ -47,36 +48,37 @@
             sha256 = "sha256-Mo11BGA27Bi62JRPU6INOq3SXTsp5ASYzd8ihlV3ZZY=";
           }
         ];
-      userSettings = {
-        "colorize.languages" = [
-            "nix"
-            "rasi"
-        ];
-        "editor.accessibilitySupport" = "off";
-        "editor.guides.bracketPairs" = true;
-        "editor.fontFamily" = "'FiraCode Nerd Font', Consolas, Meslo, 'monospace', monospace";
-        "editor.fontSize" = 16;
-        "editor.fontLigatures" = true;
-        "editor.rulers" = [
-          {
-            "color" = "#808080";
-            "column" = 100;
-          }
-        ];
-        "editor.tabSize" = 2;
-        "editor.wordWrap" = "on";
-        "extensions.ignoreRecommendations" = true;
-        "git.autofetch" = true;
-        "git.defaultBranchName" = "main";
-        "gitlens.showWelcomeOnInstall" = false;
-        "gitlens.showWhatsNewAfterUpgrades" = false;
-        "telemetry.telemetryLevel" = "off";
-        "terminal.integrated.fontSize" = 14;
-        "update.mode" = "none";
-        "window.zoomLevel" = 1;
-        "workbench.colorTheme" = "Tokyo Night";
-        "workbench.iconTheme" = "material-icon-theme";
-        "workbench.startupEditor" = "none";
+        userSettings = {
+          "colorize.languages" = [
+              "nix"
+              "rasi"
+          ];
+          "editor.accessibilitySupport" = "off";
+          "editor.guides.bracketPairs" = true;
+          "editor.fontFamily" = "'FiraCode Nerd Font', Consolas, Meslo, 'monospace', monospace";
+          "editor.fontSize" = 16;
+          "editor.fontLigatures" = true;
+          "editor.rulers" = [
+            {
+              "color" = "#808080";
+              "column" = 100;
+            }
+          ];
+          "editor.tabSize" = 2;
+          "editor.wordWrap" = "on";
+          "extensions.ignoreRecommendations" = true;
+          "git.autofetch" = true;
+          "git.defaultBranchName" = "main";
+          "gitlens.showWelcomeOnInstall" = false;
+          "gitlens.showWhatsNewAfterUpgrades" = false;
+          "telemetry.telemetryLevel" = "off";
+          "terminal.integrated.fontSize" = 14;
+          "update.mode" = "none";
+          "window.zoomLevel" = 1;
+          "workbench.colorTheme" = "Tokyo Night";
+          "workbench.iconTheme" = "material-icon-theme";
+          "workbench.startupEditor" = "none";
+        };
       };
     };
   };
