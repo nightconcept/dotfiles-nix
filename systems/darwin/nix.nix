@@ -8,7 +8,6 @@
     settings.allowed-users = ["danny"];
     gc = {
       automatic = true;
-      user = "danny";
       options = "--delete-older-than 7d";
     };
     extraOptions =
@@ -23,8 +22,6 @@
   };
 
   nixpkgs.config.allowUnfree = true;
-
-  services.nix-daemon.enable = true;
 
   system.stateVersion = 4;
 }

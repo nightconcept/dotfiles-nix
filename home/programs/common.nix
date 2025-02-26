@@ -2,6 +2,7 @@
   home.packages = with pkgs; [
     btop
     delta
+    deno
     duf
     eza
     fd
@@ -9,6 +10,7 @@
     gh
     nmap
     poetry
+    jetbrains.pycharm-community-bin
     rsync
     wget
     zip
