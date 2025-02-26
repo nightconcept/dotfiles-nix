@@ -23,9 +23,6 @@
     github-desktop
     nerd-fonts.fira-code
     nerd-fonts.fira-mono
-    noto-fonts
-    noto-fonts-cjk-sans
-    noto-fonts-emoji
     obsidian
     pyenv
     vlc
