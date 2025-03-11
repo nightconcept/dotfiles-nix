@@ -24,6 +24,7 @@
       "mos"
       "nomachine"
       "notunes"
+      "obsidian"
       "plex"
       "raycast"
       "rectangle"
