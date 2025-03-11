@@ -10,6 +10,7 @@
 
     brews = [
       "gettext"
+      "elixir"
       "pyenv"
       "xz"
     ];
