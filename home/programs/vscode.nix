@@ -21,6 +21,7 @@
           ms-python.python
           ms-vscode-remote.remote-ssh-edit
           svelte.svelte-vscode
+          elixir-lsp.vscode-elixir-ls
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
