@@ -17,6 +17,8 @@
 
   home.packages = with pkgs; [
     btrfs-assistant
+    elixir_1_18
+    erlang_27
     fastfetch
     ferdium
     filezilla
