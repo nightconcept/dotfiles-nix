@@ -128,6 +128,12 @@
           ./home/home-desktop.nix
         ];
       };
+      wsl = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {system = "x86_64-linux";};
+        modules = [
+          ./home/home-wsl.nix
+        ];
+      };
     };
   };
 }
