@@ -15,6 +15,16 @@ More uses [here](https://www.solivan.dev/blog/uses/).
 - `/hosts` - Host specific software and hardware configuration
 - `/systems` - System (NixOS and Darwin) specific configuration.
 
+## NixOS Hosts
+- Aerith - Dedicated Plex configuration
+- Celes - **(Deprecated)** configuration for main PC
+- Cloud - **(Deprecated)** configuration for laptop
+- Phoenix - **Spare** configuration for a VM
+
+## Darwin Hosts
+- Merlin - Mac Mini HTPC
+- Waver - MacBook Pro
+
 ### Usage
 
 #### NixOS
