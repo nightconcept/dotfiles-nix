@@ -2,7 +2,7 @@
 
 My dotfiles for Nix, NixOS, and Nix-Darwin. Nix-only configurations complement my automatic-os-setup repo.
 
-## Uses
+## Uses (NixOS)
 - Desktop Environment (Linux): Plasma 6
 - Shell: zsh
 - Terminal: wezterm
@@ -15,23 +15,49 @@ More uses [here](https://www.solivan.dev/blog/uses/).
 - `/hosts` - Host specific software and hardware configuration
 - `/systems` - System (NixOS and Darwin) specific configuration.
 
-## NixOS Hosts
+## Hosts
+### NixOS Hosts
 - Aerith - Dedicated Plex configuration
 - Celes - **(Deprecated)** configuration for main PC
 - Cloud - **(Deprecated)** configuration for laptop
 - Phoenix - **Spare** configuration for a VM
 
-## Darwin Hosts
+### Darwin Hosts
 - Merlin - Mac Mini HTPC
 - Waver - MacBook Pro
 
-### Usage
+## Usage
 
-#### NixOS
+### NixOS
 
 1. A fresh install of NixOS does not have git installed. It is best to add git (and particularly any other pre-requisites needed for the installation) to the configuration.nix file in /etc/nixos/configuration.nix and then run `nixos-rebuild switch`. Using `nix-shell -p git` may not always provide "enough" pre-requisites based off the configuration.
 
-2. Run `nixos-rebuild switch --flake .#<CONFIG-NAME> --experimental-feature "nix-command flakes" to switch over to the configuration in the flake.
+2. Run `nixos-rebuild switch --flake .#<CONFIG-NAME> --experimental-feature "nix-command flakes"` to switch over to the configuration in the flake.
+
+### Nix Home Manager (macOS/Linux)
+
+Run the following commands to get Nix, Home Manager, and 
+
+```shell
+// Install Nix
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+
+// Install Home Manager
+nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
+nix-channel --update
+
+// Clone
+git clone https://github.com/nightconcept/dotfiles-nix
+cd dotfiles-nix
+
+// Variations of home manager switch for Linux
+home-manager switch --flake '.#cli'
+home-manager switch --flake '.#desktop'
+
+// Variations of home manager switch for macOS
+home-manager switch --flake '.#merlin'
+home-manager switch --flake '.#waver'
+```
 
 ## Dotfile credits/inspiration
 - [hmajid2301/dotfiles](https://github.com/hmajid2301/dotfiles)
