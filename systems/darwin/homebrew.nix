@@ -18,7 +18,6 @@
     casks = [
       "calibre"
       "eloston-chromium"
-      "ferdium"
       "firefox"
       "github"
       "hiddenbar"
