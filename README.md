@@ -53,6 +53,7 @@ cd dotfiles-nix
 // Variations of home manager switch for Linux
 home-manager switch --flake '.#cli'
 home-manager switch --flake '.#desktop'
+home-manager switch --flake '.#wsl'
 
 // Variations of home manager switch for macOS
 home-manager switch --flake '.#merlin'
