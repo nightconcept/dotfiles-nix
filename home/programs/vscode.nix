@@ -23,6 +23,7 @@
           svelte.svelte-vscode
           elixir-lsp.vscode-elixir-ls
           ms-vscode-remote.remote-wsl
+          gleam.gleam
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {

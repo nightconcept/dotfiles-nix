@@ -11,6 +11,7 @@
     brews = [
       "gettext"
       "elixir"
+      "gleam"
       "pyenv"
       "xz"
     ];

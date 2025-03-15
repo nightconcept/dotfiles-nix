@@ -6,8 +6,6 @@
     deno
     duf
     eza
-    fd
-    fzf
     gh
     nmap
     neovim
