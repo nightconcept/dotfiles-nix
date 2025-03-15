@@ -20,13 +20,11 @@
     btop
     deno
     duf
-    elixir_1_18
     erlang_27
     eza
     fastfetch
-    fd
-    fzf
     git
+    gleam
     gh
     lazydocker
     lazygit
