@@ -10,8 +10,8 @@
     fzf
     gh
     nmap
+    neovim
     poetry
-    jetbrains.pycharm-community-bin
     rsync
     wget
     zip
