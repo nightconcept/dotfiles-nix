@@ -24,6 +24,7 @@
           elixir-lsp.vscode-elixir-ls
           ms-vscode-remote.remote-wsl
           gleam.gleam
+          tamasfe.even-better-toml
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
