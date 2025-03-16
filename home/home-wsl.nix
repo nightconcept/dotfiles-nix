@@ -16,10 +16,12 @@
   };
 
   home.packages = with pkgs; [
+    alejandra
     bat
     btop
     deno
     duf
+    elixir_1_18
     erlang_27
     eza
     fastfetch
