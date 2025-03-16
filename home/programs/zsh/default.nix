@@ -35,6 +35,7 @@
           {name = "zsh-users/zsh-completions";}
           {name = "zsh-users/zsh-history-substring-search";}
           {name = "chisui/zsh-nix-shell";}
+          {name = "nix-community/nix-zsh-completions";}
         ];
       };
       plugins = [
