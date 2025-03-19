@@ -72,6 +72,7 @@
           "editor.wordWrap" = "on";
           "extensions.ignoreRecommendations" = true;
           "git.autofetch" = true;
+          "git.confirmSync" = false;
           "git.defaultBranchName" = "main";
           "gitlens.showWelcomeOnInstall" = false;
           "gitlens.showWhatsNewAfterUpgrades" = false;
