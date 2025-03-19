@@ -61,7 +61,7 @@
               users.danny.home.stateVersion = "23.11";
               useGlobalPkgs = true;
               users.danny.imports = [
-                ./home/home-server.nix
+                ./home/home-nixos-server.nix
               ];
               extraSpecialArgs = {inherit inputs;};
             };
@@ -116,16 +116,16 @@
     };
 
     homeConfigurations = {
-      cli = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {system = "x86_64-linux";};
-        modules = [
-          ./home/home-cli.nix
-        ];
-      };
       desktop = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {system = "x86_64-linux";};
         modules = [
           ./home/home-desktop.nix
+        ];
+      };
+      server = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {system = "x86_64-linux";};
+        modules = [
+          ./home/home-server.nix
         ];
       };
       wsl = home-manager.lib.homeManagerConfiguration {

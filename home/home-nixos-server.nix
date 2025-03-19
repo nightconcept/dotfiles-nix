@@ -5,14 +5,16 @@
   ...
 }: {
   programs.home-manager.enable = true;
-  nixpkgs.config.allowUnfree = true;
 
-  nix = {
-    package = pkgs.nix;
-    settings.experimental-features = ["nix-command" "flakes"];
-    extraOptions = ''
-      warn-dirty = false
-    '';
+  news = {
+    display = "silent";
+  };
+
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      allowUnfreePredicate = _: true;
+    };
   };
 
   home.packages = with pkgs; [
@@ -20,9 +22,6 @@
     btop
     duf
     eza
-    fastfetch
-    fd
-    fzf
     git
     gh
     lazydocker
@@ -38,8 +37,7 @@
   ];
 
   imports = [
-    ./programs/git.nix
-    ./programs/ssh.nix
+    ./programs/direnv.nix
     ./programs/zsh
   ];
 

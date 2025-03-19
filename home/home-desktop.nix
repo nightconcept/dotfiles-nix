@@ -17,9 +17,6 @@
 
   home.packages = with pkgs; [
     btrfs-assistant
-    elixir_1_18
-    erlang_27
-    fastfetch
     filezilla
     github-desktop
     nerd-fonts.fira-code

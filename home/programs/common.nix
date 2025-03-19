@@ -1,17 +1,23 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
+    alejandra
     bat
     btop
     delta
     deno
     duf
     eza
+    fastfetch
     gh
+    lazygit
+    ncdu
     nmap
     neovim
     poetry
     rsync
+    vim
     wget
     zip
+    zoxide
   ];
 }
