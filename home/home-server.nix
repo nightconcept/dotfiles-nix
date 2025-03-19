@@ -5,24 +5,22 @@
   ...
 }: {
   programs.home-manager.enable = true;
+  nixpkgs.config.allowUnfree = true;
 
-  news = {
-    display = "silent";
-  };
-
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      allowUnfreePredicate = _: true;
-    };
+  nix = {
+    package = pkgs.nix;
+    settings.experimental-features = ["nix-command" "flakes"];
+    extraOptions = ''
+      warn-dirty = false
+    '';
   };
 
   home.packages = with pkgs; [
+    bat
     btop
     duf
     eza
-    fd
-    fzf
+    fastfetch
     git
     gh
     lazydocker
@@ -31,9 +29,6 @@
     neovim
     nmap
     rsync
-    speedtest-cli
-    tmux
-    trash-cli
     vim
     wget
     zip
@@ -41,7 +36,8 @@
   ];
 
   imports = [
-    ./programs/direnv.nix
+    ./programs/git.nix
+    ./programs/ssh.nix
     ./programs/zsh
   ];
 

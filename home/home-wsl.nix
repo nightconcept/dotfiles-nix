@@ -16,31 +16,11 @@
   };
 
   home.packages = with pkgs; [
-    alejandra
-    bat
-    btop
-    deno
-    duf
-    elixir_1_18
-    erlang_27
-    eza
-    fastfetch
-    git
-    gleam
-    gh
     lazydocker
-    lazygit
-    ncdu
-    neovim
-    nmap
-    rsync
-    vim
-    wget
-    zip
-    zoxide
   ];
 
   imports = [
+    ./programs/common.nix
     ./programs/direnv.nix
     ./programs/git.nix
     ./programs/ssh.nix

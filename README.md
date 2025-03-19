@@ -15,6 +15,13 @@ More uses [here](https://www.solivan.dev/blog/uses/).
 - `/hosts` - Host specific software and hardware configuration
 - `/systems` - System (NixOS and Darwin) specific configuration.
 
+## Homes
+- Darwin - Configuration for macOS
+- Desktop - Configuration for Linux desktops (non-NixOS)
+- NixOS Server - Configuration fo NixOS servers
+- Server - Configuration for non-NixOS Linux servers
+- WSL - Configuration for WSL
+
 ## Hosts
 ### NixOS Hosts
 - Aerith - Dedicated Plex configuration
@@ -51,8 +58,8 @@ git clone https://github.com/nightconcept/dotfiles-nix
 cd dotfiles-nix
 
 // Variations of home manager switch for Linux
-home-manager switch --flake '.#cli'
 home-manager switch --flake '.#desktop'
+home-manager switch --flake '.#server'
 home-manager switch --flake '.#wsl'
 
 // Variations of home manager switch for macOS
