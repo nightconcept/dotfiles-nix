@@ -9,6 +9,7 @@
     eza
     fastfetch
     elixir_1_18
+    erlang_27
     gh
     lazygit
     ncdu
