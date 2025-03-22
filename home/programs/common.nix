@@ -8,6 +8,7 @@
     duf
     eza
     fastfetch
+    elixir_1_18
     gh
     lazygit
     ncdu
