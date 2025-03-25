@@ -10,6 +10,7 @@
 
     brews = [
       "gettext"
+      "pinentry-mac"
       "pyenv"
       "xz"
     ];
