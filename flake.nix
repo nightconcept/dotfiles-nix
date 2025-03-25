@@ -39,7 +39,6 @@
           {
             home-manager = {
               users.danny.home.stateVersion = "23.11";
-              useGlobalPkgs = true;
               backupFileExtension = "backup";
               users.danny.imports = [
                 ./home
@@ -59,7 +58,6 @@
           {
             home-manager = {
               users.danny.home.stateVersion = "23.11";
-              useGlobalPkgs = true;
               users.danny.imports = [
                 ./home/home-nixos-server.nix
               ];
@@ -67,9 +65,13 @@
             };
           }
           vscode-server.nixosModules.default
-          ({ config, pkgs, ... }: {
+          ({
+            config,
+            pkgs,
+            ...
+          }: {
             services.vscode-server.enable = true;
-          }) 
+          })
         ];
       };
     mkDarwin = pkgs: hostname:
