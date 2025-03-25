@@ -11,6 +11,7 @@
     curl
     gh
     git
+    gpg
     home-manager
     pyenv
     vim

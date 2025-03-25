@@ -11,6 +11,7 @@
     elixir_1_18
     erlang_27
     gh
+    gnupg
     lazygit
     ncdu
     nmap
