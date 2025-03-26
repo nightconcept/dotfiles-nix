@@ -50,6 +50,12 @@
             version = "0.116.2024100715";
             sha256 = "sha256-Mo11BGA27Bi62JRPU6INOq3SXTsp5ASYzd8ihlV3ZZY=";
           }
+          {
+            name = "geminicodeassist";
+            publisher = "google";
+            version = "2.29.0";
+            sha256 = "sha256-CixHqIUgTju8GnH2gwdgYb4UfJ/2Jx8lH5oHzsXqZYk=";
+          }
         ];
         userSettings = {
           "colorize.languages" = [
