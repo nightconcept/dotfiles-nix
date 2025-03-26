@@ -5,6 +5,11 @@
     userName = "Danny Solivan";
     userEmail = "dark@nightconcept.net";
 
+    signing = {
+      key = "432928BF8B0A767DB68A01451C5E44D950920340";
+      signByDefault = true;
+    };
+
     extraConfig = {
       github = {
         user = "nightconcept";
