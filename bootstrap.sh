@@ -19,9 +19,3 @@ curl --proto '=https' --tlsv1.2 -sSf -L \
 nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
 nix-channel --update
 nix-shell '<home-manager>' -A install
-
-# run home-manager to install
-home-manager switch --flake .#cli
-
-# required for zshrc
-curl https://pyenv.run | bash
