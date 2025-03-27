@@ -43,26 +43,23 @@ More uses [here](https://www.solivan.dev/blog/uses/).
 
 ### Nix Home Manager (macOS/Linux)
 
-Run the following commands to get Nix, Home Manager, and 
+Run the following commands to get Nix, Home Manager, and configure
+
+#### Setup
 
 ```shell
-// Install Nix
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+wget -qO- https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh | bash
+```
 
-// Install Home Manager
-nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
-nix-channel --update
+#### Home Manager Switch Commands
 
-// Clone
-git clone https://github.com/nightconcept/dotfiles-nix
-cd dotfiles-nix
-
-// Variations of home manager switch for Linux
+```shell
+// Variations of home manager switch for Linux, pick only one
 home-manager switch --flake '.#desktop'
 home-manager switch --flake '.#server'
 home-manager switch --flake '.#wsl'
 
-// Variations of home manager switch for macOS
+// Variations of home manager switch for macOS, pick only one
 home-manager switch --flake '.#merlin'
 home-manager switch --flake '.#waver'
 ```
