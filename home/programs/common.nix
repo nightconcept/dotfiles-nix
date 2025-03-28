@@ -5,6 +5,7 @@
     btop
     delta
     deno
+    devenv
     duf
     eza
     fastfetch
