@@ -16,6 +16,8 @@ curl --proto '=https' --tlsv1.2 -sSf -L \
 # this might be better? this is working on wsl2 on w11 and ubuntu 22.04, the above command is not
 # sh <(curl -L https://nixos.org/nix/install) --no-daemon
 
+sudo echo "trusted-users = root danny" >> /etc/nix/nix.custom.conf
+
 . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 
 # install home manager standalone
