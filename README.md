@@ -25,8 +25,8 @@ More uses [here](https://www.solivan.dev/blog/uses/).
 ## Hosts
 ### NixOS Hosts
 - Aerith - Dedicated Plex configuration
-- Celes - **(Deprecated)** configuration for main PC
-- Cloud - **(Deprecated)** configuration for laptop
+- Celes - **Deprecated** configuration for main PC
+- Cloud - **Deprecated** configuration for laptop
 - Phoenix - **Spare** configuration for a VM
 
 ### Darwin Hosts
