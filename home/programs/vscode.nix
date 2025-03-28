@@ -24,6 +24,7 @@
           elixir-lsp.vscode-elixir-ls
           ms-vscode-remote.remote-wsl
           tamasfe.even-better-toml
+          esbenp.prettier-vscode
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
