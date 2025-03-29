@@ -90,10 +90,6 @@
         # enable passphrase prompt for gpg
         export GPG_TTY=$(tty)
 
-        export PYENV_ROOT="$HOME/.pyenv"
-        [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-        eval "$(pyenv init -)"
-
         eval "$(zoxide init zsh)"
         if [ -d "/home/linuxbrew/" ]; then
             eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
