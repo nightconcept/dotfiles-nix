@@ -2,7 +2,7 @@
 
 My dotfiles for Nix, NixOS, and Nix-Darwin. Nix-only configurations complement my automatic-os-setup repo.
 
-## Uses (NixOS)
+## Uses
 - Desktop Environment (Linux): Plasma 6
 - Shell: zsh
 - Terminal: wezterm
@@ -18,7 +18,7 @@ More uses [here](https://www.solivan.dev/blog/uses/).
 ## Homes
 - CLI - Configuration for Linux computers without a GUI (non-NixOS)
 - Darwin - Configuration for macOS
-- Desktop - Configuration for Linux desktops (non-NixOS)
+- Desktop - Configuration for Fedora desktops
 - NixOS Server - Configuration fo NixOS servers
 
 ## Hosts
