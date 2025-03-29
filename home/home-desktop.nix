@@ -22,7 +22,7 @@
     nerd-fonts.fira-code
     nerd-fonts.fira-mono
     obsidian
-    pyenv
+    uv
     vlc
     zoom
   ];

@@ -13,7 +13,7 @@
     git
     gpg
     home-manager
-    pyenv
+    uv
     vim
     wget
   ];
