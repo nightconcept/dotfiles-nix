@@ -130,10 +130,10 @@
           ./home/home-server.nix
         ];
       };
-      wsl = home-manager.lib.homeManagerConfiguration {
+      cli = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {system = "x86_64-linux";};
         modules = [
-          ./home/home-wsl.nix
+          ./home/home-cli.nix
         ];
       };
     };
