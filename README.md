@@ -16,11 +16,10 @@ More uses [here](https://www.solivan.dev/blog/uses/).
 - `/systems` - System (NixOS and Darwin) specific configuration.
 
 ## Homes
+- CLI - Configuration for Linux computers without a GUI (non-NixOS)
 - Darwin - Configuration for macOS
 - Desktop - Configuration for Linux desktops (non-NixOS)
 - NixOS Server - Configuration fo NixOS servers
-- Server - Configuration for non-NixOS Linux servers
-- WSL - Configuration for WSL
 
 ## Hosts
 ### NixOS Hosts
@@ -55,9 +54,8 @@ wget -qO- https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/boots
 
 ```shell
 // Variations of home manager switch for Linux, pick only one
+home-manager switch --flake '.#cli'
 home-manager switch --flake '.#desktop'
-home-manager switch --flake '.#server'
-home-manager switch --flake '.#wsl'
 
 // Variations of home manager switch for macOS, pick only one
 home-manager switch --flake '.#merlin'
