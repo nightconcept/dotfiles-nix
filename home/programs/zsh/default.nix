@@ -75,8 +75,6 @@
         ###################
         # Exports and evals
         ###################
-        export PATH="/home/danny/.local/share/fnm:$PATH"
-
         export PATH="/usr/local/bin:$PATH"    # arm64e homebrew path (m1   )
         export PATH="/opt/homebrew/bin:$PATH" # x86_64 homebrew path (intel)
 

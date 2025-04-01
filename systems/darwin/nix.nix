@@ -5,7 +5,10 @@
 }: {
   nix = {
     optimise.automatic = true;
-    settings.allowed-users = ["danny"];
+    settings = {
+      allowed-users = ["danny"];
+      trusted-users = ["root" "danny" "@wheel"];
+    };
     gc = {
       automatic = true;
       options = "--delete-older-than 7d";

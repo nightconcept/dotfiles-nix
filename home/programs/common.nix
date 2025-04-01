@@ -17,8 +17,6 @@
     ncdu
     neovim
     nmap
-    nodejs_22
-    pnpm
     rsync
     uv
     vim
