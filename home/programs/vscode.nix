@@ -25,6 +25,11 @@
             ms-vscode-remote.remote-wsl
             tamasfe.even-better-toml
             esbenp.prettier-vscode
+            bradlc.vscode-tailwindcss
+            styled-components.vscode-styled-components
+            davidanson.vscode-markdownlint
+            shd101wyy.markdown-preview-enhanced
+            yoavbls.pretty-ts-errors
           ]
           ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
             {
@@ -54,11 +59,18 @@
             {
               name = "geminicodeassist";
               publisher = "google";
-              version = "2.29.0";
+              version = "2.30.0";
               sha256 = "sha256-CixHqIUgTju8GnH2gwdgYb4UfJ/2Jx8lH5oHzsXqZYk=";
+            }
+            {
+              name = "roo-cline";
+              publisher = "rooveterinaryinc";
+              version = "3.11.2";
+              sha256 = "sha256-7F94p5ebaLrcbqGhvEgaSmnffi1KbG1LNmBMSp2H69Q=";
             }
           ];
         userSettings = {
+          "chat.commandCenter.enabled" = false;
           "colorize.languages" = [
             "nix"
             "rasi"
@@ -80,7 +92,6 @@
           "git.autofetch" = true;
           "git.confirmSync" = false;
           "git.defaultBranchName" = "main";
-          "gitlens.showWelcomeOnInstall" = false;
           "gitlens.showWhatsNewAfterUpgrades" = false;
           "svelte.enable-ts-plugin" = true;
           "telemetry.telemetryLevel" = "off";
