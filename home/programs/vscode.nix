@@ -59,13 +59,13 @@
             {
               name = "geminicodeassist";
               publisher = "google";
-              version = "2.30.0";
+              version = "2.30.1";
               sha256 = "sha256-CixHqIUgTju8GnH2gwdgYb4UfJ/2Jx8lH5oHzsXqZYk=";
             }
             {
               name = "roo-cline";
               publisher = "rooveterinaryinc";
-              version = "3.11.2";
+              version = "3.11.4";
               sha256 = "sha256-7F94p5ebaLrcbqGhvEgaSmnffi1KbG1LNmBMSp2H69Q=";
             }
           ];
@@ -101,19 +101,6 @@
           "workbench.colorTheme" = "Tokyo Night";
           "workbench.iconTheme" = "material-icon-theme";
           "workbench.startupEditor" = "none";
-          "[nix]" = [
-            {
-              "editor.defaultFormatter" = "kamadorueda.alejandra";
-              "editor.formatOnPaste" = true;
-              "editor.formatOnSave" = true;
-              "editor.formatOnType" = false;
-            }
-          ];
-          "[lua]" = [
-            {
-              "editor.defaultFormatter" = "sumneko.lua";
-            }
-          ];
         };
       };
     };
