@@ -11,7 +11,7 @@
     curl
     gh
     git
-    gpg
+    gnupg
     home-manager
     netbird
     uv
