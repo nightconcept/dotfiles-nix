@@ -13,7 +13,6 @@
     git
     gnupg
     home-manager
-    netbird
     uv
     vim
     wget
