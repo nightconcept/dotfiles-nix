@@ -8,6 +8,7 @@
     git
     gnupg
     home-manager
+    netbird
     wget
     vim
     wget

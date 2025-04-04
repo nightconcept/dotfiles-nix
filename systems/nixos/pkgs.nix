@@ -13,6 +13,7 @@
     git
     gpg
     home-manager
+    netbird
     uv
     vim
     wget
