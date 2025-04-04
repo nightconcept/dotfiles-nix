@@ -94,15 +94,13 @@
           "git.defaultBranchName" = "main";
           "gitlens.showWhatsNewAfterUpgrades" = false;
           "roo-cline.allowedCommands" = [
-            {
-              "npm test"
-              "npm install"
-              "tsc"
-              "git log"
-              "git diff"
-              "git show"
-            }
-          ]
+            "npm test"
+            "npm install"
+            "tsc"
+            "git log"
+            "git diff"
+            "git show"
+          ];
           "svelte.enable-ts-plugin" = true;
           "telemetry.telemetryLevel" = "off";
           "terminal.integrated.fontSize" = 14;
