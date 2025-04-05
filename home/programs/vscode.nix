@@ -30,6 +30,7 @@
             davidanson.vscode-markdownlint
             shd101wyy.markdown-preview-enhanced
             yoavbls.pretty-ts-errors
+            astro-build.astro-vscode
           ]
           ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
             {
@@ -60,13 +61,13 @@
               name = "geminicodeassist";
               publisher = "google";
               version = "2.30.1";
-              sha256 = "sha256-Ff0C/Z7FBkZjfjXFkJQIHUsJlR+xmTn0cLHj3oNvIHk=";
+              sha256 = "sha256-CixHqIUgTju8GnH2gwdgYb4UfJ/2Jx8lH5oHzsXqZYk=";
             }
             {
               name = "roo-cline";
               publisher = "rooveterinaryinc";
               version = "3.11.4";
-              sha256 = "sha256-gjtec2hfge1wBpAlTxKRp8rhBCCdPrktXCgshEc2mwc=";
+              sha256 = "sha256-7F94p5ebaLrcbqGhvEgaSmnffi1KbG1LNmBMSp2H69Q=";
             }
           ];
         userSettings = {
@@ -93,14 +94,6 @@
           "git.confirmSync" = false;
           "git.defaultBranchName" = "main";
           "gitlens.showWhatsNewAfterUpgrades" = false;
-          "roo-cline.allowedCommands" = [
-            "npm test"
-            "npm install"
-            "tsc"
-            "git log"
-            "git diff"
-            "git show"
-          ];
           "svelte.enable-ts-plugin" = true;
           "telemetry.telemetryLevel" = "off";
           "terminal.integrated.fontSize" = 14;
