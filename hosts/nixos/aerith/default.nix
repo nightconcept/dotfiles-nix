@@ -35,7 +35,9 @@
     32469
   ];
 
-# Enable the OpenSSH daemon.
+  services.netbird.enable = true;
+
+  # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
   # System available packages
