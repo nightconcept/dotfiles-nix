@@ -27,6 +27,7 @@
       "plex"
       "raycast"
       "rectangle"
+      "sourcetree"
       "stretchly"
       "vlc"
       "wezterm@nightly"
