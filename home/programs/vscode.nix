@@ -24,8 +24,6 @@
             elixir-lsp.vscode-elixir-ls
             ms-vscode-remote.remote-wsl
             tamasfe.even-better-toml
-            esbenp.prettier-vscode
-            bradlc.vscode-tailwindcss
             styled-components.vscode-styled-components
             davidanson.vscode-markdownlint
             shd101wyy.markdown-preview-enhanced
@@ -61,7 +59,7 @@
               name = "roo-cline";
               publisher = "rooveterinaryinc";
               version = "3.11.8";
-              sha256 = "sha256-7F94p5ebaLrcbqGhvEgaSmnffi1KbG1LNmBMSp2H69Q=";
+              sha256 = "sha256-zSHMEhbnCWWqXimFqxvR+gzNMFyi4JX1XlujBY62I/s=";
             }
           ];
         userSettings = {

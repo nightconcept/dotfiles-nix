@@ -16,8 +16,6 @@
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
-    alt-tab-macos
-    discord
     karabiner-elements
   ];
 
