@@ -16,7 +16,9 @@
     ];
 
     casks = [
+      "alt-tab"
       "calibre"
+      "discord"
       "firefox"
       "github"
       "hiddenbar"
