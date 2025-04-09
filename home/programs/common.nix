@@ -16,6 +16,7 @@
     lazygit
     ncdu
     neovim
+    nix-prefetch-github
     nmap
     rsync
     uv
