@@ -29,6 +29,7 @@
             shd101wyy.markdown-preview-enhanced
             yoavbls.pretty-ts-errors
             astro-build.astro-vscode
+            bradlc.vscode-tailwindcss
           ]
           ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
             {
