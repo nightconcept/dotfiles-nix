@@ -22,6 +22,7 @@
     nerd-fonts.fira-code
     nerd-fonts.fira-mono
     obsidian
+    sourcegit
     uv
     vlc
     zoom
