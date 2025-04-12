@@ -19,12 +19,14 @@
     btrfs-assistant
     filezilla
     github-desktop
+    kdePackages.xdg-desktop-portal-kde
     nerd-fonts.fira-code
     nerd-fonts.fira-mono
     obsidian
     sourcegit
     uv
     vlc
+    xdg-utils
     zoom
   ];
 
@@ -35,7 +37,7 @@
     ./programs/git.nix
     ./programs/ssh.nix
     ./programs/vscode.nix
-    ./programs/wezterm
+    #./programs/wezterm
     ./programs/zsh
   ];
 
@@ -55,6 +57,17 @@
     };
   };
   xdg.mime.enable = true;
+  xdg.mimeApps = {
+    enable = true; # Make sure home-manager manages mime apps
+
+    # Set GitHub Desktop as the default handler for its specific auth scheme
+    defaultApplications = {
+      "x-scheme-handler/x-github-desktop-dev-auth" = "github-desktop.desktop";
+
+      # You can add other associations here if needed, for example:
+      # "text/html" = "firefox.desktop"; [1, 5]
+    };
+  };
 }
 
 
