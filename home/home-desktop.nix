@@ -28,8 +28,6 @@
     zoom
   ];
 
-  #xdg.mime.enable = false;
-
   imports = [
     ./programs/common.nix
     ./programs/direnv.nix
@@ -37,7 +35,7 @@
     ./programs/git.nix
     ./programs/ssh.nix
     ./programs/vscode.nix
-    #./programs/wezterm
+    ./programs/wezterm
     ./programs/zsh
   ];
 
@@ -56,6 +54,7 @@
       data = "/usr/bin/update-desktop-database";
     };
   };
+  xdg.mime.enable = true;
 }
 
 
