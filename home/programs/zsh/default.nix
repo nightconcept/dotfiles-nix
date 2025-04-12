@@ -90,6 +90,8 @@
         # enable passphrase prompt for gpg
         export GPG_TTY=$(tty)
 
+        export XDG_DATA_DIRS="/home/danny/.nix-profile/share:$XDG_DATA_DIRS"
+
         eval "$(zoxide init zsh)"
         if [ -d "/home/linuxbrew/" ]; then
             eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"

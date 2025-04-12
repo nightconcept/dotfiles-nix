@@ -5,6 +5,7 @@
     btop
     delta
     deno
+    desktop-file-utils
     devenv
     duf
     eza
