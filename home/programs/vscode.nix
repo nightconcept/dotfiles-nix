@@ -47,20 +47,20 @@
             {
               name = "remote-explorer";
               publisher = "ms-vscode";
-              version = "0.5.2024081309";
-              sha256 = "sha256-YExf9Yyo7Zp0Nfoap8Vvtas11W9Czslt55X9lb/Ri3s=";
+              version = "0.5.2025021709";
+              sha256 = "sha256-tCNkC7qa59oL9TXA+OKN0Tq5wl0TOLJhHpiKRLmMlgo=";
             }
             {
               name = "remote-ssh";
               publisher = "ms-vscode-remote";
-              version = "0.116.2024100715";
-              sha256 = "sha256-Mo11BGA27Bi62JRPU6INOq3SXTsp5ASYzd8ihlV3ZZY=";
+              version = "0.120.2025040915";
+              sha256 = "sha256-XW7BiUtqFH758I5DDRU2NPdESJC6RfTDAuUA4myY734=";
             }
             {
               name = "roo-cline";
               publisher = "rooveterinaryinc";
-              version = "3.11.8";
-              sha256 = "sha256-zSHMEhbnCWWqXimFqxvR+gzNMFyi4JX1XlujBY62I/s=";
+              version = "3.12.1";
+              sha256 = "sha256-3wkhCcpljNJMHpLDPs2lIpP5LufRxyUIlW8Dkzqlar4=";
             }
           ];
         userSettings = {
