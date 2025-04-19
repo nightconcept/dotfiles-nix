@@ -59,8 +59,14 @@
             {
               name = "roo-cline";
               publisher = "rooveterinaryinc";
-              version = "3.13.0";
-              sha256 = "sha256-vVl8hMMpCrLP+/U6KJ3Qz/q0OYgQuEMfu8UzpScER8o=";
+              version = "3.13.2";
+              sha256 = "sha256-ezmBS84RonkqlguLcgGZa4663GpY6yReKKb+r6YzQms=";
+            }
+            {
+              name = "geminicodeassist";
+              publisher = "google";
+              version = "2.31.0";
+              sha256 = "sha256-sKN/f6DWkA2MjtuDV3zCMrLc+bQd9tdBffoJIowijiw=";
             }
           ];
         userSettings = {
