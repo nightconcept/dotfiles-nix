@@ -30,6 +30,7 @@
             yoavbls.pretty-ts-errors
             astro-build.astro-vscode
             bradlc.vscode-tailwindcss
+            editorconfig.editorconfig
           ]
           ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
             {
@@ -67,6 +68,42 @@
               publisher = "google";
               version = "2.31.0";
               sha256 = "sha256-sKN/f6DWkA2MjtuDV3zCMrLc+bQd9tdBffoJIowijiw=";
+            }
+            {
+              name = "second-local-lua-debugger-vscode";
+              publisher = "ismoh-games";
+              version = "0.3.8";
+              sha256 = "sha256-xuOIBBnVWNREAAkAXkdSEsdqM49g+ngmNKtgJWrATNA=";
+            }
+            {
+              name = "stylua";
+              publisher = "johnnymorganz";
+              version = "1.7.1";
+              sha256 = "sha256-AbMCYYyK6Ywm/VljzAdmjk0VWm7JRH5GgJAC38T3j/c=";
+            }
+            {
+              name = "pixelbyte-love2d";
+              publisher = "pixelbyte-studios";
+              version = "0.1.26";
+              sha256 = "sha256-Q46UqYW9Ce4kHxknOf65/vx3GmWx/eP+8BrHoLxIC2c=";
+            }
+            {
+              name = "github-local-actions";
+              publisher = "sanjulaganepola";
+              version = "1.2.5";
+              sha256 = "sha256-gc3iOB/ibu4YBRdeyE6nmG72RbAsV0WIhiD8x2HNCfY=";
+            }
+            {
+              name = "shader";
+              publisher = "slevesque";
+              version = "1.1.5";
+              sha256 = "sha256-Pf37FeQMNlv74f7LMz9+CKscF6UjTZ7ZpcaZFKtX2ZM=";
+            }
+            {
+              name = "luahelper";
+              publisher = "yinfei";
+              version = "0.2.29";
+              sha256 = "sha256-/2RTIl3avuQb0DRciUwDYyJ/vfHjtGWyxSuB8ssYZuo=";
             }
           ];
         userSettings = {
