@@ -49,13 +49,13 @@
 
   fonts.fontconfig.enable = true;
   targets.genericLinux.enable = true;
-  home.activation = {
-    linkDesktopApplications = {
-      after = [ "writeBoundary" "createXdgUserDirectories" ];
-      before = [ ];
-      data = "/usr/bin/update-desktop-database";
-    };
-  };
+  # home.activation = {
+  #   linkDesktopApplications = {
+  #     after = [ "writeBoundary" "createXdgUserDirectories" ];
+  #     before = [ ];
+  #     data = "/usr/bin/update-desktop-database";
+  #   };
+  # };
   xdg.mime.enable = true;
   xdg.mimeApps = {
     enable = true; # Make sure home-manager manages mime apps
