@@ -70,6 +70,12 @@
               sha256 = "sha256-sKN/f6DWkA2MjtuDV3zCMrLc+bQd9tdBffoJIowijiw=";
             }
             {
+              name = "lua";
+              publisher = "sumneko";
+              version = "3.14.0";
+              sha256 = "sha256-SRKsyhCShz7EoqYMzPugATuTUIjLWHqNpNJzBmXvhVM=";
+            }
+            {
               name = "second-local-lua-debugger-vscode";
               publisher = "ismoh-games";
               version = "0.3.8";
