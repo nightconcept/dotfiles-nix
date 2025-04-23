@@ -22,6 +22,7 @@
       "firefox"
       "github"
       "hiddenbar"
+      "love"
       "mos"
       "nomachine"
       "notunes"

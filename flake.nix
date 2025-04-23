@@ -89,6 +89,7 @@
             users.users.danny.home = "/Users/danny";
             home-manager = {
               useGlobalPkgs = false; # makes hm use nixos's pkgs value
+              backupFileExtension = "backup";
               users.danny.imports = [
                 ./home/home-darwin.nix
               ];
