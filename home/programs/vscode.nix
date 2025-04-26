@@ -135,6 +135,7 @@
           "git.autofetch" = true;
           "git.confirmSync" = false;
           "git.defaultBranchName" = "main";
+          "githubLocalActions.dockerDesktopPath" = "/Applications/Docker.app";
           "gitlens.showWhatsNewAfterUpgrades" = false;
           "svelte.enable-ts-plugin" = true;
           "telemetry.telemetryLevel" = "off";

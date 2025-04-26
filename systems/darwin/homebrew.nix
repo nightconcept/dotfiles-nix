@@ -34,6 +34,7 @@
       "stretchly"
       "vlc"
       "wezterm@nightly"
+      "windsurf"
       "zoom"
     ];
   };
