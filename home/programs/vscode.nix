@@ -72,7 +72,7 @@
               name = "lua";
               publisher = "sumneko";
               version = "3.14.0";
-              sha256 = "sha256-SRKsyhCShz7EoqYMzPugATuTUIjLWHqNpNJzBmXvhVM=";
+              sha256 = "sha256-auXQudzWRbq/cXMpFkheqHhJMu7XwacdsaZYAkv1pQs=";
             }
             {
               name = "second-local-lua-debugger-vscode";
