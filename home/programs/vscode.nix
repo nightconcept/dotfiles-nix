@@ -15,7 +15,6 @@
           [
             yzhang.markdown-all-in-one
             bbenoist.nix
-            eamodio.gitlens
             kamikillerto.vscode-colorize
             pkief.material-icon-theme
             ms-python.python
@@ -61,7 +60,7 @@
               name = "roo-cline";
               publisher = "rooveterinaryinc";
               version = "3.14.3";
-              sha256 = "sha256-ezmBS84RonkqlguLcgGZa4663GpY6yReKKb+r6YzQms=";
+              sha256 = "sha256-hYtjcxlHwtvESs08WdWuMGi10LIvdH5SEBeAI7ah8oc=";
             }
             {
               name = "geminicodeassist";
