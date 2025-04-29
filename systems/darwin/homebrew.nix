@@ -18,6 +18,7 @@
     casks = [
       "alt-tab"
       "calibre"
+      "cursor"
       "discord"
       "firefox"
       "github"

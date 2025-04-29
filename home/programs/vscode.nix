@@ -60,7 +60,7 @@
             {
               name = "roo-cline";
               publisher = "rooveterinaryinc";
-              version = "3.13.2";
+              version = "3.14.3";
               sha256 = "sha256-ezmBS84RonkqlguLcgGZa4663GpY6yReKKb+r6YzQms=";
             }
             {

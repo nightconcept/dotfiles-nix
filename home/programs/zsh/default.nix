@@ -56,7 +56,7 @@
         TERMINAL = "wezterm";
       };
 
-      initExtraFirst = ''
+      initContent = ''
         ########################
         # Headers (do not touch)
         ########################
@@ -67,10 +67,6 @@
         if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
           source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
         fi
-      '';
-
-      initExtra = ''
-
 
         ###################
         # Exports and evals
