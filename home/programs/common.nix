@@ -15,6 +15,7 @@
     gh
     gnupg
     lazygit
+    lua51Packages.lua
     ncdu
     neovim
     nix-prefetch-github
