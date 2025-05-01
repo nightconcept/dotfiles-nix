@@ -78,6 +78,8 @@
 
         export PATH="$PATH:/opt/nvim-linux64/bin"
 
+        export PATH="/home/danny/.local/bin:$PATH"
+
         export LANG=en_US.UTF-8
         export ZSH="$HOME/.oh-my-zsh"
 
