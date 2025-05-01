@@ -24,6 +24,7 @@
       "github"
       "hiddenbar"
       "love"
+      "microsoft-teams"
       "mos"
       "nomachine"
       "notunes"
