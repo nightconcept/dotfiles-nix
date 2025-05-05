@@ -114,6 +114,7 @@
         alias gb='git branch'
         alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
         alias gm='git merge'
+        alias gdev='git checkout main && git pull origin main && git checkout dev && git pull origin dev && git fetch -p'
 
         # nvim aliases
         alias vi='nvim'
