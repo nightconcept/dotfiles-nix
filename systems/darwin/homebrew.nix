@@ -9,6 +9,8 @@
     };
 
     brews = [
+      "aider"
+      "block-goose-cli"
       "gettext"
       "pinentry-mac"
       "pyenv"
