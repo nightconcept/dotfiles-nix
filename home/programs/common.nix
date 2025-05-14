@@ -4,7 +4,6 @@
     bat
     btop
     delta
-    deno
     desktop-file-utils
     devenv
     duf
