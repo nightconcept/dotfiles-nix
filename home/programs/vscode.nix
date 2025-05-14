@@ -116,18 +116,6 @@
               version = "0.46.1";
               sha256 = "sha256-R5SC6vMWT3alunlklJKcEKKJhNd6GI2MF9/QWwuNprs=";
             }
-            {
-              name = "flutter";
-              publisher = "dart-code";
-              version = "3.110.0";
-              sha256 = "sha256-Zi+q56XcHZGUKgF3TNpaYSwwdqLT8Q1fxf8dFVAEuQY=";
-            }
-            {
-              name = "dart-code";
-              publisher = "dart-code";
-              version = "3.110.0";
-              sha256 = "sha256-YLdhL5xNj8sidZUzMVZgOK6zTXgQnWdKWRrDg0on90s=";
-            }
           ];
         userSettings = {
           "chat.commandCenter.enabled" = false;
