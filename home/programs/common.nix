@@ -10,8 +10,6 @@
     duf
     eza
     fastfetch
-    elixir_1_18
-    erlang_27
     gh
     gnupg
     lazygit
@@ -20,6 +18,7 @@
     neovim
     nix-prefetch-github
     nmap
+    nodejs_22
     rsync
     uv
     vim

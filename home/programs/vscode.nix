@@ -59,8 +59,8 @@
             {
               name = "roo-cline";
               publisher = "rooveterinaryinc";
-              version = "3.16.1";
-              sha256 = "sha256-woLK05nyX9yajVN40wsCfyTCpXdhDLHoe/EkodNKI4c=";
+              version = "3.16.6";
+              sha256 = "sha256-weeLkcmB3eg5axXJlc2R90wrgYuE52IkoP/o7XUGnVw=";
             }
             {
               name = "geminicodeassist";
@@ -110,6 +110,24 @@
               version = "0.2.29";
               sha256 = "sha256-/2RTIl3avuQb0DRciUwDYyJ/vfHjtGWyxSuB8ssYZuo=";
             }
+            {
+              name = "go";
+              publisher = "golang";
+              version = "0.46.1";
+              sha256 = "sha256-R5SC6vMWT3alunlklJKcEKKJhNd6GI2MF9/QWwuNprs=";
+            }
+            {
+              name = "flutter";
+              publisher = "dart-code";
+              version = "3.110.0";
+              sha256 = "sha256-Zi+q56XcHZGUKgF3TNpaYSwwdqLT8Q1fxf8dFVAEuQY=";
+            }
+            {
+              name = "dart-code";
+              publisher = "dart-code";
+              version = "3.110.0";
+              sha256 = "sha256-YLdhL5xNj8sidZUzMVZgOK6zTXgQnWdKWRrDg0on90s=";
+            }
           ];
         userSettings = {
           "chat.commandCenter.enabled" = false;
@@ -117,6 +135,7 @@
             "nix"
             "rasi"
           ];
+          "dart.flutterSdkPath" = "~/sdk/flutter";
           "editor.accessibilitySupport" = "off";
           "editor.guides.bracketPairs" = true;
           "editor.fontFamily" = "'FiraCode Nerd Font', Consolas, Meslo, 'monospace', monospace";
