@@ -11,9 +11,12 @@
     brews = [
       "aider"
       "block-goose-cli"
+      "dotnet"
+      "dotnet@8"
       "gettext"
       "pinentry-mac"
       "pyenv"
+      "ruby"
       "xz"
     ];
 
@@ -31,10 +34,12 @@
       "notunes"
       "obsidian"
       "plex"
+      "qdirstat"
       "raycast"
       "rectangle"
       "sourcetree"
       "stretchly"
+      "visual-studio-code"
       "vlc"
       "wezterm@nightly"
       "windsurf"

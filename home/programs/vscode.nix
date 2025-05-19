@@ -116,6 +116,30 @@
               version = "0.46.1";
               sha256 = "sha256-R5SC6vMWT3alunlklJKcEKKJhNd6GI2MF9/QWwuNprs=";
             }
+            {
+              name = "flutter";
+              publisher = "dart-code";
+              version = "3.110.0";
+              sha256 = "sha256-Zi+q56XcHZGUKgF3TNpaYSwwdqLT8Q1fxf8dFVAEuQY=";
+            }
+            {
+              name = "dart-code";
+              publisher = "dart-code";
+              version = "3.110.0";
+              sha256 = "sha256-YLdhL5xNj8sidZUzMVZgOK6zTXgQnWdKWRrDg0on90s=";
+            }
+            {
+              name = "csdevkit";
+              publisher = "ms-dotnettools";
+              version = "1.19.63";
+              sha256 = "sha256-/BArJUc4d99yMtbrb6jwrLrXyzToIgzvqZH5Xb1OBL0=";
+            }
+            {
+              name = "csharp";
+              publisher = "ms-dotnettools";
+              version = "2.76.27";
+              sha256 = "sha256-umUbPv9jYIptRqoiU5C2yHEWFLJuM4LrU2mTLIaQBN8=";
+            }
           ];
         userSettings = {
           "chat.commandCenter.enabled" = false;
