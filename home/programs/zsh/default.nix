@@ -82,6 +82,9 @@
 
         export PATH="/home/danny/.local/bin:$PATH"
 
+        export PATH="$PATH:/Users/danny/.dotnet/tools"
+
+
         export LANG=en_US.UTF-8
         export ZSH="$HOME/.oh-my-zsh"
 
@@ -96,6 +99,8 @@
         if [ -d "/home/linuxbrew/" ]; then
             eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         fi
+
+        eval "$(mise activate zsh)"
 
         #########
         # Aliases

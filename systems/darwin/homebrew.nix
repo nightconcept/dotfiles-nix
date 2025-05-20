@@ -9,13 +9,12 @@
     };
 
     brews = [
-      "aider"
-      "block-goose-cli"
       "dotnet"
       "dotnet@8"
       "gettext"
+      "mise"
       "pinentry-mac"
-      "pyenv"
+      "uv"
       "ruby"
       "xz"
     ];
