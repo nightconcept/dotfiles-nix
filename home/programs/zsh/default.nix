@@ -71,19 +71,16 @@
         ###################
         # Exports and evals
         ###################
-        export PATH="/usr/local/bin:$PATH"    # arm64e homebrew path (m1   )
-        export PATH="/opt/homebrew/bin:$PATH" # x86_64 homebrew path (intel)
-
-        export PATH="/Users/danny/sdk/flutter/bin:$PATH"
-        export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-        export PATH="`gem environment gemdir`/bin:$PATH"
-
-        export PATH="$PATH:/opt/nvim-linux64/bin"
-
         export PATH="/home/danny/.local/bin:$PATH"
 
-        export PATH="$PATH:/Users/danny/.dotnet/tools"
-
+        # macOS only exports
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+          export PATH="/usr/local/bin:$PATH"    # arm64e homebrew path (m1   )
+          export PATH="/opt/homebrew/bin:$PATH" # x86_64 homebrew path (intel)
+          export PATH="/Users/danny/sdk/flutter/bin:$PATH"
+          export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+          export PATH="`gem environment gemdir`/bin:$PATH"
+        fi
 
         export LANG=en_US.UTF-8
         export ZSH="$HOME/.oh-my-zsh"
@@ -99,6 +96,8 @@
         if [ -d "/home/linuxbrew/" ]; then
             eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         fi
+
+        eval "$(mise activate zsh)"
 
         eval "$(mise activate zsh)"
 

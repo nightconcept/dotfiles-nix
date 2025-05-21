@@ -20,12 +20,14 @@
     filezilla
     github-desktop
     kdePackages.xdg-desktop-portal-kde
+    mise
     nerd-fonts.fira-code
     nerd-fonts.fira-mono
     obsidian
     sourcegit
     uv
     vlc
+    vscode
     xdg-utils
     zoom
   ];
@@ -36,7 +38,7 @@
     ./programs/gaming.nix
     ./programs/git.nix
     ./programs/ssh.nix
-    ./programs/vscode.nix
+    #./programs/vscode.nix
     #./programs/wezterm
     ./programs/zsh
   ];
