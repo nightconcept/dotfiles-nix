@@ -1,5 +1,6 @@
 {
   system = {
+    primaryUser = "danny";
     defaults = {
       finder = {
         FXDefaultSearchScope = "SCcf";

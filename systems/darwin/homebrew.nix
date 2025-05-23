@@ -9,8 +9,6 @@
     };
 
     brews = [
-      "dotnet"
-      "dotnet@8"
       "gettext"
       "mise"
       "pinentry-mac"
