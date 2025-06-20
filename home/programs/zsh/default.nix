@@ -158,7 +158,7 @@
         else
           alias nix-config="nvim ~/.nixpkgs/darwin-configuration.nix"
           alias rebuild="darwin-rebuild switch"
-          alias flake-rebuild="darwin-rebuild switch --flake"
+          alias flake-rebuild="sudo darwin-rebuild switch --flake"
         fi
 
         ########################
