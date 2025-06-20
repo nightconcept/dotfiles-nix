@@ -24,7 +24,6 @@
     fontconfig
     github-desktop
     hexchat
-    libreoffice-fresh
     mpv
     nomachine-client
     pavucontrol
