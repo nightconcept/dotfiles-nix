@@ -23,6 +23,7 @@
       "cursor"
       "discord"
       "firefox"
+      "gemini-cli"
       "github"
       "hiddenbar"
       "love"
