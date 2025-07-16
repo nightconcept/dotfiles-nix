@@ -37,6 +37,7 @@
       "vlc"
       "wezterm@nightly"
       "windsurf"
+      "zed"
     ];
   };
 }
