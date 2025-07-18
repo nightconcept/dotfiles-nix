@@ -3,6 +3,7 @@
     alejandra
     bat
     btop
+    claude-code
     delta
     desktop-file-utils
     devenv
