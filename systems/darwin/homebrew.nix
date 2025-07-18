@@ -9,6 +9,7 @@
     };
 
     brews = [
+      "gemini-cli"
       "gettext"
       "mise"
       "pinentry-mac"
@@ -23,7 +24,6 @@
       "cursor"
       "discord"
       "firefox"
-      "gemini-cli"
       "github"
       "hiddenbar"
       "love"
