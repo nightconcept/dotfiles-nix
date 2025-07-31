@@ -9,7 +9,6 @@
     };
 
     brews = [
-      "gemini-cli"
       "gettext"
       "mise"
       "pinentry-mac"
@@ -21,11 +20,11 @@
     casks = [
       "alt-tab"
       "calibre"
-      "cursor"
       "discord"
       "firefox"
       "github"
       "hiddenbar"
+      "lm-studio"
       "love"
       "mos"
       "nomachine"
@@ -37,8 +36,6 @@
       "visual-studio-code"
       "vlc"
       "wezterm@nightly"
-      "windsurf"
-      "zed"
     ];
   };
 }

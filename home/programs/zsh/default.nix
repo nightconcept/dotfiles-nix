@@ -79,7 +79,8 @@
           export PATH="/opt/homebrew/bin:$PATH" # x86_64 homebrew path (intel)
           export PATH="/Users/danny/sdk/flutter/bin:$PATH"
           export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-          export PATH="`gem environment gemdir`/bin:$PATH"
+          export PATH="/Users/danny/.local/bin:$PATH"
+
         fi
 
         export LANG=en_US.UTF-8
