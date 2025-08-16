@@ -10,7 +10,7 @@
     ./gaming.nix
     ./git.nix
     ./ssh.nix
-    ./vscode.nix
+    #./vscode.nix
     ./wezterm
     ./xdg.nix
     ./zsh
