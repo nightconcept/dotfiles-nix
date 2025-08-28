@@ -12,7 +12,7 @@
 
     zsh = {
       enable = true;
-      dotDir = "${config.xdg.configHome}/zsh";
+      dotDir = ".config/zsh";
       oh-my-zsh = {
         enable = false;
         plugins = [
