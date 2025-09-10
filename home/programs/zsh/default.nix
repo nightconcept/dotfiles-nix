@@ -48,6 +48,7 @@
 
       shellAliases = {
         home-rebuild = "home-manager switch --flake .#danny";
+        lazydocker = "DOCKER_HOST=unix:///run/user/1000/podman/podman.sock lazydocker";
       };
 
       sessionVariables = {
