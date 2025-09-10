@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(find:*)",
-      "Bash(nix:*)"
+      "Bash(nix:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": []
   }
