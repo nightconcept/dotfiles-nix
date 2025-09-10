@@ -3,12 +3,13 @@
 My dotfiles for Nix, NixOS, and Nix-Darwin. Nix-only configurations complement my automatic-os-setup repo.
 
 ## Uses
-- Desktop Environment (Linux): Plasma 6
+
 - Shell: zsh
 - Terminal: wezterm
-- Editor: vscode
+- Editor: vscode/nvim
+- Font: Fira Code
 
-More uses [here](https://www.solivan.dev/blog/uses/).
+More [uses](https://www.solivan.dev/blog/uses/).
 
 ## Structure
 - `/home` - User programs, configuration, and desktop.
@@ -16,21 +17,23 @@ More uses [here](https://www.solivan.dev/blog/uses/).
 - `/systems` - System (NixOS and Darwin) specific configuration.
 
 ## Homes
-- CLI - Configuration for Linux computers without a GUI (non-NixOS)
-- Darwin - Configuration for macOS
-- Desktop - Configuration for Fedora desktops
+
+- Darwin - Configuration for macOS Desktops
+- Darwin-Laptop - Configuration for macOS Laptops
+- Desktop - Configuration for Linux desktops
 - NixOS Server - Configuration fo NixOS servers
+- Server - Configuration for Linux servers
 
 ## Hosts
+
 ### NixOS Hosts
-- Aerith - Dedicated Plex configuration
-- Celes - **Deprecated** configuration for main PC
-- Cloud - **Deprecated** configuration for laptop
-- Phoenix - **Spare** configuration for a VM
+
+- Aerith - Plex/Jellyfin configuration
 
 ### Darwin Hosts
-- Merlin - Mac Mini HTPC
-- Waver - MacBook Pro
+
+- Merlin - Mac Mini M1 HTPC (2020)
+- Waver - MacBook Pro M1 (2020)
 
 ## Usage
 
@@ -40,9 +43,7 @@ More uses [here](https://www.solivan.dev/blog/uses/).
 
 2. Run `nixos-rebuild switch --flake .#<CONFIG-NAME> --experimental-feature "nix-command flakes"` to switch over to the configuration in the flake.
 
-### Nix Home Manager (macOS/Linux)
-
-Run the following commands to get Nix, Home Manager, and configure
+### Home Manager
 
 #### Setup
 
@@ -54,27 +55,14 @@ wget -qO- https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/boots
 
 ```shell
 // Variations of home manager switch for Linux, pick only one
-home-manager switch --flake '.#cli'
 home-manager switch --flake '.#desktop'
+home-manager switch --flake '.#server'
 
 // Variations of home manager switch for macOS, pick only one
-home-manager switch --flake '.#merlin'
-home-manager switch --flake '.#waver'
+darwin-rebuild switch --flake '.#merlin'
+darwin-rebuild switch --flake '.#waver'
 ```
 
-## Dotfile credits/inspiration
-- [hmajid2301/dotfiles](https://github.com/hmajid2301/dotfiles)
-- [HeinzDev/Hyprland-dotfiles](https://github.com/HeinzDev/Hyprland-dotfiles)
-- [fufexan/dotfiles](https://github.com/fufexan/dotfiles)
-- [nzbr/nixos](https://github.com/nzbr/nixos)
-- [notusknot/dotfiles-nix](https://github.com/notusknot/dotfiles-nix)
-- [NobbZ/nixos-config](https://github.com/NobbZ/nixos-config)
-- [notthebee/nix-config](https://github.com/notthebee/nix-config)
-- [ericmurphyxyz/dotfiles](https://github.com/ericmurphyxyz/dotfiles)
-- [sane1090x/dotfiles](https://github.com/sane1090x/dotfiles)
-- [gh0stzk/dotfiles](https://github.com/gh0stzk/dotfiles)
-- [Frost-Phoenix/nixos-config](https://github.com/Frost-Phoenix/nixos-config/tree/main)
-- [BirdeeHub/birdeeSystems)](https://github.com/BirdeeHub/birdeeSystems)
-- [LongerHV/nixos-configuration](https://github.com/LongerHV/nixos-configuration)
-- [badele/nix-homelab](https://github.com/badele/nix-homelab/tree/main?tab=readme-ov-file)
-- [SomeGuyNamedMay/users](https://github.com/SomeGuyNamedMay/users)
+## License
+
+This software is [MIT licensed](LICENSE).

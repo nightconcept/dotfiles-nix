@@ -4,12 +4,9 @@
     btop
     curl
     gcc
-    gh
     git
     gnupg
     home-manager
-    wget
-    vim
     wget
   ];
 

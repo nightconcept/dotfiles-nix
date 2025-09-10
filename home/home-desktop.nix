@@ -16,20 +16,16 @@
   };
 
   home.packages = with pkgs; [
-    btrfs-assistant
-    filezilla
     github-desktop
     kdePackages.xdg-desktop-portal-kde
-    mise
     nerd-fonts.fira-code
     nerd-fonts.fira-mono
     obsidian
-    sourcegit
+    tlp
     uv
     vlc
     vscode
     xdg-utils
-    zoom
   ];
 
   imports = [
@@ -38,7 +34,6 @@
     ./programs/gaming.nix
     ./programs/git.nix
     ./programs/ssh.nix
-    #./programs/vscode.nix
     #./programs/wezterm
     ./programs/zsh
   ];
@@ -51,13 +46,7 @@
 
   fonts.fontconfig.enable = true;
   targets.genericLinux.enable = true;
-  # home.activation = {
-  #   linkDesktopApplications = {
-  #     after = [ "writeBoundary" "createXdgUserDirectories" ];
-  #     before = [ ];
-  #     data = "/usr/bin/update-desktop-database";
-  #   };
-  # };
+
   xdg.mime.enable = true;
   xdg.mimeApps = {
     enable = true; # Make sure home-manager manages mime apps
@@ -71,5 +60,3 @@
     };
   };
 }
-
-
