@@ -9,10 +9,12 @@
     ./direnv.nix
     ./gaming.nix
     ./git.nix
+    ./neovim.nix
     ./ssh.nix
     #./vscode.nix
     ./wezterm
     ./xdg.nix
+    ./zellij.nix
     ./zsh
   ];
 

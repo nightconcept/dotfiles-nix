@@ -15,7 +15,6 @@
     lazygit
     lua51Packages.lua
     ncdu
-    neovim
     nix-prefetch-github
     nmap
     nodejs_22

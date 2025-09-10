@@ -51,7 +51,6 @@
     mkNixosServer = pkgs: hostname:
       pkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = {inherit inputs;};
         modules = [
           ./systems/nixos
           ./hosts/nixos/${hostname}
@@ -98,6 +97,29 @@
           }
         ];
       };
+    mkDarwinLaptop = pkgs: hostname:
+      nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = {
+          inherit inputs;
+        };
+
+        modules = [
+          ./systems/darwin
+          ./hosts/darwin/${hostname}
+          home-manager.darwinModules.home-manager
+          {
+            users.users.danny.home = "/Users/danny";
+            home-manager = {
+              useGlobalPkgs = false; # makes hm use nixos's pkgs value
+              backupFileExtension = "backup";
+              users.danny.imports = [
+                ./home/home-darwin-laptop.nix
+              ];
+            };
+          }
+        ];
+      };
     mkHome = system: username: module:
       home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {system = "${system}";};
@@ -108,14 +130,11 @@
   in {
     nixosConfigurations = {
       celes = mkNixos inputs.nixpkgs "celes";
-      cloud = mkNixos inputs.nixpkgs "cloud";
-      ifrit = mkNixos inputs.nixpkgs "ifrit";
       aerith = mkNixosServer inputs.nixpkgs "aerith";
-      phoenix = mkNixosServer inputs.nixpkgs "phoenix";
     };
 
     darwinConfigurations = {
-      waver = mkDarwin inputs.nixpkgs "waver";
+      waver = mkDarwinLaptop inputs.nixpkgs "waver";
       merlin = mkDarwin inputs.nixpkgs "merlin";
     };
 
@@ -130,12 +149,6 @@
         pkgs = import nixpkgs {system = "x86_64-linux";};
         modules = [
           ./home/home-server.nix
-        ];
-      };
-      cli = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {system = "x86_64-linux";};
-        modules = [
-          ./home/home-cli.nix
         ];
       };
     };
