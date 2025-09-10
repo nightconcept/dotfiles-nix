@@ -2,20 +2,26 @@
 {config, ...}: {
   programs.ssh = {
     enable = true;
-    extraConfig = ''
-    IdentityFile ${config.home.homeDirectory}/.ssh/id_sdev
-
-    Host github.com
-        Hostname ssh.github.com
-        Port 443
-        User git
-        IdentityFile=${config.home.homeDirectory}/.ssh/id_sdev
-
-    Host siren.nclabs.net
-      HostName siren.nclabs.net
-      User danny
-      IdentityFile=${config.home.homeDirectory}/.ssh/id_sdev
-    '';
+    enableDefaultConfig = false;
+    
+    matchBlocks = {
+      "*" = {
+        identityFile = "${config.home.homeDirectory}/.ssh/id_sdev";
+      };
+      
+      "github.com" = {
+        hostname = "ssh.github.com";
+        port = 443;
+        user = "git";
+        identityFile = "${config.home.homeDirectory}/.ssh/id_sdev";
+      };
+      
+      "siren.nclabs.net" = {
+        hostname = "siren.nclabs.net";
+        user = "danny";
+        identityFile = "${config.home.homeDirectory}/.ssh/id_sdev";
+      };
+    };
   };
 }
 

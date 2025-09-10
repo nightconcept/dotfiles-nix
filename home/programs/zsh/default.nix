@@ -2,6 +2,7 @@
   inputs,
   pkgs,
   lib,
+  config,
   ...
 }: {
   programs = {
@@ -12,7 +13,7 @@
 
     zsh = {
       enable = true;
-      dotDir = ".config/zsh";
+      dotDir = "${config.xdg.configHome}/zsh";
       oh-my-zsh = {
         enable = false;
         plugins = [
@@ -48,7 +49,6 @@
 
       shellAliases = {
         home-rebuild = "home-manager switch --flake .#danny";
-        lazydocker = "DOCKER_HOST=unix:///run/user/1000/podman/podman.sock lazydocker";
       };
 
       sessionVariables = {
@@ -99,10 +99,6 @@
             eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         fi
 
-        eval "$(mise activate zsh)"
-
-        eval "$(mise activate zsh)"
-
         #########
         # Aliases
         #########
@@ -146,20 +142,14 @@
         alias cat='bat'
         alias rm='rm -iv'
         alias zshclear='echo "" > ~/.zsh_history'
-        alias zshconfig="vim ~/.zshrc"
-        alias zshreload="source ~/.zshrc"
         alias mkdir="mkdir -p"
         alias cp="cp -r"
-        alias apt="sudo apt"
 
-        # nix aliases
+        # Linux vs macOS aliases
         if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-          alias nix-config="sudo nvim /etc/nixos/configuration.nix"
-          alias rebuild="sudo nixos-rebuild switch"
           alias flake-rebuild="sudo nixos-rebuild switch --flake"
+          alias apt="sudo apt"
         else
-          alias nix-config="nvim ~/.nixpkgs/darwin-configuration.nix"
-          alias rebuild="darwin-rebuild switch"
           alias flake-rebuild="sudo darwin-rebuild switch --flake"
         fi
 

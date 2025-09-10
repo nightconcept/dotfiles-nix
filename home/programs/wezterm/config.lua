@@ -43,10 +43,23 @@ config.font_rules = {
 config.color_scheme = "Tokyo Night"
 config.window_background_opacity = 0.97
 
--- keybinds.lua
+-- keybinds.lua - Coordinated with Aerospace, Zellij, and Neovim
 config.keys = {
-  { key = 't', mods = 'CTRL', action = act.SpawnTab('CurrentPaneDomain') },
-  { key = 'w', mods = 'CTRL', action = act.CloseCurrentTab { confirm = false } },
+  -- Terminal-level operations
+  { key = 't', mods = 'CMD', action = act.SpawnTab('CurrentPaneDomain') },
+  { key = 'w', mods = 'CMD', action = act.CloseCurrentTab { confirm = true } },
+  { key = 'Enter', mods = 'CMD', action = act.ToggleFullScreen },
+  
+  -- Tab navigation
+  { key = '[', mods = 'CMD|SHIFT', action = act.ActivateTabRelative(-1) },
+  { key = ']', mods = 'CMD|SHIFT', action = act.ActivateTabRelative(1) },
+  
+  -- Don't bind Cmd+1-9 (let Aerospace handle workspace switching)
+  -- Don't bind Ctrl+t (let Zellij handle multiplexing)
+  
+  -- Keep some useful terminal shortcuts that don't conflict
+  { key = 'k', mods = 'CMD', action = act.ClearScrollback('ScrollbackAndViewport') },
+  { key = 'r', mods = 'CMD', action = act.ReloadConfiguration },
 }
 -- mousebinds.lua
 config.mouse_bindings = {
@@ -58,10 +71,10 @@ config.mouse_bindings = {
     action = act.CompleteSelection 'ClipboardAndPrimarySelection',
   },
 
-  -- and make CTRL-Click open hyperlinks
+  -- and make CMD-Click open hyperlinks
   {
     event = { Up = { streak = 1, button = 'Left' } },
-    mods = 'CTRL',
+    mods = 'CMD',
     action = act.OpenLinkAtMouseCursor,
   },
   {

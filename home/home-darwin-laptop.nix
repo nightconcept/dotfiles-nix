@@ -20,9 +20,11 @@
   ];
 
   imports = [
+    ./programs/aerospace.nix
     ./programs/common.nix
     ./programs/direnv.nix
     ./programs/git.nix
+    ./programs/jankyborders.nix
     ./programs/neovim.nix
     ./programs/ssh.nix
     ./programs/wezterm

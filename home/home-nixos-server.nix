@@ -20,7 +20,6 @@
   home.packages = with pkgs; [
     bat
     btop
-    claude-code
     duf
     eza
     git
