@@ -29,7 +29,6 @@
   } @ inputs: let
     lib = nixpkgs.lib;
     pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-    plexOverlay = import ./overlays/plex.nix;
     mkNixos = pkgs: hostname:
       pkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -54,7 +53,6 @@
         system = "x86_64-linux";
         specialArgs = {inherit inputs;};
         modules = [
-          {nixpkgs.overlays = [plexOverlay];}
           ./systems/nixos
           ./hosts/nixos/${hostname}
           home-manager.nixosModules.home-manager
