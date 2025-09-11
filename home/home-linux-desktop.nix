@@ -4,8 +4,7 @@
   pkgs,
   ...
 }: {
-  programs.home-manager.enable = true;
-  nixpkgs.config.allowUnfree = true;
+  fonts.fontconfig.enable = true;
 
   nix = {
     package = pkgs.nix;
@@ -29,13 +28,14 @@
   ];
 
   imports = [
+    ./common.nix
     ./programs/common.nix
     ./programs/direnv.nix
     ./programs/gaming.nix
     ./programs/git.nix
+    ./programs/neovim.nix
+    ./programs/shell
     ./programs/ssh.nix
-    #./programs/wezterm
-    ./programs/zsh
   ];
 
   home = {
@@ -44,7 +44,6 @@
     stateVersion = "23.11";
   };
 
-  fonts.fontconfig.enable = true;
   targets.genericLinux.enable = true;
 
   xdg.mime.enable = true;

@@ -1,10 +1,10 @@
-# dotfiles-nix
+# dotfiles
 
-My dotfiles for Nix, NixOS, and Nix-Darwin. Nix-only configurations complement my automatic-os-setup repo.
+My consolidated dotfiles for Linux-based OS, macOS, NixOS and Windows. Utilities related to system configuration setup and saving are also included.
 
 ## Uses
 
-- Shell: zsh
+- Shell (*nix): zsh
 - Terminal: wezterm
 - Editor: vscode/nvim
 - Font: Fira Code
@@ -13,10 +13,10 @@ More [uses](https://www.solivan.dev/blog/uses/).
 
 ## Structure
 - `/home` - User programs, configuration, and desktop.
-- `/hosts` - Host specific software and hardware configuration
-- `/systems` - System (NixOS and Darwin) specific configuration.
+- `/hosts` - Host specific (Darwin and NixOS only) software and hardware configuration
+- `/systems` - System (NixOS, Darwin, Windows) specific configuration.
 
-## Homes
+## Homes (*nix)
 
 - Darwin - Configuration for macOS Desktops
 - Darwin-Laptop - Configuration for macOS Laptops
@@ -26,29 +26,23 @@ More [uses](https://www.solivan.dev/blog/uses/).
 
 ## Hosts
 
-### NixOS Hosts
-
-- Aerith - Plex/Jellyfin configuration
-
 ### Darwin Hosts
 
 - Merlin - Mac Mini M1 HTPC (2020)
 - Waver - MacBook Pro M1 (2020)
 
+### NixOS Hosts
+
+- Aerith - Plex configuration
+
 ## Usage
 
-### NixOS
-
-1. A fresh install of NixOS does not have git installed. It is best to add git (and particularly any other pre-requisites needed for the installation) to the configuration.nix file in /etc/nixos/configuration.nix and then run `nixos-rebuild switch`. Using `nix-shell -p git` may not always provide "enough" pre-requisites based off the configuration.
-
-2. Run `nixos-rebuild switch --flake .#<CONFIG-NAME> --experimental-feature "nix-command flakes"` to switch over to the configuration in the flake.
-
-### Home Manager
+### Home Manager (Linux/macOS)
 
 #### Setup
 
 ```shell
-wget -qO- https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh | bash
+wget -qO- https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/nix-install.sh | bash
 ```
 
 #### Home Manager Switch Commands
@@ -62,6 +56,12 @@ home-manager switch --flake '.#server'
 darwin-rebuild switch --flake '.#merlin'
 darwin-rebuild switch --flake '.#waver'
 ```
+
+### NixOS
+
+1. A fresh install of NixOS does not have git installed. It is best to add git (and particularly any other pre-requisites needed for the installation) to the configuration.nix file in /etc/nixos/configuration.nix and then run `nixos-rebuild switch`. Using `nix-shell -p git` may not always provide "enough" pre-requisites based off the configuration.
+
+2. Run `nixos-rebuild switch --flake .#<CONFIG-NAME> --experimental-feature "nix-command flakes"` to switch over to the configuration in the flake.
 
 ## License
 

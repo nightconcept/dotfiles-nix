@@ -10,7 +10,6 @@
     duf
     eza
     fastfetch
-    gh
     gnupg
     lazygit
     lua51Packages.lua
