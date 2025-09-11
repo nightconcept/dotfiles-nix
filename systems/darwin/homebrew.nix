@@ -28,6 +28,7 @@
       "firefox"
       "github"
       "hiddenbar"
+      "jellyfin-media-player"
       "mos"
       "nomachine"
       "obsidian"
