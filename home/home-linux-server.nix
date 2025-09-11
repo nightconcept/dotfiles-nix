@@ -4,7 +4,6 @@
   pkgs,
   ...
 }: {
-  programs.home-manager.enable = true;
   nixpkgs.config.allowUnfree = true;
 
   nix = {
@@ -23,6 +22,7 @@
     ./programs/common.nix
     ./programs/direnv.nix
     ./programs/git.nix
+    ./programs/neovim.nix
     ./programs/ssh.nix
     ./programs/zsh
   ];

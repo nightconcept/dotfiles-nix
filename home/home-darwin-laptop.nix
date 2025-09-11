@@ -4,15 +4,6 @@
   pkgs,
   ...
 }: {
-  programs.home-manager.enable = true;
-
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      allowUnfreePredicate = _: true;
-    };
-  };
-
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
@@ -20,16 +11,17 @@
   ];
 
   imports = [
+    ./common.nix
     ./programs/aerospace.nix
     ./programs/common.nix
     ./programs/direnv.nix
     ./programs/git.nix
     ./programs/jankyborders.nix
     ./programs/neovim.nix
+    ./programs/shell
     ./programs/ssh.nix
     ./programs/wezterm
     ./programs/zellij.nix
-    ./programs/zsh
   ];
 
   home = {

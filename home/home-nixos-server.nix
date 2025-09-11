@@ -6,39 +6,27 @@
 }: {
   programs.home-manager.enable = true;
 
-  news = {
-    display = "silent";
-  };
-
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      allowUnfreePredicate = _: true;
-    };
-  };
-
   home.packages = with pkgs; [
     bat
     btop
     duf
     eza
     git
-    gh
     lazydocker
     lazygit
     ncdu
-    neovim
     nmap
     rsync
     vim
     wget
     zip
-    zoxide
   ];
 
   imports = [
+    ./common.nix
     ./programs/direnv.nix
-    ./programs/zsh
+    ./programs/neovim.nix
+    ./programs/shell
   ];
 
   home = {

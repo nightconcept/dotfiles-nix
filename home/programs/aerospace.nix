@@ -33,7 +33,7 @@
         inner.vertical = 15;
         outer.left = 12;
         outer.bottom = 12;
-        outer.top = 12; # Space for default macOS menu bar
+        outer.top = 12;
         outer.right = 12;
       };
 

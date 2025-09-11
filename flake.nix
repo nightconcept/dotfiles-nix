@@ -120,13 +120,6 @@
           }
         ];
       };
-    mkHome = system: username: module:
-      home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {system = "${system}";};
-        modules = [
-          ./home/${module}.nix
-        ];
-      };
   in {
     nixosConfigurations = {
       celes = mkNixos inputs.nixpkgs "celes";
@@ -142,13 +135,13 @@
       desktop = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {system = "x86_64-linux";};
         modules = [
-          ./home/home-desktop.nix
+          ./home/home-linux-desktop.nix
         ];
       };
       server = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {system = "x86_64-linux";};
         modules = [
-          ./home/home-server.nix
+          ./home/home-linux-server.nix
         ];
       };
     };
