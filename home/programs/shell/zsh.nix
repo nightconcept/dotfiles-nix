@@ -103,7 +103,6 @@
 
       # Other exports
       export LANG=en_US.UTF-8
-      export ZSH="$HOME/.oh-my-zsh"
       export VISUAL=nvim
       export XDG_DATA_DIRS="/home/danny/.nix-profile/share:$XDG_DATA_DIRS"
 
