@@ -8,31 +8,34 @@
   inherit (builtins) map;
   inherit (lib.strings) concatStrings;
 
-  # Tokyo Night colors
-  red = "#f7768e";
-  orange = "#ff9e64";
-  yellow = "#e0af68";
-  light_yellow = "#cfc9c2";
-  green = "#9ece6a";
-  teal = "#73daca";
-  light_teal = "#b4f9f8";
-  cyan = "#2ac3de";
-  light_blue = "#7dcfff";
-  blue = "#7aa2f7";
-  magenta = "#bb9af7";
-  white = "#c0caf5";
-  foreground = "#a9b1d6";
-  foreground_gutter = "#9aa5ce";
-  comment = "#565f89";
-  dark_gray = "#3b4261";
-  black = "#414868";
-  bg = "#1a1b26";
-  bg_highlight = "#292e42";
-  bg_dark = "#16161e";
-  segment_bg = dark_gray; # Background for segments matching gradient
+  # P10k Classic colors (256 color codes converted to hex)
+  red = "#d70000"; # 160
+  orange = "#d78700"; # 172
+  yellow = "#d7af00"; # 178
+  light_yellow = "#afaf87"; # 144
+  green = "#5fd700"; # 76 (git branch in P10k)
+  teal = "#5fd7d7"; # 80
+  light_teal = "#87d7d7"; # 116
+  cyan = "#00afff"; # 39 (directory color)
+  light_blue = "#5fafd7"; # 74 (nix shell)
+  blue = "#0087ff"; # 33
+  magenta = "#af5fff"; # 135
+  white = "#eeeeee"; # 255
+  foreground = "#bcbcbc"; # 250
+  foreground_gutter = "#6c6c6c"; # 242
+  comment = "#6c6c6c"; # 242 (frame/ornament color)
+  dark_gray = "#444444"; # 238 (background)
+  black = "#303030"; # 236
+  bg = "#303030"; # 236 (terminal background)
+  bg_highlight = "#444444"; # 238
+  bg_dark = "#1c1c1c"; # 234
+  segment_bg = "#444444"; # 238 (P10k background)
   terminal_black = black;
   fg = foreground;
   fg_dark = foreground_gutter;
+
+  # Variable colors that change based on palette
+  git_branch_color = green; # Green in P10k, will be magenta in Tokyo Night
 in {
   programs.starship = {
     enable = true;
@@ -41,7 +44,7 @@ in {
       "$schema" = "https://starship.rs/config-schema.json";
 
       # Format with box drawing characters and gradient blocks - matches P10k style
-      format = "$line_break[╭─](${comment})[░▒▓](${segment_bg})$os$username$hostname[ ](fg:${segment_bg} bg:${segment_bg})[ ](fg:${white} bg:${segment_bg})$directory[](fg:${segment_bg})$git_branch$git_status[](fg:${segment_bg})$fill[](fg:${segment_bg})$status$cmd_duration$all$nix_shell$time[▓▒░](${segment_bg})[─╮](${comment})$line_break[╰─](${comment})$character";
+      format = "$line_break[╭─](${comment})[░▒▓](${segment_bg})$os$username$hostname[ ](fg:${foreground_gutter} bg:${segment_bg})$directory[](fg:${segment_bg})$git_branch$git_status[](fg:${segment_bg})$fill[](fg:${segment_bg})$status$cmd_duration$all$nix_shell$time[▓▒░](${segment_bg})[─╮ ](${comment})$line_break[╰─ ](${comment})$character";
 
       # Right prompt format
       right_format = "[─╯](${comment})";
@@ -49,7 +52,34 @@ in {
       # Add newline before prompt like P10k
       add_newline = true;
 
-      palette = "tokyo_night";
+      palette = "p10k_classic";
+
+      palettes.p10k_classic = {
+        red = "${red}";
+        orange = "${orange}";
+        yellow = "${yellow}";
+        light_yellow = "${light_yellow}";
+        green = "${green}";
+        teal = "${teal}";
+        light_teal = "${light_teal}";
+        cyan = "${cyan}";
+        light_blue = "${light_blue}";
+        blue = "${blue}";
+        magenta = "${magenta}";
+        white = "${white}";
+        foreground = "${foreground}";
+        foreground_gutter = "${foreground_gutter}";
+        comment = "${comment}";
+        dark_gray = "${dark_gray}";
+        black = "${black}";
+        bg = "${bg}";
+        bg_highlight = "${bg_highlight}";
+        bg_dark = "${bg_dark}";
+        segment_bg = "${segment_bg}";
+        terminal_black = "${terminal_black}";
+        fg = "${fg}";
+        fg_dark = "${fg_dark}";
+      };
 
       palettes.tokyo_night = {
         red = "${red}";
@@ -139,32 +169,31 @@ in {
       # Git branch
       git_branch = {
         symbol = "";
-        style = "fg:${magenta} bg:${segment_bg}";
+        style = "fg:${git_branch_color} bg:${segment_bg}";
         format = "[ on ](fg:${foreground_gutter} bg:${segment_bg})[$symbol $branch ]($style)";
       };
 
       # Git status - with file counts like P10k
       git_status = {
-        style = "fg:${red} bg:${segment_bg}";
-        format = "[$ahead_behind$all_status]($style)";
+        format = "$ahead_behind$all_status";
         conflicted = "~$count ";
-        ahead = "[⇡$count ](fg:${magenta} bg:${segment_bg})";
-        behind = "[⇣$count ](fg:${magenta} bg:${segment_bg})";
-        diverged = "[⇕$ahead_count ⇣$behind_count ](fg:${magenta} bg:${segment_bg})";
+        ahead = "[⇡$count ](fg:${git_branch_color} bg:${segment_bg})";
+        behind = "[⇣$count ](fg:${git_branch_color} bg:${segment_bg})";
+        diverged = "[⇡$ahead_count ⇣$behind_count ](fg:${git_branch_color} bg:${segment_bg})";
         up_to_date = "";
-        untracked = "?$count ";
-        stashed = "*$count ";
-        modified = "!$count ";
-        staged = "+$count ";
-        renamed = "»$count ";
-        deleted = "✘$count ";
+        untracked = "[?$count ](fg:${yellow} bg:${segment_bg})";
+        stashed = "[*$count ](fg:${green} bg:${segment_bg})";
+        modified = "[!$count ](fg:${yellow} bg:${segment_bg})";
+        staged = "[+$count ](fg:${yellow} bg:${segment_bg})";
+        renamed = "[»$count ](fg:${yellow} bg:${segment_bg})";
+        deleted = "[✘$count ](fg:${red} bg:${segment_bg})";
       };
 
       # Status - show success/error symbol with background
       status = {
         style = "fg:${green} bg:${segment_bg}";
         success_symbol = "[✔](fg:${green} bg:${segment_bg})";
-        error_symbol = "[✗](fg:${red} bg:${segment_bg})";
+        error_symbol = "[✘](fg:${red} bg:${segment_bg})";
         format = "[ $symbol ]($style)";
         map_symbol = false;
         disabled = false;
@@ -175,13 +204,13 @@ in {
         min_time = 3000;
         show_milliseconds = false;
         style = "fg:${yellow} bg:${segment_bg}";
-        format = "[](fg:${white} bg:${segment_bg})[ took $duration ]($style)";
+        format = "[](fg:${foreground_gutter} bg:${segment_bg})[ took $duration ]($style)";
       };
 
       # Nix shell with background
       nix_shell = {
         style = "fg:${blue} bg:${segment_bg} bold";
-        format = "[](fg:${white} bg:${segment_bg})[ $state  ]($style)";
+        format = "[](fg:${foreground_gutter} bg:${segment_bg})[ $state  ]($style)";
         impure_msg = "impure ";
         pure_msg = "pure ";
         unknown_msg = "";
@@ -191,8 +220,8 @@ in {
       time = {
         disabled = false;
         time_format = "%H:%M:%S";
-        style = "fg:${comment} bg:${segment_bg}";
-        format = "[](fg:${white} bg:${segment_bg})[ at $time ]($style)";
+        style = "fg:${white} bg:${segment_bg}";
+        format = "[](fg:${foreground_gutter} bg:${segment_bg})[ at $time   ]($style)";
       };
 
       # Line break
@@ -202,7 +231,7 @@ in {
 
       # Character - prompt symbol
       character = {
-        disabled = false;
+        disabled = true;
         success_symbol = "[❯](bold fg:${green})";
         error_symbol = "[❯](bold fg:${red})";
         vimcmd_symbol = "[❮](bold fg:${green})";
@@ -337,7 +366,7 @@ in {
         symbol = "📦";
         style = "fg:${orange} bg:${segment_bg}";
         format = " [$symbol ($version) ]($style)";
-        disabled = false;
+        disabled = true;
       };
     };
   };
