@@ -20,7 +20,6 @@
     nerd-fonts.fira-code
     nerd-fonts.fira-mono
     obsidian
-    tlp
     uv
     vlc
     vscode
