@@ -6,19 +6,6 @@
   programs.zsh = {
     enable = true;
     dotDir = "${config.xdg.configHome}/zsh";
-    oh-my-zsh = {
-      enable = false;
-      plugins = [
-        "alias-finder"
-        "brew"
-        "eza"
-        "z"
-      ];
-      extraConfig = ''
-        zstyle ':omz:update' mode auto # update automatically without asking
-        zstyle ':omz:update' frequency 13
-      '';
-    };
 
     zplug = {
       enable = true;
