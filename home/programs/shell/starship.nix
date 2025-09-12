@@ -44,7 +44,7 @@ in {
       "$schema" = "https://starship.rs/config-schema.json";
 
       # Format with box drawing characters and gradient blocks - matches P10k style
-      format = "$line_break[╭─](${comment})[](fg:${segment_bg})$os$username$hostname[ ](fg:${foreground_gutter} bg:${segment_bg})$directory$git_branch$git_status[](fg:${segment_bg})$fill[](fg:${segment_bg})$status$cmd_duration$all$nix_shell$time[](fg:${segment_bg})[─╮ ](${comment})$line_break[╰─ ](${comment})$character";
+      format = "$line_break[╭─](${comment})[](fg:${segment_bg})$os$username$hostname[ ](fg:${foreground_gutter} bg:${segment_bg})$directory$git_branch$git_status[](fg:${segment_bg})$fill[](fg:${segment_bg})$nix_shell$time[](fg:${segment_bg})[─╮ ](${comment})$line_break[╰─ ](${comment})$character";
 
       # Right prompt format
       right_format = "[─╯](${comment})";
@@ -104,11 +104,8 @@ in {
           Gentoo = "󰣨";
           Fedora = "󰣛";
           Alpine = "";
-          Amazon = "";
-          Android = "";
           Arch = "󰣇";
           Artix = "󰣇";
-          CentOS = "";
           Debian = "";
           Redhat = "󱄛";
           RedHatEnterprise = "󱄛";
@@ -169,21 +166,22 @@ in {
         error_symbol = "[✘](fg:${red} bg:${segment_bg})";
         format = "[ $symbol ]($style)";
         map_symbol = false;
-        disabled = false;
+        disabled = true;
       };
 
       # Command duration with background
       cmd_duration = {
-        min_time = 3000;
+        min_time = 10000;
         show_milliseconds = false;
         style = "fg:${yellow} bg:${segment_bg}";
         format = "[](fg:${foreground_gutter} bg:${segment_bg})[ took $duration ]($style)";
+        disabled = true;
       };
 
       # Nix shell with background
       nix_shell = {
         style = "fg:${light_blue} bg:${segment_bg} bold";
-        format = "[](fg:${foreground_gutter} bg:${segment_bg})[ $state  ]($style)";
+        format = "[ $state  ]($style)";
         impure_msg = "impure ";
         pure_msg = "pure ";
         unknown_msg = "";
@@ -204,28 +202,13 @@ in {
 
       # Character - prompt symbol
       character = {
-        disabled = true;
+        disabled = false;
         success_symbol = "[❯](bold fg:${green})";
         error_symbol = "[❯](bold fg:${red})";
         vimcmd_symbol = "[❮](bold fg:${green})";
         vimcmd_replace_one_symbol = "[❮](bold fg:${magenta})";
         vimcmd_replace_symbol = "[❮](bold fg:${magenta})";
         vimcmd_visual_symbol = "[❮](bold fg:${yellow})";
-      };
-
-      # Programming languages with backgrounds
-      nodejs = {
-        symbol = "";
-        style = "fg:${green} bg:${segment_bg}";
-        format = " [$symbol ($version) ]($style)";
-        disabled = false;
-      };
-
-      rust = {
-        symbol = "";
-        style = "fg:${orange} bg:${segment_bg}";
-        format = " [$symbol ($version) ]($style)";
-        disabled = false;
       };
 
       python = {
@@ -235,111 +218,12 @@ in {
         disabled = false;
       };
 
-      golang = {
-        symbol = "";
-        style = "fg:${cyan} bg:${segment_bg}";
-        format = " [$symbol ($version) ]($style)";
-        disabled = false;
-      };
-
-      c = {
-        symbol = "";
-        style = "fg:${blue} bg:${segment_bg}";
-        format = " [$symbol ($version) ]($style)";
-        disabled = false;
-      };
-
-      php = {
-        symbol = "";
-        style = "fg:${magenta} bg:${segment_bg}";
-        format = " [$symbol ($version) ]($style)";
-        disabled = false;
-      };
-
-      java = {
-        symbol = "";
-        style = "fg:${red} bg:${segment_bg}";
-        format = " [$symbol ($version) ]($style)";
-        disabled = false;
-      };
-
-      kotlin = {
-        symbol = "";
-        style = "fg:${magenta} bg:${segment_bg}";
-        format = " [$symbol ($version) ]($style)";
-        disabled = false;
-      };
-
-      haskell = {
-        symbol = "";
-        style = "fg:${magenta} bg:${segment_bg}";
-        format = " [$symbol ($version) ]($style)";
-        disabled = false;
-      };
-
-      ruby = {
-        symbol = "";
-        style = "fg:${red} bg:${segment_bg}";
-        format = " [$symbol ($version) ]($style)";
-        disabled = false;
-      };
-
       # Container/Environment tools with backgrounds
       docker_context = {
         symbol = "";
         style = "fg:${cyan} bg:${segment_bg}";
         format = " [$symbol $context ]($style)";
         disabled = false;
-      };
-
-      conda = {
-        symbol = "";
-        style = "fg:${green} bg:${segment_bg}";
-        format = " [$symbol $environment ]($style)";
-        ignore_base = false;
-        disabled = false;
-      };
-
-      aws = {
-        symbol = "󰸏";
-        style = "fg:${orange} bg:${segment_bg}";
-        format = " [$symbol ($profile )(\($region\)) ]($style)";
-        disabled = false;
-      };
-
-      azure = {
-        symbol = "󰠅";
-        style = "fg:${blue} bg:${segment_bg}";
-        format = " [$symbol ($subscription) ]($style)";
-        disabled = false;
-      };
-
-      gcloud = {
-        symbol = "󱇶";
-        style = "fg:${blue} bg:${segment_bg}";
-        format = " [$symbol ($project) ]($style)";
-        disabled = false;
-      };
-
-      kubernetes = {
-        symbol = "󱃾";
-        style = "fg:${blue} bg:${segment_bg}";
-        format = " [$symbol $context( \($namespace\)) ]($style)";
-        disabled = false;
-      };
-
-      terraform = {
-        symbol = "󱁢";
-        style = "fg:${magenta} bg:${segment_bg}";
-        format = " [$symbol $workspace ]($style)";
-        disabled = false;
-      };
-
-      package = {
-        symbol = "📦";
-        style = "fg:${orange} bg:${segment_bg}";
-        format = " [$symbol ($version) ]($style)";
-        disabled = true;
       };
     };
   };
