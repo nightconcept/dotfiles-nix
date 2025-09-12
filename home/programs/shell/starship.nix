@@ -44,44 +44,17 @@ in {
       "$schema" = "https://starship.rs/config-schema.json";
 
       # Format with box drawing characters and gradient blocks - matches P10k style
-      format = "$line_break[╭─](${comment})[░▒▓](${segment_bg})$os$username$hostname[ ](fg:${foreground_gutter} bg:${segment_bg})$directory[](fg:${segment_bg})$git_branch$git_status[](fg:${segment_bg})$fill[](fg:${segment_bg})$status$cmd_duration$all$nix_shell$time[▓▒░](${segment_bg})[─╮ ](${comment})$line_break[╰─ ](${comment})$character";
+      format = "$line_break[╭─](${comment})[](fg:${segment_bg})$os$username$hostname[ ](fg:${foreground_gutter} bg:${segment_bg})$directory$git_branch$git_status[](fg:${segment_bg})$fill[](fg:${segment_bg})$status$cmd_duration$all$nix_shell$time[](fg:${segment_bg})[─╮ ](${comment})$line_break[╰─ ](${comment})$character";
 
       # Right prompt format
       right_format = "[─╯](${comment})";
 
       # Add newline before prompt like P10k
-      add_newline = true;
+      add_newline = false;
 
       palette = "p10k_classic";
 
       palettes.p10k_classic = {
-        red = "${red}";
-        orange = "${orange}";
-        yellow = "${yellow}";
-        light_yellow = "${light_yellow}";
-        green = "${green}";
-        teal = "${teal}";
-        light_teal = "${light_teal}";
-        cyan = "${cyan}";
-        light_blue = "${light_blue}";
-        blue = "${blue}";
-        magenta = "${magenta}";
-        white = "${white}";
-        foreground = "${foreground}";
-        foreground_gutter = "${foreground_gutter}";
-        comment = "${comment}";
-        dark_gray = "${dark_gray}";
-        black = "${black}";
-        bg = "${bg}";
-        bg_highlight = "${bg_highlight}";
-        bg_dark = "${bg_dark}";
-        segment_bg = "${segment_bg}";
-        terminal_black = "${terminal_black}";
-        fg = "${fg}";
-        fg_dark = "${fg_dark}";
-      };
-
-      palettes.tokyo_night = {
         red = "${red}";
         orange = "${orange}";
         yellow = "${yellow}";
@@ -170,7 +143,7 @@ in {
       git_branch = {
         symbol = "";
         style = "fg:${git_branch_color} bg:${segment_bg}";
-        format = "[ on ](fg:${foreground_gutter} bg:${segment_bg})[$symbol $branch ]($style)";
+        format = "[](fg:${foreground_gutter} bg:${segment_bg})[ $symbol $branch ]($style)";
       };
 
       # Git status - with file counts like P10k
@@ -209,7 +182,7 @@ in {
 
       # Nix shell with background
       nix_shell = {
-        style = "fg:${blue} bg:${segment_bg} bold";
+        style = "fg:${light_blue} bg:${segment_bg} bold";
         format = "[](fg:${foreground_gutter} bg:${segment_bg})[ $state  ]($style)";
         impure_msg = "impure ";
         pure_msg = "pure ";
@@ -220,8 +193,8 @@ in {
       time = {
         disabled = false;
         time_format = "%H:%M:%S";
-        style = "fg:${white} bg:${segment_bg}";
-        format = "[](fg:${foreground_gutter} bg:${segment_bg})[ at $time   ]($style)";
+        style = "fg:${foreground} bg:${segment_bg}";
+        format = "[](fg:${foreground_gutter} bg:${segment_bg})[ $time   ]($style)";
       };
 
       # Line break
