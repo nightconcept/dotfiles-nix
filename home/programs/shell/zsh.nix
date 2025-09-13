@@ -3,6 +3,15 @@
   config,
   ...
 }: {
+  home.sessionPath = [
+    "/home/danny/.local/bin"
+    "/opt/nvim-linux64/bin"
+  ] ++ (if pkgs.stdenv.isDarwin then [
+    "/usr/local/bin"
+    "/opt/homebrew/bin"  
+    "/Users/danny/.local/bin"
+  ] else []);
+
   programs.zsh = {
     enable = true;
     dotDir = "${config.xdg.configHome}/zsh";
@@ -83,36 +92,18 @@
       EDITOR = "nvim";
       BROWSER = "firefox";
       TERMINAL = "wezterm";
+      LANG = "en_US.UTF-8";
+      VISUAL = "nvim";
+      GPG_TTY = "$(tty)";
+      XDG_DATA_DIRS = "/home/danny/.nix-profile/share:$XDG_DATA_DIRS";
     };
 
     initContent = ''
-
-      # Path exports
-      export PATH="/home/danny/.local/bin:$PATH"
-      export PATH="$PATH:/opt/nvim-linux64/bin"
-
-      # macOS only exports
-      if [[ "$OSTYPE" == "darwin"* ]]; then
-        export PATH="/usr/local/bin:$PATH"    # arm64e homebrew path (m1   )
-        export PATH="/opt/homebrew/bin:$PATH" # x86_64 homebrew path (intel)
-        export PATH="/Users/danny/sdk/flutter/bin:$PATH"
-        export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-        export PATH="/Users/danny/.local/bin:$PATH"
-
-      fi
-
-      # Other exports
-      export LANG=en_US.UTF-8
-      export VISUAL=nvim
-      export XDG_DATA_DIRS="/home/danny/.nix-profile/share:$XDG_DATA_DIRS"
-
-      # enable passphrase prompt for gpg
-      export GPG_TTY=$(tty)
-
-      # Evals
+      # Shell integrations
       eval "$(starship init zsh)"
       eval "$(zoxide init zsh)"
 
+      # Conditional brew setup
       if [ -d "/home/linuxbrew/" ]; then
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
       fi
