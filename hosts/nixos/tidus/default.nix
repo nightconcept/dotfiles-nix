@@ -11,9 +11,9 @@
   config = {
     plasma6.enable = true;
 
-    networking.hostName = "celes";
+    networking.hostName = "tidus";
 
-    boot.kernelPackages = pkgs.linuxPackages_6_11;
+    boot.kernelPackages = pkgs.linuxPackages_6_12;
 
     system.stateVersion = "23.11";
   };
