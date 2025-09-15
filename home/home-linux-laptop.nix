@@ -33,9 +33,14 @@
     ./programs/direnv.nix
     ./programs/gaming.nix
     ./programs/git.nix
+    ./programs/mako.nix
     ./programs/neovim.nix
     ./programs/shell
     ./programs/ssh.nix
+    ./programs/swaylock.nix
+    ./programs/waybar.nix
+    ./programs/wlogout.nix
+    ./programs/wofi.nix
   ];
 
   home = {

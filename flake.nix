@@ -138,6 +138,12 @@
           ./home/home-linux-desktop.nix
         ];
       };
+      laptop = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {system = "x86_64-linux";};
+        modules = [
+          ./home/home-linux-laptop.nix
+        ];
+      };
       server = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {system = "x86_64-linux";};
         modules = [
