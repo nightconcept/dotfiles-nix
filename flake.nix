@@ -122,7 +122,7 @@
       };
   in {
     nixosConfigurations = {
-      celes = mkNixos inputs.nixpkgs "celes";
+      tidus = mkNixos inputs.nixpkgs "tidus";
       aerith = mkNixosServer inputs.nixpkgs "aerith";
     };
 

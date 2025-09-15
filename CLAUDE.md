@@ -17,7 +17,7 @@ This is a Nix flake configuration for personal dotfiles supporting multiple plat
 nixos-rebuild switch --flake .#<CONFIG-NAME> --experimental-feature "nix-command flakes"
 
 # Example configurations:
-nixos-rebuild switch --flake .#celes
+nixos-rebuild switch --flake .#tidus
 nixos-rebuild switch --flake .#aerith
 ```
 
@@ -91,15 +91,11 @@ nix flake show
 
 #### Active NixOS Hosts
 - `aerith` - Plex media server (uses `mkNixosServer`)
-- `phoenix` - Spare/VM configuration (uses `mkNixosServer`)
+- `tidus` - Dell NixOS Laptop
 
 #### Active Darwin Hosts  
 - `waver` - MacBook Pro
 - `merlin` - Mac Mini HTPC
-
-#### Deprecated Hosts
-- `celes` - Former main PC
-- `cloud` - Former laptop
 
 ## Development Workflow
 
