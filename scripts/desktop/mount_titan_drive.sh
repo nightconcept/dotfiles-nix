@@ -6,14 +6,74 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-# Check for cifs-utils
-if ! dpkg -s cifs-utils >/dev/null 2>&1; then
-    echo "cifs-utils not found, installing..."
-    apt-get update && apt-get install -y cifs-utils || {
-        echo "Failed to install cifs-utils" >&2
-        exit 1
-    }
+# Detect Linux distribution
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    DISTRO="$ID"
+else
+    echo "Cannot detect Linux distribution" >&2
+    exit 1
 fi
+
+# Check for and install cifs-utils based on distro
+case "$DISTRO" in
+    debian|ubuntu|linuxmint|pop)
+        if ! dpkg -s cifs-utils >/dev/null 2>&1; then
+            echo "cifs-utils not found, installing..."
+            apt-get update && apt-get install -y cifs-utils || {
+                echo "Failed to install cifs-utils" >&2
+                exit 1
+            }
+        fi
+        ;;
+    arch|manjaro|endeavouros|cachyos)
+        if ! pacman -Qi cifs-utils >/dev/null 2>&1; then
+            echo "cifs-utils not found, installing..."
+            
+            # Check for stale pacman lock
+            if [ -f /var/lib/pacman/db.lck ]; then
+                if ! pgrep -x "pacman" >/dev/null && ! pgrep "yay" >/dev/null && ! pgrep "paru" >/dev/null; then
+                    echo "Removing stale pacman lock file..."
+                    rm -f /var/lib/pacman/db.lck
+                else
+                    echo "Another package manager is running. Please wait for it to finish." >&2
+                    exit 1
+                fi
+            fi
+            
+            pacman -S --noconfirm cifs-utils || {
+                echo "Failed to install cifs-utils" >&2
+                echo "Please run manually: sudo pacman -S cifs-utils" >&2
+                exit 1
+            }
+        else
+            echo "cifs-utils is already installed"
+        fi
+        ;;
+    fedora|rhel|centos|rocky|almalinux)
+        if ! rpm -q cifs-utils >/dev/null 2>&1; then
+            echo "cifs-utils not found, installing..."
+            dnf install -y cifs-utils || yum install -y cifs-utils || {
+                echo "Failed to install cifs-utils" >&2
+                exit 1
+            }
+        fi
+        ;;
+    opensuse*|suse*)
+        if ! rpm -q cifs-utils >/dev/null 2>&1; then
+            echo "cifs-utils not found, installing..."
+            zypper install -y cifs-utils || {
+                echo "Failed to install cifs-utils" >&2
+                exit 1
+            }
+        fi
+        ;;
+    *)
+        echo "Unsupported distribution: $DISTRO" >&2
+        echo "Please manually install cifs-utils and try again" >&2
+        exit 1
+        ;;
+esac
 
 # Create mount directory
 mkdir -p /mnt/titan
@@ -32,7 +92,16 @@ EOF
     
     echo "Please edit the credentials file with your actual password"
     read -p "Press enter to continue..."
-    nano /etc/mog-secrets
+    # Use available editor
+    if command -v nano >/dev/null 2>&1; then
+        nano /etc/mog-secrets
+    elif command -v vim >/dev/null 2>&1; then
+        vim /etc/mog-secrets
+    elif command -v vi >/dev/null 2>&1; then
+        vi /etc/mog-secrets
+    else
+        echo "No text editor found. Please manually edit /etc/mog-secrets"
+    fi
 fi
 
 # Add to fstab if not already present
