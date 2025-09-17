@@ -2,24 +2,13 @@
 { config, lib, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    bat
-    btop
-    duf
-    eza
-    git
-    lazydocker
-    lazygit
-    ncdu
-    nmap
-    rsync
-    vim
-    wget
-    zip
+  imports = [
+    ../programs/common.nix
+    ../programs/shell
   ];
 
-  # Server uses shell but not the full desktop shell config
-  imports = [
-    ../programs/shell
+  # Additional server-specific packages
+  home.packages = with pkgs; [
+    lazydocker
   ];
 }
