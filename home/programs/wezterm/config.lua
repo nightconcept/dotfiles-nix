@@ -43,24 +43,44 @@ config.font_rules = {
 config.color_scheme = "Tokyo Night"
 config.window_background_opacity = 0.97
 
--- keybinds.lua - Coordinated with Aerospace, Zellij, and Neovim
-config.keys = {
-  -- Terminal-level operations
-  { key = 't', mods = 'CMD', action = act.SpawnTab('CurrentPaneDomain') },
-  { key = 'w', mods = 'CMD', action = act.CloseCurrentTab { confirm = true } },
-  { key = 'Enter', mods = 'CMD', action = act.ToggleFullScreen },
-  
-  -- Tab navigation
-  { key = '[', mods = 'CMD|SHIFT', action = act.ActivateTabRelative(-1) },
-  { key = ']', mods = 'CMD|SHIFT', action = act.ActivateTabRelative(1) },
-  
-  -- Don't bind Cmd+1-9 (let Aerospace handle workspace switching)
-  -- Don't bind Ctrl+t (let Zellij handle multiplexing)
-  
-  -- Keep some useful terminal shortcuts that don't conflict
-  { key = 'k', mods = 'CMD', action = act.ClearScrollback('ScrollbackAndViewport') },
-  { key = 'r', mods = 'CMD', action = act.ReloadConfiguration },
-}
+-- keybinds.lua
+if wezterm.target_triple == 'x86_64-pc-windows-msvc' or wezterm.target_triple == 'aarch64-apple-darwin' then
+  config.keys = {
+    -- Terminal-level operations
+    { key = 't', mods = 'CMD', action = act.SpawnTab('CurrentPaneDomain') },
+    { key = 'w', mods = 'CMD', action = act.CloseCurrentTab { confirm = true } },
+    { key = 'Enter', mods = 'CMD', action = act.ToggleFullScreen },
+    
+    -- Tab navigation
+    { key = 'LeftArrow', mods = 'CMD', action = act.ActivateTabRelative(-1) },
+    { key = 'RightArrow', mods = 'CMD', action = act.ActivateTabRelative(1) },
+    
+    -- Don't bind Cmd+1-9 (let Aerospace handle workspace switching)
+    -- Don't bind Ctrl+t (let Zellij handle multiplexing)
+    
+    -- Keep some useful terminal shortcuts that don't conflict
+    { key = 'k', mods = 'CMD', action = act.ClearScrollback('ScrollbackAndViewport') },
+    { key = 'r', mods = 'CMD', action = act.ReloadConfiguration },
+  }
+else
+    config.keys = {
+    -- Terminal-level operations
+    { key = 't', mods = 'CTRL', action = act.SpawnTab('CurrentPaneDomain') },
+    { key = 'w', mods = 'CTRL', action = act.CloseCurrentTab { confirm = true } },
+    { key = 'Enter', mods = 'CTRL', action = act.ToggleFullScreen },
+    
+    -- Tab navigation
+    { key = 'LeftArrow', mods = 'CTRL', action = act.ActivateTabRelative(-1) },
+    { key = 'RightArrow', mods = 'CTRL', action = act.ActivateTabRelative(1) },
+    
+    -- Don't bind Cmd+1-9 (let Aerospace handle workspace switching)
+    -- Don't bind Ctrl+t (let Zellij handle multiplexing)
+    
+    -- Keep some useful terminal shortcuts that don't conflict
+    { key = 'k', mods = 'CTRL', action = act.ClearScrollback('ScrollbackAndViewport') },
+    { key = 'r', mods = 'CTRL', action = act.ReloadConfiguration },
+  }
+end
 -- mousebinds.lua
 config.mouse_bindings = {
   -- Change the default click behavior so that it only selects
@@ -83,6 +103,20 @@ config.mouse_bindings = {
     mods = 'NONE',
   },
 }
+
+-- Disable middle-click closing tabs on Linux only
+if wezterm.target_triple:find("linux") then
+  table.insert(config.mouse_bindings, {
+    event = { Up = { streak = 1, button = 'Middle' } },
+    mods = 'NONE',
+    action = act.Nop,  -- Do nothing on middle click
+  })
+  table.insert(config.mouse_bindings, {
+    event = { Down = { streak = 1, button = 'Middle' } },
+    mods = 'NONE',
+    action = act.Nop,  -- Do nothing on middle click
+  })
+end
 
 -- general random config
 config.scrollback_lines = 7000

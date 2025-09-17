@@ -6,11 +6,19 @@
     userEmail = "dark@nightconcept.net";
 
     signing = {
-      key = "432928BF8B0A767DB68A01451C5E44D950920340";
+      key = "~/.ssh/id_sdev.pub";
       signByDefault = true;
     };
 
     extraConfig = {
+      gpg = {
+        format = "ssh";
+      };
+      
+      "gpg \"ssh\"" = {
+        allowedSignersFile = "~/.ssh/allowed_signers";
+      };
+      
       github = {
         user = "nightconcept";
       };

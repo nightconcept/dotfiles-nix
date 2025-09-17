@@ -1,4 +1,4 @@
-# WARNING: Keep this file encrypted
+# SSH configuration
 {config, ...}: {
   programs.ssh = {
     enable = true;
@@ -22,6 +22,11 @@
         identityFile = "${config.home.homeDirectory}/.ssh/id_sdev";
       };
     };
+  };
+  
+  # Deploy the public key (not sensitive, doesn't need encryption)
+  home.file.".ssh/id_sdev.pub" = {
+    text = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMJKTm63zFmYfGauCBlUWq7lvHFq+NVPT5RqIfjLM7MN danny@solivan.dev";
   };
 }
 

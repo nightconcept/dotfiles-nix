@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   imports = [
-    ./amd-gpu.nix
-    #./amd-pstate.nix
+    ./bluetooth.nix
+    ./power-management.nix
   ];
 
   services.printing.enable = true;
