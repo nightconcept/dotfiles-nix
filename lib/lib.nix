@@ -1,7 +1,7 @@
 { inputs }:
 
 let
-  inherit (inputs) nixpkgs home-manager nix-darwin vscode-server stylix spicetify-nix sops-nix;
+  inherit (inputs) nixpkgs home-manager nix-darwin vscode-server stylix spicetify-nix sops-nix lix-module;
 in
 {
   mkNixos = pkgs: hostname:
@@ -14,6 +14,7 @@ in
         home-manager.nixosModules.home-manager
         stylix.nixosModules.stylix
         sops-nix.nixosModules.sops
+        lix-module.nixosModules.default
         {
           home-manager = {
             users.danny.home.stateVersion = "23.11";
@@ -39,6 +40,7 @@ in
         ../hosts/nixos/${hostname}
         home-manager.nixosModules.home-manager
         sops-nix.nixosModules.sops
+        lix-module.nixosModules.default
         {
           home-manager = {
             users.danny.home.stateVersion = "23.11";
