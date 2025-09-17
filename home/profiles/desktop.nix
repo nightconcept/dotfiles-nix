@@ -1,14 +1,15 @@
-# Desktop configuration for GUI environments
-{ config, lib, pkgs, ... }:
-
+# Linux (non-NixOS) Desktops
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   imports = [
     ../programs/common.nix
-    ../programs/gaming.nix
     ../programs/spicetify.nix
     ../programs/wezterm
     ../stylix.nix
-    ../desktops/hyprland
   ];
 
   fonts.fontconfig.enable = true;
@@ -25,11 +26,9 @@
     xdg-utils
   ];
 
-  # Enable the Hyprland desktop
-  desktops.hyprland.enable = true;
-  
-  # Enable Spicetify for themed Spotify
   programs.spicetify.enable = true;
+
+  stylix.targets.gtk.enable = lib.mkForce false;
 
   xdg.mime.enable = true;
   xdg.mimeApps = {

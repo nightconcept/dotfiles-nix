@@ -1,19 +1,42 @@
-# Laptop-specific configuration (power management, battery, etc)
-{ config, lib, pkgs, ... }:
-
+# Desktop configuration for GUI environments
 {
-  # Laptop profiles always include desktop
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   imports = [
-    ./desktop.nix
+    ../programs/common.nix
+    ../programs/gaming.nix
+    ../programs/spicetify.nix
+    ../programs/wezterm
+    ../stylix.nix
+    ../desktops/hyprland
   ];
 
-  # Laptop-specific packages could go here
-  # home.packages = with pkgs; [
-  #   powertop
-  #   tlp
-  # ];
+  fonts.fontconfig.enable = true;
 
-  # Laptop-specific configuration
-  # For example, battery display is already handled in waybar.nix
-  # Power management would be in system configuration, not home-manager
+  home.packages = with pkgs; [
+    github-desktop
+    kdePackages.xdg-desktop-portal-kde
+    nerd-fonts.fira-code
+    nerd-fonts.fira-mono
+    obsidian
+    uv
+    vlc
+    vscode
+    xdg-utils
+  ];
+
+  desktops.hyprland.enable = true;
+
+  programs.spicetify.enable = true;
+
+  xdg.mime.enable = true;
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "x-scheme-handler/x-github-desktop-dev-auth" = "github-desktop.desktop";
+    };
+  };
 }
