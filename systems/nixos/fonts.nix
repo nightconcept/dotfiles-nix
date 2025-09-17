@@ -19,6 +19,7 @@
       noto-fonts-emoji
       source-serif
       work-sans
+      (callPackage ./pkgs/inter-nerd-font.nix {})
     ];
     fontconfig = {
       antialias = true;

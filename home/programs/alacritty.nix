@@ -14,20 +14,20 @@
       # Font configuration
       font = {
         normal = {
-          family = "FiraMono Nerd Font";
+          family = "FiraCode Nerd Font Propo";
           style = "Regular";
         };
         bold = {
-          family = "FiraMono Nerd Font";
+          family = "FiraCode Nerd Font Propo";
           style = "Bold";
         };
         italic = {
-          family = "FiraMono Nerd Font";
-          style = "Italic";
+          family = "FiraCode Nerd Font Propo";
+          style = "Light";  # FiraCode doesn't have a true italic, using Light instead
         };
         bold_italic = {
-          family = "FiraMono Nerd Font";
-          style = "Bold Italic";
+          family = "FiraCode Nerd Font Propo";
+          style = "SemiBold";  # Using SemiBold for bold italic
         };
         size = 14.0;
       };
@@ -35,8 +35,8 @@
       # Window configuration
       window = {
         padding = {
-          x = 2;
-          y = 2;
+          x = 3;
+          y = 3;
         };
         decorations = "Full";
         opacity = 0.97;

@@ -14,7 +14,8 @@
 
   programs.zsh = {
     enable = true;
-    dotDir = "${config.xdg.configHome}/zsh";
+    dotDir = ".config/zsh";
+    enableCompletion = true;
 
     zplug = {
       enable = true;
@@ -98,7 +99,14 @@
       XDG_DATA_DIRS = "/home/danny/.nix-profile/share:$XDG_DATA_DIRS";
     };
 
-    initContent = ''
+    initExtraFirst = ''
+      # Source home-manager session vars if it exists
+      if [[ -f "/home/danny/.nix-profile/etc/profile.d/hm-session-vars.sh" ]]; then
+        source "/home/danny/.nix-profile/etc/profile.d/hm-session-vars.sh"
+      fi
+    '';
+
+    initExtra = ''
       # Shell integrations
       eval "$(starship init zsh)"
       eval "$(zoxide init zsh)"

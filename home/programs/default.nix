@@ -11,6 +11,7 @@
     ./git.nix
     ./neovim.nix
     ./ssh.nix
+    ./vencord.nix
     ./wezterm
     ./xdg.nix
     ./zellij.nix
