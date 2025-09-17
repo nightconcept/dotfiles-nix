@@ -93,6 +93,7 @@
       # Shell integrations
       starship init fish | source
       zoxide init fish | source
+      any-nix-shell fish --info-right | source
 
       # Conditional brew setup
       if test -d "/home/linuxbrew/"
