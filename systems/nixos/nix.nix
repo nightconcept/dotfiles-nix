@@ -6,7 +6,7 @@
   nix = {
     settings = {
       auto-optimise-store = true;
-      trusted-users = ["root" "@wheel"];
+      trusted-users = ["root" "@wheel" "danny"];
       experimental-features = ["nix-command" "flakes"];
       use-xdg-base-directories = true;
       warn-dirty = false;
@@ -15,7 +15,7 @@
     };
     gc = {
       automatic = true;
-      options = "--delete-older-than 7d";
+      options = "--delete-older-than 7d --max-generations 10";
     };
   };
 

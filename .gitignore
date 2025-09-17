@@ -2,3 +2,10 @@
 .devenv/
 .devenv*
 .direnv/
+
+# Nix build outputs
+result
+result-*
+
+# Environment files
+.env

@@ -10,6 +10,7 @@
     duf
     eza
     fastfetch
+    gemini-cli
     gnupg
     lazygit
     lua51Packages.lua

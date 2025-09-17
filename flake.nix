@@ -17,139 +17,57 @@
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
     };
+
+    stylix = {
+      url = "github:danth/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    spicetify-nix = {
+      url = "github:Gerg-L/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware/master";
+    };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
     self,
     nixpkgs,
     home-manager,
-    nix-darwin,
-    vscode-server,
     ...
   } @ inputs: let
-    lib = nixpkgs.lib;
+    lib = import ./lib/lib.nix { inherit inputs; };
     pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-    mkNixos = pkgs: hostname:
-      pkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./systems/nixos
-          ./hosts/nixos/${hostname}
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              users.danny.home.stateVersion = "23.11";
-              backupFileExtension = "backup";
-              users.danny.imports = [
-                ./home
-              ];
-              extraSpecialArgs = {inherit inputs;};
-            };
-          }
-        ];
-      };
-    mkNixosServer = pkgs: hostname:
-      pkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./systems/nixos
-          ./hosts/nixos/${hostname}
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              users.danny.home.stateVersion = "23.11";
-              users.danny.imports = [
-                ./home/home-nixos-server.nix
-              ];
-              extraSpecialArgs = {inherit inputs;};
-            };
-          }
-          vscode-server.nixosModules.default
-          ({
-            config,
-            pkgs,
-            ...
-          }: {
-            services.vscode-server.enable = true;
-          })
-        ];
-      };
-    mkDarwin = pkgs: hostname:
-      nix-darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        specialArgs = {
-          inherit inputs;
-        };
-
-        modules = [
-          ./systems/darwin
-          ./hosts/darwin/${hostname}
-          home-manager.darwinModules.home-manager
-          {
-            users.users.danny.home = "/Users/danny";
-            home-manager = {
-              useGlobalPkgs = false; # makes hm use nixos's pkgs value
-              backupFileExtension = "backup";
-              users.danny.imports = [
-                ./home/home-darwin.nix
-              ];
-            };
-          }
-        ];
-      };
-    mkDarwinLaptop = pkgs: hostname:
-      nix-darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        specialArgs = {
-          inherit inputs;
-        };
-
-        modules = [
-          ./systems/darwin
-          ./hosts/darwin/${hostname}
-          home-manager.darwinModules.home-manager
-          {
-            users.users.danny.home = "/Users/danny";
-            home-manager = {
-              useGlobalPkgs = false; # makes hm use nixos's pkgs value
-              backupFileExtension = "backup";
-              users.danny.imports = [
-                ./home/home-darwin-laptop.nix
-              ];
-            };
-          }
-        ];
-      };
   in {
     nixosConfigurations = {
-      tidus = mkNixos inputs.nixpkgs "tidus";
-      aerith = mkNixosServer inputs.nixpkgs "aerith";
+      tidus = lib.mkNixos inputs.nixpkgs "tidus";
+      aerith = lib.mkNixosServer inputs.nixpkgs "aerith";
     };
 
     darwinConfigurations = {
-      waver = mkDarwinLaptop inputs.nixpkgs "waver";
-      merlin = mkDarwin inputs.nixpkgs "merlin";
+      waver = lib.mkDarwinLaptop inputs.nixpkgs "waver";
+      merlin = lib.mkDarwin inputs.nixpkgs "merlin";
     };
 
     homeConfigurations = {
-      desktop = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {system = "x86_64-linux";};
-        modules = [
-          ./home/home-linux-desktop.nix
-        ];
-      };
-      laptop = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {system = "x86_64-linux";};
-        modules = [
-          ./home/home-linux-laptop.nix
-        ];
-      };
-      server = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {system = "x86_64-linux";};
-        modules = [
-          ./home/home-linux-server.nix
-        ];
-      };
+      # Generic configurations for standalone home-manager
+      desktop = lib.mkHome "x86_64-linux" [ 
+        { hostname = "desktop"; }
+      ];
+      laptop = lib.mkHome "x86_64-linux" [ 
+        { hostname = "laptop"; }
+      ];
+      server = lib.mkHome "x86_64-linux" [ 
+        { hostname = "server"; }
+      ];
     };
   };
 }
