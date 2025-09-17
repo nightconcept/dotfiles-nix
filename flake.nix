@@ -42,6 +42,12 @@
       url = "git+https://git.lix.systems/lix-project/nixos-module";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    
+    # Vicinae - High-performance launcher for Linux
+    vicinae = {
+      url = "github:vicinaehq/vicinae";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {

@@ -8,7 +8,7 @@
     ./hyprland.nix
     ./waybar.nix
     ./waybar-lid-handler.nix
-    ./wofi.nix
+    ./vicinae.nix
     ./wofi-bluetooth.nix
     ./mako.nix
     ./hypridle.nix

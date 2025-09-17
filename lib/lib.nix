@@ -1,7 +1,7 @@
 { inputs }:
 
 let
-  inherit (inputs) nixpkgs home-manager nix-darwin vscode-server stylix spicetify-nix sops-nix lix-module;
+  inherit (inputs) nixpkgs home-manager nix-darwin vscode-server stylix spicetify-nix sops-nix lix-module vicinae;
 in
 {
   mkNixos = pkgs: hostname:
@@ -24,6 +24,7 @@ in
               stylix.homeModules.stylix
               spicetify-nix.homeManagerModules.default
               sops-nix.homeManagerModules.sops
+              vicinae.homeManagerModules.default
             ];
             extraSpecialArgs = {inherit inputs; inherit hostname;};
           };
@@ -47,6 +48,7 @@ in
             users.danny.imports = [
               ../home
               sops-nix.homeManagerModules.sops
+              vicinae.homeManagerModules.default
             ];
             extraSpecialArgs = {inherit inputs; inherit hostname;};
           };

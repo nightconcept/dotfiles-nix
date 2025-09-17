@@ -16,7 +16,7 @@
       # Default applications
       "$terminal" = "wezterm";
       "$filemanager" = "";
-      "$applauncher" = "wofi";
+      "$applauncher" = "vicinae";
       "$browser" = "firefox";
       "$idlehandler" = "hypridle";
 
@@ -418,6 +418,8 @@
         "animation slide top, logout_dialog"
         "animation slide down, waybar"
         "animation fade 50%, wallpaper"
+        "blur, vicinae"
+        "ignorealpha 0, vicinae"
       ];
     };
 
