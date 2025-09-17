@@ -215,7 +215,8 @@
         "$mod, E, exec, $filemanager"
         "$mod, Q, killactive"
         "$mod SHIFT, M, exec, loginctl terminate-user \"\""
-        "$mod, V, togglefloating"
+        "$mod, V, exec, ${pkgs.vscode}/bin/code"
+        "$mod SHIFT, V, togglefloating"
         "$mod, SPACE, exec, $applauncher"
         "$mod, F, fullscreen"
         "$mod, Y, pin"
@@ -230,9 +231,13 @@
         "$mod, K, togglegroup"
         "$mod, Tab, changegroupactive, f"
         
-        # Window cycling (Alt+Tab like Windows)
-        "ALT, Tab, cyclenext"
-        "ALT SHIFT, Tab, cyclenext, prev"
+        # Workspace cycling with Alt+Tab (cycle through workspaces with windows)
+        "ALT, Tab, workspace, m+1"
+        "ALT SHIFT, Tab, workspace, m-1"
+        
+        # Window cycling within workspace with Super+Left/Right
+        "$mod, Right, focuswindow, next"
+        "$mod, Left, focuswindow, prev"
 
         # Gaps
         "$mod SHIFT, G, exec, hyprctl --batch \"keyword general:gaps_out 5;keyword general:gaps_in 3\""
@@ -283,10 +288,6 @@
         "$mod, 8, workspace, 8"
         "$mod, 9, workspace, 9"
         "$mod, 0, workspace, 10"
-        
-        # Switch workspaces with Super + Left/Right arrow keys
-        "$mod, Left, workspace, -1"
-        "$mod, Right, workspace, +1"
 
         # Move to workspace
         "$mod CTRL, 1, movetoworkspace, 1"

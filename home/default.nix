@@ -37,7 +37,7 @@ let
       homeDirectory = "/Users/danny";
       extraImports = [ 
         ./programs/common.nix
-        ./programs/zsh 
+        ./programs/shell
       ];
       extraConfig = {};
     };

@@ -7,9 +7,9 @@
   config = lib.mkIf (config.desktops.hyprland.enable or false) {
     programs.waybar.style = ''
     * {
-        font-family: "SF Mono Nerd Font", "Fira Sans Semibold", "Font Awesome 6 Free", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        font-weight: 900;
+        font-family: "InterVariable Nerd Font", "Inter", "FiraCode Nerd Font Propo", Roboto, Helvetica, Arial, sans-serif;
+        font-size: 18px;
+        font-weight: 800;
         margin: 0;
         padding: 0;
         transition-property: background-color;
@@ -20,16 +20,18 @@
         border: none;
         border-radius: 3px;
         min-height: 0;
-        margin: 0.2em 0.3em 0.2em 0.3em;
+        margin: 0.1em 0.2em 0.1em 0.2em;
     }
 
     #waybar {
-        background-color: transparent;
+        background-color: rgba(26, 27, 38, 0.85);
         color: #ffffff;
         transition-property: background-color;
         transition-duration: 0.5s;
         border-radius: 0px;
-        margin: 0px 0px;
+        margin: 0px;
+        padding: 0px 0;
+        min-height: 20px;
     }
 
     window#waybar.hidden {
@@ -37,22 +39,22 @@
     }
 
     #workspaces button {
-        padding: 1px 5px;
-        margin: 1px 5px;
+        padding: 3px 5px;
+        margin: 3px 5px;
         border-radius: 6px;
-        color: @foreground;
-        background-color: #111827;
+        color: #d8dee9;
+        background-color: transparent;
         transition: all 0.3s ease-in-out;
         font-size: 13px;
     }
 
     #workspaces button.active {
-        color: @foreground;
-        background: #025939;
+        color: #d8dee9;
+        background: rgba(2, 89, 57, 0.6);
     }
 
     #workspaces button:hover {
-        background: #333333;
+        background: rgba(51, 51, 51, 0.6);
     }
 
     #workspaces button.urgent {
@@ -60,19 +62,19 @@
     }
 
     #workspaces {
-        background-color: #111827;
-        border-radius: 14px;
-        padding: 1px 6px;
+        background-color: transparent;
+        border-radius: 0px;
+        padding: 3px 6px;
     }
 
     #window {
-        background-color: #111827;
+        background-color: transparent;
         font-size: 15px;
         font-weight: 800;
-        color: @foreground;
-        border-radius: 14px;
-        padding: 1px 6px;
-        margin: 1px;
+        color: #d8dee9;
+        border-radius: 0px;
+        padding: 3px 6px;
+        margin: 2px;
         opacity: 1;
     }
 
@@ -94,39 +96,18 @@
     #custom-hyprPicker,
     #custom-power-menu,
     #custom-spotify,
-    #custom-weather,
-    #custom-weather.severe,
-    #custom-weather.sunnyDay,
-    #custom-weather.clearNight,
-    #custom-weather.cloudyFoggyDay,
-    #custom-weather.cloudyFoggyNight,
-    #custom-weather.rainyDay,
-    #custom-weather.rainyNight,
-    #custom-weather.showyIcyDay,
-    #custom-weather.snowyIcyNight,
-    #custom-weather.default {
-        background-color: #111827;
-        border-radius: 14px;
-        padding: 4px;
-    }
-
-    #custom-screenshot_t {
-        background-color: #111827;
-        border-radius: 14px;
-        padding: 4px;
-    }
-
-    #custom-spotify {
-        background-color: #111827;
-        border-radius: 14px;
-        padding: 1px 12px;
-    }
-
+    #custom-launcher,
+    #custom-power,
+    #custom-pacman,
+    #custom-screenshot_t,
+    #custom-storage,
     #tray {
-        background-color: #111827;
-        border-radius: 14px;
-        padding: 4px;
+        background-color: transparent;
+        border-radius: 0px;
+        padding: 3px 6px;
+        margin: 2px;
     }
+
 
     #cpu {
         color: #fb958b;
@@ -141,23 +122,10 @@
     }
 
     #custom-power {
-        background-color: #111827;
-        border-radius: 14px;
-        padding: 4px;
+        background-color: transparent;
+        color: #00aeff;
     }
 
-    #custom-storage {
-        background-color: #111827;
-        border-radius: 14px;
-        padding: 4px;
-    }
-
-    #custom-launcher {
-        background-color: #1b242b;
-        color: #6a92d7;
-        border-radius: 7.5px;
-        padding: 1px 6px;
-    }
 
     #custom-weather.severe {
         color: #eb937d;

@@ -6,7 +6,7 @@
     ../common.nix
     ../programs/direnv.nix
     ../programs/git.nix
-    ../programs/neovim.nix
+    ../programs/helix.nix
     ../programs/ssh.nix
     ../secrets/sops.nix
   ];

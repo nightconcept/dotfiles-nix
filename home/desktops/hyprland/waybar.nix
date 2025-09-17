@@ -22,6 +22,7 @@
       mainBar = {
         layer = "top";
         position = "top";
+        height = 20;
         spacing = 3;
         
         margin-left = 0;
@@ -154,128 +155,6 @@
         };
       };
     };
-    
-    style = ''
-      * {
-        font-family: "InterVariable Nerd Font", "Inter", "FiraCode Nerd Font Propo", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 18px;
-        font-weight: 800;
-        margin: 0;
-        padding: 0;
-        transition-property: background-color;
-        transition-duration: 0.5s;
-      }
-
-      * {
-        border: none;
-        border-radius: 3px;
-        min-height: 0;
-        margin: 0.1em 0.2em 0.1em 0.2em;
-      }
-
-      #waybar {
-        background-color: rgba(26, 27, 38, 0.85);
-        color: #ffffff;
-        transition-property: background-color;
-        transition-duration: 0.5s;
-        border-radius: 0px;
-        margin: 0px;
-        padding: 0px 0;
-        min-height: 30px;
-      }
-
-      window#waybar.hidden {
-        opacity: 0.2;
-      }
-
-      #workspaces button {
-        padding: 3px 5px;
-        margin: 3px 5px;
-        border-radius: 6px;
-        color: #d8dee9;
-        background-color: transparent;
-        transition: all 0.3s ease-in-out;
-        font-size: 13px;
-      }
-
-      #workspaces button.active {
-        color: #d8dee9;
-        background: rgba(2, 89, 57, 0.6);
-      }
-
-      #workspaces button:hover {
-        background: rgba(51, 51, 51, 0.6);
-      }
-
-      #workspaces button.urgent {
-        background-color: #eb4d4b;
-      }
-
-      #workspaces {
-        background-color: transparent;
-        border-radius: 0px;
-        padding: 3px 6px;
-      }
-
-      #window {
-        background-color: transparent;
-        font-size: 15px;
-        font-weight: 800;
-        color: #d8dee9;
-        border-radius: 0px;
-        padding: 3px 6px;
-        margin: 2px;
-        opacity: 1;
-      }
-
-      #clock,
-      #battery,
-      #cpu,
-      #memory,
-      #disk,
-      #temperature,
-      #backlight,
-      #network,
-      #pulseaudio,
-      #wireplumber,
-      #custom-media,
-      #mode,
-      #idle_inhibitor,
-      #mpd,
-      #bluetooth,
-      #custom-hyprPicker,
-      #custom-power-menu,
-      #custom-spotify,
-      #custom-launcher,
-      #custom-power,
-      #custom-pacman,
-      #custom-screenshot_t,
-      #custom-storage,
-      #tray {
-        background-color: transparent;
-        border-radius: 0px;
-        padding: 3px 6px;
-        margin: 2px;
-      }
-
-      #custom-power {
-        background-color: transparent;
-        color: #00aeff;
-      }
-
-      #tray {
-        background-color: transparent;
-      }
-
-      #tray > .passive {
-        -gtk-icon-effect: dim;
-      }
-
-      #tray > .needs-attention {
-        -gtk-icon-effect: highlight;
-        background-color: #eb4d4b;
-      }
-    '';
   };
   
   };
