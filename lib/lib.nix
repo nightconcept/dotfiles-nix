@@ -110,10 +110,15 @@ in
       ];
     };
     
-  mkHome = system: modules:
+  mkHome = hostname:
     home-manager.lib.homeManagerConfiguration {
-      pkgs = import nixpkgs { inherit system; };
-      modules = [ ../home ] ++ modules;
-      extraSpecialArgs = { inherit inputs; };
+      pkgs = import nixpkgs { system = "x86_64-linux"; };
+      modules = [ 
+        ../home
+        stylix.homeModules.stylix
+        spicetify-nix.homeManagerModules.default
+        sops-nix.homeManagerModules.sops
+      ];
+      extraSpecialArgs = { inherit inputs hostname; };
     };
 }

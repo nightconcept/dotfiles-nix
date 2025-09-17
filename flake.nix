@@ -59,15 +59,9 @@
 
     homeConfigurations = {
       # Generic configurations for standalone home-manager
-      desktop = lib.mkHome "x86_64-linux" [ 
-        { hostname = "desktop"; }
-      ];
-      laptop = lib.mkHome "x86_64-linux" [ 
-        { hostname = "laptop"; }
-      ];
-      server = lib.mkHome "x86_64-linux" [ 
-        { hostname = "server"; }
-      ];
+      desktop = lib.mkHome "desktop";
+      laptop = lib.mkHome "laptop";
+      server = lib.mkHome "server";
     };
   };
 }

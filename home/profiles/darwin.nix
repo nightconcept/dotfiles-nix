@@ -1,7 +1,10 @@
-# macOS-specific configuration
-{ config, lib, pkgs, ... }:
-
+# macOS (desktop) specific configuration
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   imports = [
     ../programs/zellij.nix
   ];
