@@ -16,6 +16,16 @@ in
 
   networking.hostName = "aerith";
 
+  # Override bootloader for legacy BIOS (no EFI partition)
+  boot.loader = {
+    systemd-boot.enable = lib.mkForce false;
+    efi.canTouchEfiVariables = lib.mkForce false;
+    grub = {
+      enable = true;
+      device = "/dev/sda";  # Install GRUB to MBR
+    };
+  };
+
   modules.nixos = {
     kernel.type = "lts";
     
