@@ -12,10 +12,19 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ./disks.nix
   ];
 
   networking.hostName = "barrett";
+
+  # Override bootloader for legacy BIOS (no EFI partition)
+  boot.loader = {
+    systemd-boot.enable = lib.mkForce false;
+    efi.canTouchEfiVariables = lib.mkForce false;
+    grub = {
+      enable = true;
+      device = "/dev/sda";  # Install GRUB to MBR
+    };
+  };
 
   modules.nixos = {
     kernel.type = "lts";
@@ -58,8 +67,8 @@ in
       };
 
       nordvpn = {
-        enable = false;  # Temporarily disable for deployment - no SOPS secrets available
-        # tokenFile = "/run/secrets/nordvpn-token";
+        enable = true;
+        tokenFile = "/run/secrets/nordvpn-token";
         country = "United States";  # P2P servers are available in most US locations
       };
     };

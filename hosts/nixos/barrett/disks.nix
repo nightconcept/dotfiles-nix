@@ -3,51 +3,23 @@
     disk = {
       main = {
         type = "disk";
-        device = "/dev/sdb";
+        device = "/dev/sda";
         content = {
           type = "gpt";
           partitions = {
-            ESP = {
-              type = "EF00";
-              size = "512M";
-              content = {
-                type = "filesystem";
-                format = "vfat";
-                mountpoint = "/boot";
-                mountOptions = [ "umask=0077" ];
-              };
+            # Small BIOS boot partition for GRUB on GPT
+            bios = {
+              size = "1M";
+              type = "EF02";  # BIOS boot partition type
+              priority = 1;
             };
             root = {
               size = "100%";
+              priority = 2;
               content = {
-                type = "btrfs";
-                extraArgs = [ "-f" ]; # Override existing filesystem
-                subvolumes = {
-                  # Root subvolume
-                  "@" = {
-                    mountpoint = "/";
-                    mountOptions = [ "compress=zstd" "noatime" ];
-                  };
-                  # Nix store subvolume (separate for snapshots)
-                  "@nix" = {
-                    mountpoint = "/nix";
-                    mountOptions = [ "compress=zstd" "noatime" ];
-                  };
-                  # Home subvolume
-                  "@home" = {
-                    mountpoint = "/home";
-                    mountOptions = [ "compress=zstd" ];
-                  };
-                  # Var subvolume (logs, etc.)
-                  "@var" = {
-                    mountpoint = "/var";
-                    mountOptions = [ "compress=zstd" "noatime" ];
-                  };
-                  # Snapshots directory (not mounted by default)
-                  "@snapshots" = {
-                    mountOptions = [ "compress=zstd" "noatime" ];
-                  };
-                };
+                type = "filesystem";
+                format = "ext4";
+                mountpoint = "/";
               };
             };
           };

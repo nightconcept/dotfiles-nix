@@ -11,9 +11,9 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
-  # Boot loader configuration for EFI
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # Boot loader configuration disabled - using GRUB from main config
+  # boot.loader.systemd-boot.enable = true;
+  # boot.loader.efi.canTouchEfiVariables = true;
 
   # Filesystems are handled by disko configuration
   # No explicit filesystem declarations needed here
