@@ -1,3 +1,8 @@
+{ config, lib, systemType ? "laptop", ... }:
+let
+  # Check if this is a desktop system (Mac Mini)
+  isDesktop = systemType == "desktop";
+in
 {
   # Use homebrew to install casks and Mac App Store apps
   homebrew = {
@@ -10,16 +15,15 @@
 
     taps = [
       "FelixKratz/formulae"
+      "atlassian-labs/acli"
     ];
 
     brews = [
-      "acli"
       "borders"
       "gettext"
       "pinentry-mac"
       "uv"
       "xz"
-      "zellij"
     ];
 
     casks = [
@@ -33,11 +37,15 @@
       "nomachine"
       "obsidian"
       "plex"
+      "qdirstat"
       "raycast"
       "stretchly"
       "visual-studio-code"
       "vlc"
       "wezterm@nightly"
+    ] ++ lib.optionals isDesktop [
+      "alt-tab"
+      "rectangle"
     ];
   };
 }
