@@ -42,7 +42,7 @@ in
         ../hosts/nixos/${hostname}
         home-manager.nixosModules.home-manager
         sops-nix.nixosModules.sops
-        # lix-module.nixosModules.default  # Disabled for faster builds - can re-enable post-install
+        lix-module.nixosModules.default
         disko.nixosModules.disko
         {
           home-manager = {
@@ -50,7 +50,6 @@ in
             users.danny.imports = [
               ../home
               sops-nix.homeManagerModules.sops
-              vicinae.homeManagerModules.default
             ];
             extraSpecialArgs = {inherit inputs; inherit hostname;};
           };
