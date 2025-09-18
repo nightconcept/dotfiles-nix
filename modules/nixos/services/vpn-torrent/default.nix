@@ -179,9 +179,12 @@ in
           ${pkgs.python3.withPackages (ps: with ps; [ pip ])}/bin/pip install --user autoremove-torrents || true
           
           # Generate config file with actual password
-          ${lib.optionalString (cfg.qbittorrent.passwordFile != null) ''
+          ${if cfg.qbittorrent.passwordFile != null then ''
             PASSWORD=$(cat "${cfg.qbittorrent.passwordFile}")
             sed "s/PLACEHOLDER_PASSWORD/$PASSWORD/g" /etc/autoremove-torrents/config-template.yml > /run/autoremove-torrents/config.yml
+          '' else ''
+            # Use default password when no passwordFile is specified
+            sed "s/PLACEHOLDER_PASSWORD/admin/g" /etc/autoremove-torrents/config-template.yml > /run/autoremove-torrents/config.yml
           ''}
           
           # Run autoremove-torrents

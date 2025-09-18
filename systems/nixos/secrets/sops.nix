@@ -43,13 +43,13 @@
         mode = "0400";
       };
 
-      # qBittorrent web UI password
-      "torrent/qbittorrent_password" = {
-        owner = "danny";
-        group = "danny";
-        path = "/run/secrets/qbittorrent-password";
-        mode = "0400";
-      };
+      # qBittorrent web UI password - TODO: Add to SOPS after deployment
+      # "torrent/qbittorrent_password" = {
+      #   owner = "danny";
+      #   group = "danny";
+      #   path = "/run/secrets/qbittorrent-password";
+      #   mode = "0400";
+      # };
     };
   };
 }

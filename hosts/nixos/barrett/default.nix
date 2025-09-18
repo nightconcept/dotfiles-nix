@@ -42,7 +42,7 @@ in
         webUIPort = 8080;
         torrentPort = 6881;
         username = "danny";
-        passwordFile = "/run/secrets/qbittorrent-password";
+        passwordFile = null;  # Temporarily disable SOPS for deployment
       };
 
       autoremove = {
