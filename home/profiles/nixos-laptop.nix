@@ -6,13 +6,17 @@
   ...
 }: {
   imports = [
-    ../programs/common.nix
-    ../programs/gaming.nix
-    ../programs/spicetify.nix
-    ../programs/wezterm
+    ./base.nix
+    ../../modules/home
     ../stylix.nix
     ../desktops/hyprland
   ];
+
+  modules.home.programs = {
+    gaming.enable = true;
+    spotify.enable = true;
+    wezterm.enable = true;
+  };
 
   fonts.fontconfig.enable = true;
 
@@ -29,8 +33,6 @@
   ];
 
   desktops.hyprland.enable = true;
-
-  programs.spicetify.enable = true;
 
   xdg.mime.enable = true;
   xdg.mimeApps = {
