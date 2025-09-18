@@ -42,7 +42,7 @@ in
         webUIPort = 8080;
         torrentPort = 6881;
         username = "danny";
-        passwordFile = null;  # Temporarily disable SOPS for deployment
+        password = "changeme";
       };
 
       autoremove = {
@@ -58,9 +58,8 @@ in
       };
 
       nordvpn = {
-        enable = true;
-        # Token managed via SOPS - automatically deployed to this path
-        tokenFile = "/run/secrets/nordvpn-token";
+        enable = false;  # Temporarily disable for deployment - no SOPS secrets available
+        # tokenFile = "/run/secrets/nordvpn-token";
         country = "United States";  # P2P servers are available in most US locations
       };
     };

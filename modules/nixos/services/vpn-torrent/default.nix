@@ -28,7 +28,7 @@ in
       torrentPort = mkOpt lib.types.port 6881 "Port for BitTorrent traffic";
       openFirewall = mkBoolOpt true "Open firewall ports for qBittorrent";
       username = mkOpt lib.types.str "admin" "qBittorrent Web UI username";
-      passwordFile = mkOpt (lib.types.nullOr lib.types.path) null "Path to file containing qBittorrent Web UI password";
+      password = mkOpt lib.types.str "admin" "qBittorrent Web UI password (plain text)";
     };
 
     autoremove = {
@@ -135,21 +135,20 @@ in
         ]))
       ];
 
-      # Create autoremove-torrents configuration script that reads password from file
-      environment.etc."autoremove-torrents/config-template.yml".text = lib.generators.toYAML {} {
+      # Create autoremove-torrents configuration file
+      environment.etc."autoremove-torrents/config.yml".text = lib.generators.toYAML {} {
         qbittorrent_task = {
           client = "qbittorrent";
           host = "http://127.0.0.1:${toString cfg.qbittorrent.webUIPort}";
           username = cfg.qbittorrent.username;
-          password = "PLACEHOLDER_PASSWORD";  # Will be replaced at runtime
+          password = cfg.qbittorrent.password;
           strategies = cfg.autoremove.strategies;
         };
       };
 
-      # Create log directory and runtime config directory
+      # Create log directory
       systemd.tmpfiles.rules = [
         "d /var/log/autoremove-torrents 0755 ${cfg.user} ${cfg.user} -"
-        "d /run/autoremove-torrents 0755 ${cfg.user} ${cfg.user} -"
       ];
 
       # Autoremove-torrents systemd service
@@ -169,7 +168,6 @@ in
           ReadWritePaths = [
             "/var/log/autoremove-torrents"
             "/home/${cfg.user}/.local" # For pip install --user
-            "/run/autoremove-torrents"
           ];
           NoNewPrivileges = true;
         };
@@ -178,18 +176,9 @@ in
           # Install autoremove-torrents if not already installed
           ${pkgs.python3.withPackages (ps: with ps; [ pip ])}/bin/pip install --user autoremove-torrents || true
           
-          # Generate config file with actual password
-          ${if cfg.qbittorrent.passwordFile != null then ''
-            PASSWORD=$(cat "${cfg.qbittorrent.passwordFile}")
-            sed "s/PLACEHOLDER_PASSWORD/$PASSWORD/g" /etc/autoremove-torrents/config-template.yml > /run/autoremove-torrents/config.yml
-          '' else ''
-            # Use default password when no passwordFile is specified
-            sed "s/PLACEHOLDER_PASSWORD/admin/g" /etc/autoremove-torrents/config-template.yml > /run/autoremove-torrents/config.yml
-          ''}
-          
-          # Run autoremove-torrents
+          # Run autoremove-torrents with static config file
           ${pkgs.python3}/bin/python -m autoremove_torrents \
-            --conf=/run/autoremove-torrents/config.yml \
+            --conf=/etc/autoremove-torrents/config.yml \
             --log=/var/log/autoremove-torrents
         '';
       };
