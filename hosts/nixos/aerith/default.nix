@@ -1,47 +1,52 @@
 {
   config,
   pkgs,
-  inputs,
   lib,
   ...
-}: {
+}: 
+let
+  # Import our custom lib functions
+  moduleLib = import ../../../lib/module { inherit lib; };
+  inherit (moduleLib) enabled disabled;
+in
+{
   imports = [
     ./hardware-configuration.nix
-    ../../../systems/nixos/network.nix
   ];
 
   networking.hostName = "aerith";
 
-  # Kernel specified at 6.12 for the latest LTS
-  boot.kernelPackages = pkgs.linuxPackages_6_12;
-
-  # Display settings
-  services.xserver.enable = true;
-
-  services.plex = {
-    enable = true;
-    openFirewall = true;
-    user = "danny";
+  # Override bootloader for legacy BIOS (no EFI partition)
+  boot.loader = {
+    systemd-boot.enable = lib.mkForce false;
+    efi.canTouchEfiVariables = lib.mkForce false;
+    grub = {
+      enable = true;
+      device = "/dev/sda";  # Install GRUB to MBR
+    };
   };
-  networking.firewall.allowedTCPPorts = [
-    5353
-    8324
-    32400
-    32410
-    32412
-    32413
-    32414
-    32469
-  ];
 
-  # Enable the OpenSSH daemon.
+  modules.nixos = {
+    kernel.type = "lts";
+    
+    network = {
+      networkManager = true;
+      mdns = true;
+    };
+    
+    services.plex = {
+      enable = true;
+      user = "danny";
+      openFirewall = true;
+    };
+  };
+
   services.openssh.enable = true;
 
-  # System available packages
+  # System packages for server management
   environment.systemPackages = with pkgs; [
     home-manager
   ];
 
-  # Do not touch
   system.stateVersion = "23.11";
 }

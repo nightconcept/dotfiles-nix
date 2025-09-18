@@ -21,6 +21,13 @@ let
       extraConfig = {};
     };
     
+    barrett = {
+      profiles = [ ./profiles/server.nix ];
+      homeDirectory = "/home/danny";
+      extraImports = [ ];
+      extraConfig = {};
+    };
+    
     # Darwin hosts
     waver = {
       profiles = [ ./profiles/darwin-laptop.nix ];
