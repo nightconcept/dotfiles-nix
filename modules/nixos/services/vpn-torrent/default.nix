@@ -27,11 +27,24 @@ in
       webUIPort = mkOpt lib.types.port 8080 "Port for qBittorrent Web UI";
       torrentPort = mkOpt lib.types.port 6881 "Port for BitTorrent traffic";
       openFirewall = mkBoolOpt true "Open firewall ports for qBittorrent";
+      username = mkOpt lib.types.str "admin" "qBittorrent Web UI username";
+      passwordFile = mkOpt (lib.types.nullOr lib.types.path) null "Path to file containing qBittorrent Web UI password";
+    };
+
+    autoremove = {
+      enable = mkBoolOpt true "Enable autoremove-torrents service";
+      intervalMinutes = mkOpt lib.types.int 10 "How often to run autoremove-torrents (in minutes)";
+      strategies = mkOpt lib.types.attrs {
+        default_strategy = {
+          remove = "seeding_time > 604800 or ratio > 2.0"; # Remove after 1 week or 2.0 ratio
+          delete_data = true;
+        };
+      } "Autoremove strategies configuration";
     };
 
     nordvpn = {
       enable = mkBoolOpt true "Enable NordVPN service using wgnord";
-      tokenFile = mkOpt lib.types.nullOr lib.types.path null "Path to NordVPN token file (managed via SOPS)";
+      tokenFile = mkOpt (lib.types.nullOr lib.types.path) null "Path to NordVPN token file (managed via SOPS)";
       # Note: wgnord doesn't support P2P server selection directly, so we use country-based selection
       # P2P servers are available in most countries and NordVPN automatically routes P2P traffic
       country = mkOpt lib.types.str "United States" "NordVPN server country (P2P servers available in most locations)";
@@ -109,6 +122,86 @@ in
       environment.systemPackages = with pkgs; [
         qbittorrent-nox
       ];
+    })
+
+    # Autoremove-torrents configuration
+    (mkIf cfg.autoremove.enable {
+      # Install autoremove-torrents Python package
+      environment.systemPackages = with pkgs; [
+        (python3.withPackages (ps: with ps; [
+          pyyaml
+          requests
+          # Custom autoremove-torrents package will be defined below
+        ]))
+      ];
+
+      # Create autoremove-torrents configuration script that reads password from file
+      environment.etc."autoremove-torrents/config-template.yml".text = lib.generators.toYAML {} {
+        qbittorrent_task = {
+          client = "qbittorrent";
+          host = "http://127.0.0.1:${toString cfg.qbittorrent.webUIPort}";
+          username = cfg.qbittorrent.username;
+          password = "PLACEHOLDER_PASSWORD";  # Will be replaced at runtime
+          strategies = cfg.autoremove.strategies;
+        };
+      };
+
+      # Create log directory and runtime config directory
+      systemd.tmpfiles.rules = [
+        "d /var/log/autoremove-torrents 0755 ${cfg.user} ${cfg.user} -"
+        "d /run/autoremove-torrents 0755 ${cfg.user} ${cfg.user} -"
+      ];
+
+      # Autoremove-torrents systemd service
+      systemd.services.autoremove-torrents = {
+        description = "Remove torrents automatically according to configured strategies";
+        after = [ "qbittorrent.service" ];
+        wants = [ "qbittorrent.service" ];
+
+        serviceConfig = {
+          Type = "oneshot";
+          User = cfg.user;
+          Group = cfg.user;
+          
+          # Security hardening
+          PrivateTmp = true;
+          ProtectSystem = "strict";
+          ReadWritePaths = [
+            "/var/log/autoremove-torrents"
+            "/home/${cfg.user}/.local" # For pip install --user
+            "/run/autoremove-torrents"
+          ];
+          NoNewPrivileges = true;
+        };
+
+        script = ''
+          # Install autoremove-torrents if not already installed
+          ${pkgs.python3.withPackages (ps: with ps; [ pip ])}/bin/pip install --user autoremove-torrents || true
+          
+          # Generate config file with actual password
+          ${lib.optionalString (cfg.qbittorrent.passwordFile != null) ''
+            PASSWORD=$(cat "${cfg.qbittorrent.passwordFile}")
+            sed "s/PLACEHOLDER_PASSWORD/$PASSWORD/g" /etc/autoremove-torrents/config-template.yml > /run/autoremove-torrents/config.yml
+          ''}
+          
+          # Run autoremove-torrents
+          ${pkgs.python3}/bin/python -m autoremove_torrents \
+            --conf=/run/autoremove-torrents/config.yml \
+            --log=/var/log/autoremove-torrents
+        '';
+      };
+
+      # Systemd timer for periodic execution
+      systemd.timers.autoremove-torrents = {
+        description = "Run autoremove-torrents every ${toString cfg.autoremove.intervalMinutes} minutes";
+        wantedBy = [ "timers.target" ];
+
+        timerConfig = {
+          OnBootSec = "${toString cfg.autoremove.intervalMinutes}min";
+          OnUnitActiveSec = "${toString cfg.autoremove.intervalMinutes}min";
+          Unit = "autoremove-torrents.service";
+        };
+      };
     })
 
     # NordVPN configuration using wgnord

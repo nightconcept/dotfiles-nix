@@ -12,6 +12,7 @@ in
 {
   imports = [
     ./hardware-configuration.nix
+    ./disks.nix
   ];
 
   networking.hostName = "barrett";
@@ -40,6 +41,20 @@ in
         enable = true;
         webUIPort = 8080;
         torrentPort = 6881;
+        username = "danny";
+        passwordFile = "/run/secrets/qbittorrent-password";
+      };
+
+      autoremove = {
+        enable = true;
+        intervalMinutes = 10;  # Run every 10 minutes as requested
+        strategies = {
+          # Remove torrents after just 10 minutes of seeding
+          minimal_seed_strategy = {
+            remove = "seeding_time > 600";  # 600 seconds = 10 minutes
+            delete_data = true;
+          };
+        };
       };
 
       nordvpn = {

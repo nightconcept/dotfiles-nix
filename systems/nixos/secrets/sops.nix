@@ -42,6 +42,14 @@
         path = "/run/secrets/nordvpn-token";
         mode = "0400";
       };
+
+      # qBittorrent web UI password
+      "torrent/qbittorrent_password" = {
+        owner = "danny";
+        group = "danny";
+        path = "/run/secrets/qbittorrent-password";
+        mode = "0400";
+      };
     };
   };
 }

@@ -1,7 +1,7 @@
 { inputs }:
 
 let
-  inherit (inputs) nixpkgs home-manager nix-darwin vscode-server stylix spicetify-nix sops-nix lix-module vicinae;
+  inherit (inputs) nixpkgs home-manager nix-darwin vscode-server stylix spicetify-nix sops-nix lix-module vicinae disko;
 in
 {
   mkNixos = pkgs: hostname:
@@ -42,7 +42,8 @@ in
         ../hosts/nixos/${hostname}
         home-manager.nixosModules.home-manager
         sops-nix.nixosModules.sops
-        lix-module.nixosModules.default
+        # lix-module.nixosModules.default  # Disabled for faster builds - can re-enable post-install
+        disko.nixosModules.disko
         {
           home-manager = {
             users.danny.home.stateVersion = "23.11";
