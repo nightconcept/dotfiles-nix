@@ -34,6 +34,22 @@
         path = "/etc/sops-mog-secrets";
         mode = "0600";
       };
+
+      # NordVPN token for wgnord authentication
+      "vpn/nordvpn_token" = {
+        owner = "root";
+        group = "root";
+        path = "/run/secrets/nordvpn-token";
+        mode = "0400";
+      };
+
+      # qBittorrent web UI password - TODO: Add to SOPS after deployment
+      # "torrent/qbittorrent_password" = {
+      #   owner = "danny";
+      #   group = "danny";
+      #   path = "/run/secrets/qbittorrent-password";
+      #   mode = "0400";
+      # };
     };
   };
 }
