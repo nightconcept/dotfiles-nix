@@ -69,6 +69,7 @@ in
       system = "aarch64-darwin";
       specialArgs = {
         inherit inputs;
+        systemType = "desktop";
       };
 
       modules = [
@@ -82,6 +83,7 @@ in
             backupFileExtension = "backup";
             users.danny.imports = [
               ../home
+              sops-nix.homeManagerModules.sops
             ];
             extraSpecialArgs = {inherit inputs; inherit hostname;};
           };
@@ -94,6 +96,7 @@ in
       system = "aarch64-darwin";
       specialArgs = {
         inherit inputs;
+        systemType = "laptop";
       };
 
       modules = [
@@ -107,6 +110,7 @@ in
             backupFileExtension = "backup";
             users.danny.imports = [
               ../home
+              sops-nix.homeManagerModules.sops
             ];
             extraSpecialArgs = {inherit inputs; inherit hostname;};
           };
