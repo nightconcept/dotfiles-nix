@@ -85,6 +85,14 @@
       set -gx GPG_TTY (tty)
       set -gx XDG_DATA_DIRS /home/danny/.nix-profile/share $XDG_DATA_DIRS
 
+      # Ensure Nix is in PATH
+      if test -d "/nix/var/nix/profiles/default/bin"
+          fish_add_path --prepend /nix/var/nix/profiles/default/bin
+      end
+      if test -d "/home/danny/.nix-profile/bin"
+          fish_add_path --prepend /home/danny/.nix-profile/bin
+      end
+
       # Load API keys from sops if available
       if test -r "$XDG_RUNTIME_DIR/secrets/gemini_api_key"
           set -gx GEMINI_API_KEY (cat "$XDG_RUNTIME_DIR/secrets/gemini_api_key")
