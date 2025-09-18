@@ -37,6 +37,7 @@ in
       system = "x86_64-linux";
       specialArgs = {inherit inputs;};
       modules = [
+        ../modules/nixos
         ../systems/nixos
         ../hosts/nixos/${hostname}
         home-manager.nixosModules.home-manager
