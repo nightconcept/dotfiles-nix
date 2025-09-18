@@ -161,12 +161,13 @@ clone_flake() {
 # NixOS host selection menu
 select_nixos_host() {
     print_info "Available NixOS configurations:"
-    echo "  1) tidus  - Dell Latitude 7420 laptop"
-    echo "  2) aerith - Server configuration"
-    echo "  3) Skip   - Don't switch configuration"
+    echo "  1) tidus   - Dell Latitude 7420 laptop"
+    echo "  2) aerith  - Plex media server"
+    echo "  3) barrett - VPN torrent server"
+    echo "  4) Skip    - Don't switch configuration"
     echo
     
-    read -p "Select configuration (1-3): " -n 1 -r
+    read -p "Select configuration (1-4): " -n 1 -r
     echo
     
     case "$REPLY" in
@@ -177,11 +178,72 @@ select_nixos_host() {
             echo "aerith"
             ;;
         3)
+            echo "barrett"
+            ;;
+        4)
             echo "skip"
             ;;
         *)
             print_error "Invalid selection"
             select_nixos_host
+            ;;
+    esac
+}
+
+# Setup SOPS age keys
+setup_age_keys() {
+    print_info "Setting up SOPS age keys..."
+    
+    # Create age directory
+    mkdir -p "$HOME/.config/sops/age"
+    
+    # Check if age key already exists
+    if [[ -f "$HOME/.config/sops/age/keys.txt" ]]; then
+        print_info "Age key file already exists"
+        return
+    fi
+    
+    print_info "Age key is required for accessing encrypted secrets (SOPS)"
+    print_info "You can either:"
+    echo "  1) Enter an existing age key"
+    echo "  2) Generate a new age key (will need to be added to .sops.yaml)"
+    echo "  3) Skip (secrets won't work until configured later)"
+    echo
+    
+    read -p "Select option (1-3): " -n 1 -r
+    echo
+    
+    case "$REPLY" in
+        1)
+            echo "Enter your age private key (starts with AGE-SECRET-KEY):"
+            read -r age_key
+            if [[ "$age_key" =~ ^AGE-SECRET-KEY ]]; then
+                echo "$age_key" > "$HOME/.config/sops/age/keys.txt"
+                chmod 600 "$HOME/.config/sops/age/keys.txt"
+                print_success "Age key saved successfully"
+            else
+                print_error "Invalid age key format"
+                return 1
+            fi
+            ;;
+        2)
+            if command -v age-keygen &> /dev/null; then
+                age-keygen -o "$HOME/.config/sops/age/keys.txt"
+                print_success "New age key generated"
+                print_warning "You'll need to add the public key to .sops.yaml for secrets access"
+                print_info "Public key: $(age-keygen -y "$HOME/.config/sops/age/keys.txt")"
+            else
+                print_error "age-keygen not available. Install age package first."
+                return 1
+            fi
+            ;;
+        3)
+            print_warning "Skipping age key setup. Secrets won't work until configured."
+            return
+            ;;
+        *)
+            print_error "Invalid selection"
+            setup_age_keys
             ;;
     esac
 }
@@ -196,6 +258,9 @@ apply_nixos_config() {
     if ! grep -q "experimental-features.*flakes" /etc/nix/nix.conf 2>/dev/null; then
         echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.conf
     fi
+    
+    # Setup age keys before applying config
+    setup_age_keys
     
     # Build and switch
     sudo nixos-rebuild switch --flake ".#$host"

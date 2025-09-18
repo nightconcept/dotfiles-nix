@@ -1,28 +1,29 @@
-# Barrett hardware configuration
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports = [
-    (modulesPath + "/profiles/qemu-guest.nix")
-  ];
+  imports =
+    [ (modulesPath + "/profiles/qemu-guest.nix")
+    ];
 
   boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
-  # Boot loader configuration disabled - using GRUB from main config
-  # boot.loader.systemd-boot.enable = true;
-  # boot.loader.efi.canTouchEfiVariables = true;
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/d86707fd-d39c-40e2-ab2f-560a8f6ec954";
+      fsType = "ext4";
+    };
 
-  # Filesystems are handled by disko configuration
-  # No explicit filesystem declarations needed here
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/3826-10D9";
+      fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
+    };
 
   swapDevices = [ ];
 
-  # Enables DHCP on each ethernet and wireless interface
   networking.useDHCP = lib.mkDefault true;
-  networking.interfaces.ens18.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }
