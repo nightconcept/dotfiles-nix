@@ -24,11 +24,11 @@ nixos-rebuild switch --flake .#aerith
 ### Darwin System Rebuild
 ```bash
 # Switch to a Darwin configuration
-darwin-rebuild switch --flake .#<CONFIG-NAME>
+sudo darwin-rebuild switch --flake .#<CONFIG-NAME>
 
 # Example configurations:
-darwin-rebuild switch --flake .#waver
-darwin-rebuild switch --flake .#merlin
+sudo darwin-rebuild switch --flake .#waver
+sudo darwin-rebuild switch --flake .#merlin
 ```
 
 ### Home Manager

@@ -53,8 +53,8 @@ nixos-rebuild switch --flake .#aerith
 
 ### Darwin
 ```bash
-darwin-rebuild switch --flake .#waver
-darwin-rebuild switch --flake .#merlin
+sudo darwin-rebuild switch --flake .#waver
+sudo darwin-rebuild switch --flake .#merlin
 ```
 
 ### Home Manager (standalone)
