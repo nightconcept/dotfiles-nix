@@ -1,0 +1,54 @@
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  # Import our custom lib functions
+  moduleLib = import ../../../lib/module { inherit lib; };
+  inherit (moduleLib) mkBoolOpt enabled disabled;
+in
+{
+  options.modules.home.secrets.sops = {
+    enable = mkBoolOpt true "Enable SOPS secrets management for home-manager";
+  };
+
+  config = lib.mkIf config.modules.home.secrets.sops.enable {
+    # SOPS configuration for home-manager (works on all platforms)
+    sops = {
+      # Use the user's age key (converted from SSH key)
+      age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+      
+      # Can also use SSH keys directly if they have no password
+      age.sshKeyPaths = [ "${config.home.homeDirectory}/.ssh/id_sdev" ];
+      
+      # Default secrets file
+      defaultSopsFile = ./user.yaml;
+      
+      # Validate files
+      validateSopsFiles = true;
+      
+      # User-level secrets
+      secrets = {
+        # SSH private key - deployed to actual location for git/ssh
+        "id_sdev" = {
+          path = "${config.home.homeDirectory}/.ssh/id_sdev";
+          mode = "0600";
+        };
+        
+        # Gemini API key - deployed to a file that shell can source
+        "gemini_api_key" = {
+          # Use XDG runtime dir for better security (tmpfs, user-only access)
+          path = "%r/secrets/gemini_api_key";
+          mode = "0400";
+        };
+        
+        # Other user secrets can be added here
+      };
+    };
+    
+    # Ensure the age keys directory exists
+    home.file.".config/sops/age/.keep".text = "";
+  };
+}

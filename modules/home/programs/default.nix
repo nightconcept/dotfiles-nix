@@ -2,5 +2,12 @@
 {
   imports = [
     ./common.nix
+    ./direnv.nix
+    ./gaming.nix
+    ./git.nix
+    ./helix.nix
+    ./spotify.nix
+    ./ssh.nix
+    ./wezterm
   ];
 }

@@ -65,20 +65,20 @@ NixOS = ""
 # Username - only show on SSH
 [username]
 show_always = false
-style_user = "fg:#00afff bg:#444444 bold"
-style_root = "fg:#d70000 bg:#444444 bold"
-format = "[$user]($style)"
+style_user = "fg:#d7af00 bg:#444444 bold"
+style_root = "fg:#d7af00 bg:#444444 bold"
+format = "[ $user]($style)"
 
 # Hostname - only show on SSH
 [hostname]
 ssh_only = true
-format = "[@$hostname](fg:#00afff bg:#444444 bold)"
+format = "[@$hostname](fg:#d7af00 bg:#444444 bold)"
 disabled = false
 
 # Directory with proper spacing and separator
 [directory]
 style = "fg:#00afff bg:#444444 bold"
-format = "[  $path ]($style)"
+format = "[   $path ]($style)"
 truncation_length = 3
 truncation_symbol = "../"
 truncate_to_repo = false

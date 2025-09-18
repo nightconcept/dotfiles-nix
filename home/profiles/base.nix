@@ -4,15 +4,19 @@
 {
   imports = [
     ../../modules/home
-    ../programs/direnv.nix
-    ../programs/git.nix
-    ../programs/helix.nix
-    ../programs/ssh.nix
-    ../secrets/sops.nix
   ];
 
   modules.home = {
-    programs.common.enable = true;
+    programs = {
+      common.enable = true;
+      direnv.enable = true;
+      git.enable = true;
+      helix.enable = true;
+      ssh.enable = true;
+    };
+    secrets = {
+      sops.enable = true;
+    };
   };
 
   home = {

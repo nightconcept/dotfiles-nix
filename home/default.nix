@@ -6,7 +6,7 @@ let
   profileMap = {
     # NixOS hosts
     tidus = {
-      profiles = [ ./profiles/laptop.nix ];
+      profiles = [ ./profiles/nixos-laptop.nix ];
       homeDirectory = "/home/danny";
       extraImports = [ ./programs/shell ];
       extraConfig = {
@@ -60,7 +60,7 @@ let
     };
     
     laptop = {
-      profiles = [ ./profiles/laptop.nix ];
+      profiles = [ ./profiles/nixos-laptop.nix ];
       homeDirectory = "/home/danny";
       extraImports = [ ./programs/shell ];
       extraConfig = {
