@@ -34,6 +34,14 @@
         path = "/etc/sops-mog-secrets";
         mode = "0600";
       };
+
+      # NordVPN token for wgnord authentication
+      "vpn/nordvpn_token" = {
+        owner = "root";
+        group = "root";
+        path = "/run/secrets/nordvpn-token";
+        mode = "0400";
+      };
     };
   };
 }

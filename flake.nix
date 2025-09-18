@@ -62,6 +62,7 @@
     nixosConfigurations = {
       tidus = lib.mkNixos inputs.nixpkgs "tidus";
       aerith = lib.mkNixosServer inputs.nixpkgs "aerith";
+      barrett = lib.mkNixosServer inputs.nixpkgs "barrett";
     };
 
     darwinConfigurations = {
