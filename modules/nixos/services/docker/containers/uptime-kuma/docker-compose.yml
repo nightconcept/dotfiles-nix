@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  uptimekuma:
+    container_name: uptimekuma
+    image: louislam/uptime-kuma:1-alpine
+    ports:
+      - target: 3001
+        published: "3001"
+        protocol: tcp
+    networks:
+      - proxy
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: ~/config/uptime-kuma
+        target: /app/data
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.uptimekuma.entrypoints=http"
+      - "traefik.http.routers.uptimekuma.rule=Host(`status.local.solivan.dev`)"
+      - "traefik.http.middlewares.uptimekuma-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.uptimekuma.middlewares=uptimekuma-https-redirect"
+      - "traefik.http.routers.uptimekuma-secure.entrypoints=https"
+      - "traefik.http.routers.uptimekuma-secure.rule=Host(`status.local.solivan.dev`)"
+      - "traefik.http.routers.uptimekuma-secure.tls=true"
+      - "traefik.http.routers.uptimekuma-secure.service=uptimekuma"
+      - "traefik.http.services.uptimekuma.loadbalancer.server.port=3001"
+      - "traefik.docker.network=proxy"
+      - 'traefik.http.routers.uptimekuma-secure.middlewares=authelia@docker'
+    privileged: false
+
+networks:
+  proxy:
+    external: true

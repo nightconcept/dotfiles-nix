@@ -1,0 +1,33 @@
+services:
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    networks:
+      - proxy
+    restart: unless-stopped
+    environment:
+      - PGID=1000
+      - PUID=1000
+    volumes:
+      - /mnt/titan/Audiobooks:/audiobooks
+      - /mnt/titan/Podcasts:/podcasts
+      - ~/config/audiobookshelf/metadata:/metadata
+      - ~/config/audiobookshelf/config:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.audiobookshelf.entrypoints=http"
+      - "traefik.http.routers.audiobookshelf.rule=Host(`audiobookshelf.local.solivan.dev`) || Host(`audiobookshelf.solivan.dev`)"
+      - "traefik.http.middlewares.audiobookshelf-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.audiobookshelf.middlewares=audiobookshelf-https-redirect"
+      - "traefik.http.routers.audiobookshelf-secure.entrypoints=https"
+      - "traefik.http.routers.audiobookshelf-secure.rule=Host(`audiobookshelf.local.solivan.dev`) || Host(`audiobookshelf.solivan.dev`)"
+      - "traefik.http.routers.audiobookshelf-secure.tls=true"
+      - "traefik.http.routers.audiobookshelf-secure.service=audiobookshelf"
+      - "traefik.http.services.audiobookshelf.loadbalancer.server.port=80"
+      - "traefik.docker.network=proxy"
+      - "com.centurylinklabs.watchtower.enable=true"
+    privileged: false
+
+networks:
+  proxy:
+    external: true

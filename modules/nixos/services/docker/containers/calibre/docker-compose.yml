@@ -1,0 +1,36 @@
+services:
+  calibre:
+    image: lscr.io/linuxserver/calibre:latest
+    networks:
+      - proxy
+    container_name: calibre
+    security_opt:
+      - seccomp:unconfined #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - CONFIG_PATH=~/config/calibre
+      - TZ=America/Los_Angeles
+      - PASSWORD= #optional
+      - CLI_ARGS= #optional
+    volumes:
+      - type: bind
+        source: ~/config/calibre
+        target: /config
+      - type: bind
+        source: /mnt/titan/Books
+        target: /books
+      - type: bind
+        source: /mnt/titan/Comics/
+        target: /comics
+    ports:
+      - 8080:8080
+      - 8181:8181
+      - 8081:8081
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  proxy:
+    external: true

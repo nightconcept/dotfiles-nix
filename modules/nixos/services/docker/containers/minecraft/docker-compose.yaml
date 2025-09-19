@@ -1,0 +1,42 @@
+services:
+  minecraft:
+    image: itzg/minecraft-server:latest
+    tty: true
+    stdin_open: true
+    network_mode: "host"
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      TYPE: "AUTO_CURSEFORGE"
+      VERSION: "LATEST"
+      MEMORY: "4G"
+      
+      # CurseForge Cobblemon Academy modpack
+      CF_API_KEY: "${CF_API_KEY}"  # Set in .env file
+      CF_SLUG: "cobblemon-academy"
+      # Alternative: use project ID directly
+      # CF_PROJECT_ID: "1328411"
+      
+      # Exclude client-only mods that cause issues on server
+      CF_EXCLUDE_MODS: "spiffyhud,fancymenu"
+      CF_FORCE_SYNCHRONIZE: "true"  # Force re-evaluation of mods
+      
+      # Server properties
+      VIEW_DISTANCE: "10"
+      SIMULATION_DISTANCE: "10"
+      MAX_PLAYERS: "20"
+      MOTD: "NightConcept Cobblemon Server"
+      ENABLE_QUERY: "true"  # Enable server query for status sites
+      ENABLE_WHITELIST: "true"  # Only allow whitelisted players
+      ENFORCE_WHITELIST: "true"  # Kick non-whitelisted players immediately
+      
+    volumes:
+      - type: bind
+        source: ~/config/minecraft
+        target: /data
+    restart: unless-stopped
+    container_name: "minecraft"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"  # Enable automatic updates
+
