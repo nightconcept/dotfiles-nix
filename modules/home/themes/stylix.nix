@@ -12,9 +12,13 @@ let
   
   # Check if stylix option is available (i.e., stylix module is imported)
   stylixAvailable = builtins.hasAttr "stylix" options;
-  
-  # Only define stylix config if the module is available AND enabled
-  stylixConfig = if stylixAvailable && config.modules.home.themes.stylix.enable then {
+in
+{
+  options.modules.home.themes.stylix = {
+    enable = mkBoolOpt false "Enable Stylix theming with Tokyo Night";
+  };
+
+  config = lib.mkIf (config.modules.home.themes.stylix.enable && stylixAvailable) {
     stylix = {
       enable = true;
       
@@ -90,13 +94,5 @@ let
       #   base0F = "7dcfff"; # Brown
       # };
     };
-  } else {};
-in
-{
-  options.modules.home.themes.stylix = {
-    enable = mkBoolOpt false "Enable Stylix theming with Tokyo Night";
   };
-
-  # Directly merge the config without mkIf wrapper
-  config = stylixConfig;
 }
