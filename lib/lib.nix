@@ -54,6 +54,7 @@ in
             users.danny.imports = [
               ../home
               sops-nix.homeManagerModules.sops
+              # Note: stylix is intentionally not included for servers
             ];
             extraSpecialArgs = {inherit inputs; inherit hostname;};
           };
