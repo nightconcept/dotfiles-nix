@@ -70,9 +70,6 @@
       };
     };
   };
-  
-  # Hardware for server
-  modules.nixos.hardware.usbAutomount.enable = true;
 
   services.openssh.enable = true;
 

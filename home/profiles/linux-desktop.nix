@@ -12,7 +12,6 @@
 
   modules.home.programs = {
     spotify.enable = true;
-    wezterm.enable = true;
     xdg.enable = true;
     shell = {
       fish.enable = true;
@@ -36,12 +35,4 @@
   ];
 
   stylix.targets.gtk.enable = lib.mkForce false;
-
-  xdg.mime.enable = true;
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications = {
-      "x-scheme-handler/x-github-desktop-dev-auth" = "github-desktop.desktop";
-    };
-  };
 }

@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  forgejo-runner:
+    image: code.forgejo.org/forgejo/runner:latest
+    restart: unless-stopped
+    environment:
+      - FORGEJO_INSTANCE_URL=${FORGEJO_INSTANCE_URL}
+      - FORGEJO_RUNNER_REGISTRATION_TOKEN=${FORGEJO_RUNNER_TOKEN}
+      - FORGEJO_RUNNER_NAME=${RUNNER_NAME:-vincent-runner}
+      - FORGEJO_RUNNER_LABELS=${LABELS:-docker,amd64,linux}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - forgejo-runner-data:/data
+    networks:
+      - runner-network
+
+volumes:
+  forgejo-runner-data:
+
+networks:
+  runner-network:
+    driver: bridge
