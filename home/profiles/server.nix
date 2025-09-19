@@ -3,9 +3,14 @@
 
 {
   imports = [
-    ../programs/common.nix
-    ../programs/shell
+    ./base.nix
   ];
+
+  modules.home.programs.shell = {
+    fish.enable = true;
+    starship.enable = true;
+    zoxide.enable = true;
+  };
 
   # Additional server-specific packages
   home.packages = with pkgs; [

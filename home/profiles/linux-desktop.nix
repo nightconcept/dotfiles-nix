@@ -6,11 +6,20 @@
   ...
 }: {
   imports = [
-    ../programs/common.nix
-    ../programs/spicetify.nix
-    ../programs/wezterm
-    ../stylix.nix
+    ./base.nix
+    ../../modules/home
   ];
+
+  modules.home.programs = {
+    spotify.enable = true;
+    wezterm.enable = true;
+    xdg.enable = true;
+    shell = {
+      fish.enable = true;
+      starship.enable = true;
+      zoxide.enable = true;
+    };
+  };
 
   fonts.fontconfig.enable = true;
 
@@ -25,8 +34,6 @@
     vscode
     xdg-utils
   ];
-
-  programs.spicetify.enable = true;
 
   stylix.targets.gtk.enable = lib.mkForce false;
 

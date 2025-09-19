@@ -8,7 +8,7 @@ let
     tidus = {
       profiles = [ ./profiles/nixos-laptop.nix ];
       homeDirectory = "/home/danny";
-      extraImports = [ ./programs/shell ];
+      extraImports = [ ];
       extraConfig = {
         targets.genericLinux.enable = true;
       };
@@ -32,28 +32,22 @@ let
     waver = {
       profiles = [ ./profiles/darwin-laptop.nix ];
       homeDirectory = "/Users/danny";
-      extraImports = [ 
-        ./programs/common.nix
-        ./programs/shell 
-      ];
+      extraImports = [ ];
       extraConfig = {};
     };
     
     merlin = {
-      profiles = [ ./profiles/darwin.nix ];
+      profiles = [ ./profiles/darwin-desktop.nix ];
       homeDirectory = "/Users/danny";
-      extraImports = [ 
-        ./programs/common.nix
-        ./programs/shell
-      ];
+      extraImports = [ ];
       extraConfig = {};
     };
     
     # Generic standalone home-manager configurations
     desktop = {
-      profiles = [ ./profiles/desktop.nix ];
+      profiles = [ ./profiles/linux-desktop.nix ];
       homeDirectory = "/home/danny";
-      extraImports = [ ./programs/shell ];
+      extraImports = [ ];
       extraConfig = {
         targets.genericLinux.enable = true;
       };
@@ -62,7 +56,7 @@ let
     laptop = {
       profiles = [ ./profiles/nixos-laptop.nix ];
       homeDirectory = "/home/danny";
-      extraImports = [ ./programs/shell ];
+      extraImports = [ ];
       extraConfig = {
         targets.genericLinux.enable = true;
       };
@@ -79,9 +73,9 @@ let
     
     # Default fallback
     default = {
-      profiles = [ ./profiles/desktop.nix ];
+      profiles = [ ./profiles/linux-desktop.nix ];
       homeDirectory = "/home/danny";
-      extraImports = [ ./programs/shell ];
+      extraImports = [ ];
       extraConfig = {
         targets.genericLinux.enable = true;
       };
