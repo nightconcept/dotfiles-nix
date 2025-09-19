@@ -11,42 +11,31 @@ in
 {
   options.modules.home.programs.git = {
     enable = mkBoolOpt true "Enable git with comprehensive configuration";
-    userName = lib.mkOption {
-      type = lib.types.str;
-      default = "Danny Solivan";
-      description = "Git user name";
-    };
-    userEmail = lib.mkOption {
-      type = lib.types.str;
-      default = "dark@nightconcept.net";
-      description = "Git user email";
-    };
-    enableSigning = mkBoolOpt true "Enable SSH commit signing (requires SSH module and SOPS secrets)";
   };
 
-  config = lib.mkIf config.modules.home.programs.git.enable (let
-    # Only enable signing if explicitly enabled AND we have SSH module
-    # SSH module provides public key and allowed_signers file
-    signingEnabled = config.modules.home.programs.git.enableSigning 
-      && config.modules.home.programs.ssh.enable;
-  in {
+  config = lib.mkIf config.modules.home.programs.git.enable {
     programs.git = {
       enable = true;
-      userName = config.modules.home.programs.git.userName;
-      userEmail = config.modules.home.programs.git.userEmail;
+      userName = "Danny Solivan";
+      userEmail = "dark@nightconcept.net";
 
-      signing = lib.mkIf signingEnabled {
+      signing = {
         key = "~/.ssh/id_sdev.pub";
         signByDefault = true;
       };
 
       extraConfig = {
-        gpg = lib.mkIf signingEnabled {
+        gpg = {
           format = "ssh";
+          ssh.allowedSignersFile = "~/.ssh/allowed_signers";
         };
         
-        "gpg \"ssh\"" = lib.mkIf signingEnabled {
-          allowedSignersFile = "~/.ssh/allowed_signers";
+        tag = {
+          gpgSign = true;  # Also sign tags
+        };
+        
+        commit = {
+          gpgSign = true;  # Ensure commits are signed
         };
         
         github = {
@@ -120,5 +109,10 @@ in
         };
       };
     };
-  });
+    
+    # Create the allowed signers file for SSH signing verification
+    home.file.".ssh/allowed_signers".text = ''
+      dark@nightconcept.net ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMJKTm63zFmYfGauCBlUWq7lvHFq+NVPT5RqIfjLM7MN danny@solivan.dev
+    '';
+  };
 }

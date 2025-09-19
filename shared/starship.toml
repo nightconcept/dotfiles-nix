@@ -1,7 +1,7 @@
 "$schema" = "https://starship.rs/config-schema.json"
 
 # Format with box drawing characters and gradient blocks - matches P10k style
-format = "[╭─](#6c6c6c)[](fg:#444444)$os$username$hostname[ ](fg:#6c6c6c bg:#444444)$directory$git_branch$git_status[](fg:#444444)$fill[](fg:#444444)$nix_shell$time[](fg:#444444)[─╮ ](#6c6c6c)$line_break[╰─ ](#6c6c6c)$character"
+format = "[╭─](#6c6c6c)[](fg:#444444)$os$username$hostname$directory$git_branch$git_status[](fg:#444444)$fill[](fg:#444444)$nix_shell$time[](fg:#444444)[─╮ ](#6c6c6c)$line_break[╰─ ](#6c6c6c)$character"
 
 # Right prompt format
 right_format = "[─╯ ](#6c6c6c)$line_break"
@@ -42,7 +42,7 @@ style = "fg:#6c6c6c"
 [os]
 disabled = false
 style = "fg:#eeeeee bg:#444444"
-format = "[ $symbol]($style)"
+format = "[ $symbol ]($style)[](fg:#6c6c6c bg:#444444)"
 
 [os.symbols]
 Windows = ""

@@ -9,7 +9,7 @@ in
       system = "x86_64-linux";
       specialArgs = {inherit inputs;};
       modules = [
-        ../systems/nixos
+        ../modules/nixos
         ../hosts/nixos/${hostname}
         home-manager.nixosModules.home-manager
         stylix.nixosModules.stylix
@@ -40,7 +40,6 @@ in
       specialArgs = {inherit inputs;};
       modules = [
         ../modules/nixos
-        ../systems/nixos
         ../hosts/nixos/${hostname}
         home-manager.nixosModules.home-manager
         sops-nix.nixosModules.sops
@@ -51,6 +50,7 @@ in
             useGlobalPkgs = true;
             useUserPackages = true;
             users.danny.home.stateVersion = "23.11";
+            backupFileExtension = "backup";
             users.danny.imports = [
               ../home
               sops-nix.homeManagerModules.sops
@@ -74,40 +74,10 @@ in
       system = "aarch64-darwin";
       specialArgs = {
         inherit inputs;
-        systemType = "desktop";
       };
 
       modules = [
-        ../systems/darwin
-        ../hosts/darwin/${hostname}
-        home-manager.darwinModules.home-manager
-        {
-          users.users.danny.home = "/Users/danny";
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            backupFileExtension = "backup";
-            users.danny.imports = [
-              ../home
-              stylix.homeModules.stylix
-              sops-nix.homeManagerModules.sops
-            ];
-            extraSpecialArgs = {inherit inputs; inherit hostname;};
-          };
-        }
-      ];
-    };
-
-  mkDarwinLaptop = pkgs: hostname:
-    nix-darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
-      specialArgs = {
-        inherit inputs;
-        systemType = "laptop";
-      };
-
-      modules = [
-        ../systems/darwin
+        ../modules/darwin
         ../hosts/darwin/${hostname}
         home-manager.darwinModules.home-manager
         {

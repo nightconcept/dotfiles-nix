@@ -1,20 +1,17 @@
+# Aerith - Plex media server
 {
   config,
   pkgs,
   lib,
+  inputs,
   ...
-}: 
-let
-  # Import our custom lib functions
-  moduleLib = import ../../../lib/module { inherit lib; };
-  inherit (moduleLib) enabled disabled;
-in
-{
+}: {
   imports = [
     ./hardware-configuration.nix
   ];
 
-  networking.hostName = "aerith";
+  # Networking
+  modules.nixos.networking.base.hostName = "aerith";
 
   # Override bootloader for legacy BIOS (no EFI partition)
   boot.loader = {
@@ -26,6 +23,7 @@ in
     };
   };
 
+  # Existing modular configuration
   modules.nixos = {
     kernel.type = "lts";
     
@@ -40,6 +38,9 @@ in
       openFirewall = true;
     };
   };
+  
+  # Hardware for server
+  modules.nixos.hardware.usbAutomount.enable = true;
 
   services.openssh.enable = true;
 

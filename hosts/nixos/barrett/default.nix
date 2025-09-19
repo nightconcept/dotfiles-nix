@@ -1,20 +1,17 @@
+# Barrett - VPN torrent server
 {
   config,
   pkgs,
   lib,
+  inputs,
   ...
-}:
-let
-  # Import our custom lib functions
-  moduleLib = import ../../../lib/module { inherit lib; };
-  inherit (moduleLib) enabled disabled;
-in
-{
+}: {
   imports = [
     ./hardware-configuration.nix
   ];
 
-  networking.hostName = "barrett";
+  # Networking
+  modules.nixos.networking.base.hostName = "barrett";
 
   # Override bootloader for legacy BIOS (no EFI partition)
   boot.loader = {
@@ -73,6 +70,9 @@ in
       };
     };
   };
+  
+  # Hardware for server
+  modules.nixos.hardware.usbAutomount.enable = true;
 
   services.openssh.enable = true;
 
