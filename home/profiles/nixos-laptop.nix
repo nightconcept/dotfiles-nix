@@ -40,12 +40,4 @@
   ];
 
   desktops.hyprland.enable = true;
-
-  xdg.mime.enable = true;
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications = {
-      "x-scheme-handler/x-github-desktop-dev-auth" = "github-desktop.desktop";
-    };
-  };
 }

@@ -53,6 +53,7 @@ in
           "application/pdf" = "firefox";
           "x-scheme-handler/discord" = ["discord.desktop"];
           "x-scheme-handler/spotify" = ["spotify.desktop"];
+          "x-scheme-handler/x-github-desktop-dev-auth" = "github-desktop.desktop";
           "application/toml" = "org.gnome.TextEditor.desktop";
           "text/plain" = "org.gnome.TextEditor.desktop";
         };

@@ -69,6 +69,7 @@
       aerith = lib.mkNixosServer inputs.nixpkgs "aerith";
       barrett = lib.mkNixosServer inputs.nixpkgs "barrett";
       rinoa = lib.mkNixosServer inputs.nixpkgs "rinoa";
+      vincent = lib.mkNixosServer inputs.nixpkgs "vincent";
     };
 
     darwinConfigurations = {
