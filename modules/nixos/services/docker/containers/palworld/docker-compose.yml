@@ -1,0 +1,17 @@
+services:
+  palworld-dedicated-server:
+    container_name: palworld-dedicated-server
+    image: jammsen/palworld-dedicated-server:latest
+    restart: unless-stopped
+    network_mode: "host"
+    ports:
+      - target: 8211 # Gamerserver port inside of the container
+        published: 8211 # Gamerserver port on your host
+        protocol: udp
+      - target: 25575 # RCON port inside of the container
+        published: 25575 # RCON port on your host
+        protocol: tcp
+    env_file:
+      - ./default.env
+    volumes:
+      - ~/config/palworld:/palworld

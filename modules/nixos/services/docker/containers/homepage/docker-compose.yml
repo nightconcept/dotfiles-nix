@@ -1,0 +1,30 @@
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    restart: always
+    networks:
+      - proxy
+    volumes:
+      - ~/config/homepage:/app/config # Make sure your local config directory exists
+      - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations, see alternative methods
+    environment:
+      PUID: 0 # read them from .env
+      PGID: 0 # read them from .env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homepage.entrypoints=http"
+      - "traefik.http.routers.homepage.rule=Host(`home.local.solivan.dev`)"
+      - "traefik.http.middlewares.homepage-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.homepage.middlewares=homepage-https-redirect"
+      - "traefik.http.routers.homepage-secure.entrypoints=https"
+      - "traefik.http.routers.homepage-secure.rule=Host(`home.local.solivan.dev`)"
+      - "traefik.http.routers.homepage-secure.tls=true"
+      - "traefik.http.routers.homepage-secure.service=homepage"
+      - "traefik.http.services.homepage.loadbalancer.server.port=3000"
+      - "traefik.docker.network=proxy"
+      - "com.centurylinklabs.watchtower.enable=true"
+      - 'traefik.http.routers.homepage-secure.middlewares=authelia@docker'
+networks:
+  proxy:
+    external: true

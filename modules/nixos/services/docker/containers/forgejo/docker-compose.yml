@@ -1,0 +1,56 @@
+services:
+  forgejo-db:
+    image: postgres:16-alpine
+    container_name: forgejo-db
+    restart: always
+    networks:
+      - proxy
+    volumes:
+      - ~/config/forgejo/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=forgejo
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=forgejo
+
+  forgejo:
+    image: codeberg.org/forgejo/forgejo:11
+    container_name: forgejo
+    restart: always
+    networks:
+      - proxy
+    depends_on:
+      - forgejo-db
+    volumes:
+      - ~/config/forgejo/data:/data
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - FORGEJO__database__DB_TYPE=postgres
+      - FORGEJO__database__HOST=forgejo-db:5432
+      - FORGEJO__database__NAME=forgejo
+      - FORGEJO__database__USER=forgejo
+      - FORGEJO__database__PASSWD=${DB_PASSWORD}
+      - FORGEJO__server__DOMAIN=forge.local.solivan.dev
+      - FORGEJO__server__SSH_DOMAIN=forge.local.solivan.dev
+      - FORGEJO__server__ROOT_URL=https://forge.local.solivan.dev
+      - FORGEJO__server__HTTP_PORT=3000
+      - FORGEJO__server__SSH_PORT=22
+    ports:
+      - "2222:22"  # SSH port for git operations
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.forgejo.entrypoints=http"
+      - "traefik.http.routers.forgejo.rule=Host(`forge.local.solivan.dev`)"
+      - "traefik.http.middlewares.forgejo-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.forgejo.middlewares=forgejo-https-redirect"
+      - "traefik.http.routers.forgejo-secure.entrypoints=https"
+      - "traefik.http.routers.forgejo-secure.rule=Host(`forge.local.solivan.dev`) || Host(`forge.solivan.dev`)"
+      - "traefik.http.routers.forgejo-secure.tls=true"
+      - "traefik.http.routers.forgejo-secure.service=forgejo"
+      - "traefik.http.services.forgejo.loadbalancer.server.port=3000"
+      - "traefik.docker.network=proxy"
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  proxy:
+    external: true

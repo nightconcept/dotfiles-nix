@@ -1,0 +1,45 @@
+# Minecraft Server Management Commands
+
+# List all whitelisted players
+whitelist-list:
+    docker exec minecraft rcon-cli whitelist list
+
+# Add a player to the whitelist
+whitelist-add USERNAME:
+    docker exec minecraft rcon-cli whitelist add {{USERNAME}}
+    @echo "Added {{USERNAME}} to whitelist"
+
+# Remove a player from the whitelist
+whitelist-remove USERNAME:
+    docker exec minecraft rcon-cli whitelist remove {{USERNAME}}
+    @echo "Removed {{USERNAME}} from whitelist"
+
+# Show server logs
+logs:
+    docker logs -f minecraft
+
+# Restart the server
+restart:
+    docker compose restart
+
+# Stop the server
+stop:
+    docker compose down
+
+# Start the server
+start:
+    docker compose up -d
+
+# Connect to server console
+console:
+    docker exec -it minecraft rcon-cli
+
+# Show online players
+who:
+    docker exec minecraft rcon-cli list
+
+# Backup world data
+backup:
+    @echo "Creating backup..."
+    @tar -czf backups/minecraft-backup-$(date +%Y%m%d-%H%M%S).tar.gz -C ~/config/minecraft/data world world_nether world_the_end
+    @echo "Backup completed!"
