@@ -31,7 +31,7 @@
       "network/titan_credentials" = {
         owner = "root";
         group = "root";
-        path = "/etc/sops-mog-secrets";
+        # Don't specify path - let sops-nix handle it
         mode = "0600";
       };
 
@@ -39,7 +39,7 @@
       "vpn/nordvpn_token" = {
         owner = "root";
         group = "root";
-        path = "/run/secrets/nordvpn-token";
+        # Don't specify path - let sops-nix handle it
         mode = "0400";
       };
 

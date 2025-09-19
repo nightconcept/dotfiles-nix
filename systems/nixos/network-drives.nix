@@ -19,7 +19,7 @@
     what = "//192.168.1.167/titan";  # Using fixed IP address for reliability
     where = "/mnt/titan";
     type = "cifs";
-    options = "credentials=/etc/sops-mog-secrets,uid=1000,gid=100,iocharset=utf8,nofail,_netdev,x-systemd.automount,x-systemd.mount-timeout=10";
+    options = "credentials=/run/secrets/network/titan_credentials,uid=1000,gid=100,iocharset=utf8,nofail,_netdev,x-systemd.automount,x-systemd.mount-timeout=10";
     wantedBy = [ ];  # Don't auto-start, let automount handle it
     after = [ "network-online.target" "nss-lookup.target" ];
     wants = [ "network-online.target" ];

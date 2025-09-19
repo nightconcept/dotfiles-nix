@@ -23,7 +23,7 @@ in
 
       mountPoint = mkOpt lib.types.str "/mnt/titan" "Local mount point for the titan share";
 
-      credentialsFile = mkOpt lib.types.str "/etc/sops-mog-secrets" "Path to credentials file for authentication";
+      credentialsFile = mkOpt lib.types.str "/run/secrets/network/titan_credentials" "Path to credentials file for authentication";
 
       uid = mkOpt lib.types.int 1000 "User ID for mounted files";
 

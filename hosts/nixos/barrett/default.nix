@@ -68,7 +68,7 @@ in
 
       nordvpn = {
         enable = true;
-        tokenFile = "/run/secrets/nordvpn-token";
+        tokenFile = config.sops.secrets."vpn/nordvpn_token".path;
         country = "United States";  # P2P servers are available in most US locations
       };
     };
