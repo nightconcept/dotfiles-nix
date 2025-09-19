@@ -2,19 +2,23 @@
   config,
   lib,
   pkgs,
+  options,
   ...
 }:
 let
   # Import our custom lib functions
   moduleLib = import ../../../lib/module { inherit lib; };
   inherit (moduleLib) mkBoolOpt enabled disabled;
+  
+  # Check if stylix option is available (i.e., stylix module is imported)
+  stylixAvailable = builtins.hasAttr "stylix" options;
 in
 {
   options.modules.home.themes.stylix = {
     enable = mkBoolOpt false "Enable Stylix theming with Tokyo Night";
   };
 
-  config = lib.mkIf (config.modules.home.themes.stylix.enable && (builtins.hasAttr "stylix" config)) {
+  config = lib.mkIf (config.modules.home.themes.stylix.enable && stylixAvailable) {
     stylix = {
       enable = true;
       
