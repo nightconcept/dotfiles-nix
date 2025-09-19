@@ -79,7 +79,7 @@ in
         serviceConfig = {
           Type = "simple";
           User = cfg.user;
-          Group = cfg.user;
+          Group = "users";  # Use the standard users group instead of user-specific group
 
           # Configure qBittorrent with download directory and profile location
           ExecStart = ''
@@ -160,7 +160,7 @@ in
         serviceConfig = {
           Type = "oneshot";
           User = cfg.user;
-          Group = cfg.user;
+          Group = "users";  # Use the standard users group instead of user-specific group
           
           # Security hardening
           PrivateTmp = true;
