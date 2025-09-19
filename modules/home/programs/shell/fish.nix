@@ -8,6 +8,9 @@ let
   # Import our custom lib functions
   moduleLib = import ../../../../lib/module { inherit lib; };
   inherit (moduleLib) mkBoolOpt enabled disabled;
+
+  # Dotfiles directory constant - change this if the repo moves
+  dot_dir = "$HOME/git/dotfiles-nix";
 in
 {
   options.modules.home.programs.shell.fish = {
@@ -154,73 +157,75 @@ in
                 set host (hostname -s)
                 echo "Auto-detected host: $host"
             end
-            
+
             # Determine flake directory
             if set -q FLAKE_DIR
                 set flake_dir $FLAKE_DIR
             else
-                set flake_dir "$HOME/git/dotfiles-nix"
+                set flake_dir "${dot_dir}"
             end
-            
+
             # Verify flake directory exists
             if not test -d $flake_dir
                 echo "Error: Flake directory not found at $flake_dir"
-                echo "Set FLAKE_DIR environment variable or ensure ~/git/dotfiles-nix exists"
+                echo "Set FLAKE_DIR environment variable or ensure ${dot_dir} exists"
                 return 1
             end
-            
-            # Determine system type and configuration
-            if test (uname) = "Darwin"
-                set config_type "darwinConfigurations"
-                set rebuild_cmd "sudo darwin-rebuild switch"
-            else if test -f /etc/nixos/configuration.nix
+
+            # Check what configurations are available in the flake for this hostname
+            set nixos_configs (nix eval $flake_dir#nixosConfigurations --apply 'x: builtins.attrNames x' 2>/dev/null | tr -d '[]"' | tr ' ' '\n')
+            set darwin_configs (nix eval $flake_dir#darwinConfigurations --apply 'x: builtins.attrNames x' 2>/dev/null | tr -d '[]"' | tr ' ' '\n')
+            set home_configs (nix eval $flake_dir#homeConfigurations --apply 'x: builtins.attrNames x' 2>/dev/null | tr -d '[]"' | tr ' ' '\n')
+
+            # Check if hostname exists in any configuration type
+            if contains $host $nixos_configs
+                echo "Found NixOS configuration for $host"
                 set config_type "nixosConfigurations"
                 set rebuild_cmd "sudo nixos-rebuild switch"
-            else
-                # Non-NixOS Linux, use home-manager
+            else if contains $host $darwin_configs
+                echo "Found Darwin configuration for $host"
+                set config_type "darwinConfigurations"
+                set rebuild_cmd "sudo darwin-rebuild switch"
+            else if contains $host $home_configs
+                echo "Found Home Manager configuration for $host"
                 set config_type "homeConfigurations"
                 set rebuild_cmd "home-manager switch"
-                
-                # For home-manager, try user@host format first, then fallback to generic profiles
+            else
+                # Try user@host format for home-manager
                 set user_host "danny@$host"
-                set available_homes (nix eval $flake_dir#homeConfigurations --apply 'x: builtins.attrNames x' 2>&1 | tail -1 | tr -d '[]"' | tr ' ' '\n')
-                
-                if contains $user_host $available_homes
+                if contains $user_host $home_configs
+                    echo "Found Home Manager configuration for $user_host"
                     set host $user_host
+                    set config_type "homeConfigurations"
+                    set rebuild_cmd "home-manager switch"
                 else
-                    # Map hostname to profile if needed
-                    switch $host
-                        case "desktop*"
-                            set host "desktop"
-                        case "laptop*"
-                            set host "laptop"
-                        case "server*"
-                            set host "server"
-                        case "*"
-                            # Check if host exists in homeConfigurations
-                            if not contains $host $available_homes
-                                echo "Host '$host' not found, defaulting to 'desktop' profile"
-                                set host "desktop"
-                            end
+                    # No exact match found, show available configurations
+                    echo "Error: No configuration found for hostname '$host'"
+                    echo ""
+                    if test (count $nixos_configs) -gt 0
+                        echo "Available NixOS configurations:"
+                        for conf in $nixos_configs
+                            echo "  - $conf"
+                        end
                     end
-                end
-            end
-            
-            # Check if host configuration exists by evaluating the flake
-            set available_configs (nix eval $flake_dir#$config_type --apply 'x: builtins.attrNames x' 2>&1 | tail -1 | tr -d '[]"' | tr ' ' '\n')
-            if not contains $host $available_configs
-                echo "Warning: configuration '$host' not found in $config_type"
-                echo "Available $config_type:"
-                for conf in $available_configs
-                    echo "  - $conf"
-                end
-                echo ""
-                read -P "Continue anyway? [y/N] " -n 1 confirm
-                if test "$confirm" != "y" -a "$confirm" != "Y"
+                    if test (count $darwin_configs) -gt 0
+                        echo "Available Darwin configurations:"
+                        for conf in $darwin_configs
+                            echo "  - $conf"
+                        end
+                    end
+                    if test (count $home_configs) -gt 0
+                        echo "Available Home Manager configurations:"
+                        for conf in $home_configs
+                            echo "  - $conf"
+                        end
+                    end
+                    echo ""
+                    echo "Usage: flake-rebuild [hostname]"
                     return 1
                 end
             end
-            
+
             # Pre-authenticate sudo if needed (for NixOS and Darwin)
             if test "$config_type" != "homeConfigurations"
                 echo "Authenticating sudo..."

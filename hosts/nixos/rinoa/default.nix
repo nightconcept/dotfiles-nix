@@ -1,32 +1,37 @@
+# Rinoa - Server configuration
 {
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
   ];
 
-  modules = {
-    nixos = {
-      core = {
-        enable = true;
-        hostname = "rinoa";
-        username = "danny";
-        timezone = "America/Los_Angeles";
-      };
+  # Networking
+  modules.nixos.networking.base.hostName = "rinoa";
 
-      networking = {
-        enable = true;
-        useDHCP = true;
-      };
+  # Standard NixOS modules
+  modules.nixos = {
+    kernel.type = "lts";
 
-      ssh = {
-        enable = true;
-        allowPasswordAuth = false;
-      };
-
-      docker = {
-        enable = true;
-      };
+    network = {
+      networkManager = true;
+      mdns = true;
     };
   };
+
+  services.openssh.enable = true;
+
+  # Enable Docker
+  modules.nixos.docker.enable = true;
+
+  # System packages for server management
+  environment.systemPackages = with pkgs; [
+    home-manager
+  ];
 
   system.stateVersion = "24.05";
 }
