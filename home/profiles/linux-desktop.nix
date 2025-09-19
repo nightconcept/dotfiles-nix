@@ -12,6 +12,7 @@
 
   modules.home.programs = {
     spotify.enable = true;
+    wezterm.configOnly = true;
     xdg.enable = true;
     shell = {
       fish.enable = true;
