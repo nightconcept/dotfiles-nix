@@ -8,7 +8,6 @@
   imports = [
     ./base.nix
     ../../modules/home
-    ../stylix.nix
     ../desktops/hyprland
   ];
 
@@ -16,7 +15,15 @@
     gaming.enable = true;
     spotify.enable = true;
     wezterm.enable = true;
+    xdg.enable = true;
+    shell = {
+      fish.enable = true;
+      starship.enable = true;
+      zoxide.enable = true;
+    };
   };
+
+  modules.home.themes.stylix.enable = true;
 
   fonts.fontconfig.enable = true;
 

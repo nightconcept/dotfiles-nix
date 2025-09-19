@@ -3,5 +3,6 @@
   imports = [
     ./programs
     ./secrets
+    ./themes
   ];
 }
