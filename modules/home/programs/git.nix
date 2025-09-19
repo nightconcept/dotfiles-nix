@@ -101,6 +101,15 @@ in
           protocol = "https";
         };
 
+        # Automatically rewrite HTTPS URLs to SSH for GitHub
+        "url \"git@github.com:\"" = {
+          insteadOf = "https://github.com/";
+        };
+
+        "url \"git@github.com:\"" = {
+          insteadOf = "https://www.github.com/";
+        };
+
         "filter \"lfs\"" = {
           process = "git-lfs filter-process";
           required = true;
