@@ -70,14 +70,6 @@ in
           cp = "${pkgs.coreutils}/bin/cp -r";
           fishclear = "echo \"\" > ~/.local/share/fish/fish_history";
 
-          # Platform-specific flake rebuild
-          flake-rebuild =
-            if pkgs.stdenv.isLinux
-            then "sudo nixos-rebuild switch --flake"
-            else "sudo darwin-rebuild switch --flake";
-
-          # Home Manager rebuild
-          home-rebuild = "home-manager switch --flake";
         }
         // (
           if pkgs.stdenv.isLinux
@@ -148,6 +140,110 @@ in
         fish_greeting = {
           description = "Greeting to show when starting a fish shell";
           body = "";
+        };
+        
+        flake-rebuild = {
+          description = "Smart flake rebuild that auto-detects system and hostname";
+          body = ''
+            # Parse arguments - check if host was provided
+            if test (count $argv) -gt 0
+                set host $argv[1]
+                echo "Using specified host: $host"
+            else
+                # Auto-detect hostname
+                set host (hostname -s)
+                echo "Auto-detected host: $host"
+            end
+            
+            # Determine flake directory
+            if set -q FLAKE_DIR
+                set flake_dir $FLAKE_DIR
+            else
+                set flake_dir "$HOME/git/dotfiles-nix"
+            end
+            
+            # Verify flake directory exists
+            if not test -d $flake_dir
+                echo "Error: Flake directory not found at $flake_dir"
+                echo "Set FLAKE_DIR environment variable or ensure ~/git/dotfiles-nix exists"
+                return 1
+            end
+            
+            # Determine system type and configuration
+            if test (uname) = "Darwin"
+                set config_type "darwinConfigurations"
+                set rebuild_cmd "sudo darwin-rebuild switch"
+            else if test -f /etc/nixos/configuration.nix
+                set config_type "nixosConfigurations"
+                set rebuild_cmd "sudo nixos-rebuild switch"
+            else
+                # Non-NixOS Linux, use home-manager
+                set config_type "homeConfigurations"
+                set rebuild_cmd "home-manager switch"
+                
+                # For home-manager, try user@host format first, then fallback to generic profiles
+                set user_host "danny@$host"
+                set available_homes (nix eval $flake_dir#homeConfigurations --apply 'x: builtins.attrNames x' 2>&1 | tail -1 | tr -d '[]"' | tr ' ' '\n')
+                
+                if contains $user_host $available_homes
+                    set host $user_host
+                else
+                    # Map hostname to profile if needed
+                    switch $host
+                        case "desktop*"
+                            set host "desktop"
+                        case "laptop*"
+                            set host "laptop"
+                        case "server*"
+                            set host "server"
+                        case "*"
+                            # Check if host exists in homeConfigurations
+                            if not contains $host $available_homes
+                                echo "Host '$host' not found, defaulting to 'desktop' profile"
+                                set host "desktop"
+                            end
+                    end
+                end
+            end
+            
+            # Check if host configuration exists by evaluating the flake
+            set available_configs (nix eval $flake_dir#$config_type --apply 'x: builtins.attrNames x' 2>&1 | tail -1 | tr -d '[]"' | tr ' ' '\n')
+            if not contains $host $available_configs
+                echo "Warning: configuration '$host' not found in $config_type"
+                echo "Available $config_type:"
+                for conf in $available_configs
+                    echo "  - $conf"
+                end
+                echo ""
+                read -P "Continue anyway? [y/N] " -n 1 confirm
+                if test "$confirm" != "y" -a "$confirm" != "Y"
+                    return 1
+                end
+            end
+            
+            # Pre-authenticate sudo if needed (for NixOS and Darwin)
+            if test "$config_type" != "homeConfigurations"
+                echo "Authenticating sudo..."
+                sudo -v
+                if test $status -ne 0
+                    echo "sudo authentication failed"
+                    return 1
+                end
+            end
+            
+            # Run the appropriate rebuild command
+            echo "Running $config_type rebuild for $host..."
+            # Run in background to prevent shell lockup during rebuild
+            eval $rebuild_cmd --flake "$flake_dir#$host" &
+            
+            # Wait for the background job to complete
+            set rebuild_pid $last_pid
+            wait $rebuild_pid
+            set rebuild_status $status
+            
+            # Return the rebuild exit status
+            return $rebuild_status
+          '';
         };
       };
     };

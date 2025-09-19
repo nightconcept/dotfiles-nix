@@ -1,3 +1,4 @@
+# Tidus - Dell Latitude 7420 laptop with Hyprland
 {
   config,
   pkgs,
@@ -10,20 +11,26 @@
     inputs.nixos-hardware.nixosModules.dell-latitude-7420
   ];
 
-  config = {
-    # Enable Hyprland instead of Plasma
-    hyprland.enable = true;
-
-    # Explicitly disable GNOME and Plasma
-    services.desktopManager.gnome.enable = false;
-    services.displayManager.gdm.enable = false;
-
-    networking.hostName = "tidus";
-
-    boot.kernelPackages = pkgs.linuxPackages_zen;
-
-    # Allow unfree packages for Spotify
-    nixpkgs.config.allowUnfree = true;
+  # Networking
+  modules.nixos.networking.base.hostName = "tidus";
+    
+    # Desktop environment
+    modules.nixos.desktop.hyprland.enable = true;
+    
+    # Hardware features
+    modules.nixos.hardware = {
+      bluetooth.enable = true;
+      power.enable = true;
+      sound.enable = true;
+      graphics.enable = true;
+      usbAutomount.enable = true;
+    };
+    
+    # Storage
+    modules.nixos.storage.networkDrives.enable = true;
+    
+    # Kernel configuration
+    modules.nixos.kernel.type = "zen";
 
     # Install Firefox at system level for tidus only
     environment.systemPackages = with pkgs; [
@@ -31,5 +38,4 @@
     ];
 
     system.stateVersion = "23.11";
-  };
 }

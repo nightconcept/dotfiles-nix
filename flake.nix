@@ -71,7 +71,7 @@
     };
 
     darwinConfigurations = {
-      waver = lib.mkDarwinLaptop inputs.nixpkgs "waver";
+      waver = lib.mkDarwin inputs.nixpkgs "waver";
       merlin = lib.mkDarwin inputs.nixpkgs "merlin";
     };
 

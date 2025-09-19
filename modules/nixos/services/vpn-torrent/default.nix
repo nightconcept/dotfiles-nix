@@ -57,8 +57,8 @@ in
     {
       # Create required directories for configuration
       systemd.tmpfiles.rules = [
-        "d ${cfg.configDir} 0755 ${cfg.user} ${cfg.user} -"
-        "d ${cfg.configDir}/qbittorrent 0755 ${cfg.user} ${cfg.user} -"
+        "d ${cfg.configDir} 0755 ${cfg.user} users -"
+        "d ${cfg.configDir}/qbittorrent 0755 ${cfg.user} users -"
         "d /var/lib/wgnord 0755 root root -"
       ];
 
@@ -79,7 +79,7 @@ in
         serviceConfig = {
           Type = "simple";
           User = cfg.user;
-          Group = "users";  # Use the standard users group instead of user-specific group
+          Group = "users";  # Use the 'users' group instead of username
 
           # Configure qBittorrent with download directory and profile location
           ExecStart = ''
@@ -148,7 +148,7 @@ in
 
       # Create log directory
       systemd.tmpfiles.rules = [
-        "d /var/log/autoremove-torrents 0755 ${cfg.user} ${cfg.user} -"
+        "d /var/log/autoremove-torrents 0755 ${cfg.user} users -"
       ];
 
       # Autoremove-torrents systemd service
@@ -160,7 +160,7 @@ in
         serviceConfig = {
           Type = "oneshot";
           User = cfg.user;
-          Group = "users";  # Use the standard users group instead of user-specific group
+          Group = "users";
           
           # Security hardening
           PrivateTmp = true;
