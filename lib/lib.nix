@@ -53,8 +53,8 @@ in
             backupFileExtension = "backup";
             users.danny.imports = [
               ../home
+              stylix.homeModules.stylix
               sops-nix.homeManagerModules.sops
-              # Note: stylix is intentionally not included for servers
             ];
             extraSpecialArgs = {inherit inputs; inherit hostname;};
           };
