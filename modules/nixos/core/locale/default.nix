@@ -16,7 +16,7 @@ in
 
     timeZone = mkOption {
       type = types.str;
-      default = "America/New_York";
+      default = "America/Los_Angeles";
       description = "System timezone";
     };
   };

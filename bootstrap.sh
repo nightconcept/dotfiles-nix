@@ -1,23 +1,24 @@
 #!/usr/bin/env bash
 #
 # Universal Bootstrap Script for Nix Dotfiles
-# 
+#
 # Usage:
+#   # From existing system or NixOS LiveCD
 #   curl -sSL https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh | bash
-#   # OR
 #   wget -qO- https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh | bash
 #
 # Supports:
-#   - NixOS (with host selection for tidus/aerith)
+#   - NixOS fresh installation (auto-detected from LiveCD)
+#   - NixOS existing system (configuration switching)
 #   - Linux distros (Ubuntu, Fedora, Arch, SUSE, Alpine, etc.)
 #   - macOS (partial - manual steps required)
 #
 # Features:
-#   - Auto-detects OS and package manager
-#   - Installs Nix if not present
-#   - Clones dotfiles repository
-#   - On NixOS: Offers to switch to a specific host configuration
-#   - On Linux: Sets up Home Manager with profile selection
+#   - Auto-detects if running from LiveCD for fresh install
+#   - Partitions disk and installs NixOS when on LiveCD
+#   - Switches configuration on existing NixOS systems
+#   - Sets up Home Manager on non-NixOS Linux
+#   - Handles both desktop and server installations
 #
 
 set -e
@@ -53,6 +54,18 @@ detect_os() {
     else
         echo "unknown"
     fi
+}
+
+# Check if running from NixOS LiveCD
+is_nixos_livecd() {
+    if [[ -f /etc/os-release ]]; then
+        . /etc/os-release
+        # NixOS LiveCD typically runs from tmpfs and has no /etc/nixos
+        if [[ "$ID" == "nixos" ]] && [[ ! -d /etc/nixos ]] && mountpoint -q /; then
+            return 0
+        fi
+    fi
+    return 1
 }
 
 # Detect package manager
@@ -158,34 +171,82 @@ clone_flake() {
     cd "$FLAKE_DIR"
 }
 
-# NixOS host selection menu
-select_nixos_host() {
-    print_info "Available NixOS configurations:"
+# Determine system type
+select_system_type() {
+    print_info "What type of system is this?"
+    echo "  1) Desktop/Laptop (with GUI)"
+    echo "  2) Server (headless, no GUI)"
+    echo
+
+    read -p "Select type (1-2): " -n 1 -r
+    echo
+
+    case "$REPLY" in
+        1)
+            echo "desktop"
+            ;;
+        2)
+            echo "server"
+            ;;
+        *)
+            print_error "Invalid selection"
+            select_system_type
+            ;;
+    esac
+}
+
+# NixOS host selection menu for desktops
+select_desktop_host() {
+    print_info "Available desktop configurations:"
     echo "  1) tidus   - Dell Latitude 7420 laptop"
-    echo "  2) aerith  - Plex media server"
-    echo "  3) barrett - VPN torrent server"
-    echo "  4) Skip    - Don't switch configuration"
+    echo "  2) Skip    - Don't switch configuration"
     echo
-    
-    read -p "Select configuration (1-4): " -n 1 -r
+
+    read -p "Select configuration (1-2): " -n 1 -r
     echo
-    
+
     case "$REPLY" in
         1)
             echo "tidus"
             ;;
         2)
+            echo "skip"
+            ;;
+        *)
+            print_error "Invalid selection"
+            select_desktop_host
+            ;;
+    esac
+}
+
+# NixOS host selection menu for servers
+select_server_host() {
+    print_info "Available server configurations:"
+    echo "  1) aerith  - Plex media server"
+    echo "  2) barrett - VPN torrent server"
+    echo "  3) rinoa   - Docker server"
+    echo "  4) Skip    - Don't switch configuration"
+    echo
+
+    read -p "Select configuration (1-4): " -n 1 -r
+    echo
+
+    case "$REPLY" in
+        1)
             echo "aerith"
             ;;
-        3)
+        2)
             echo "barrett"
+            ;;
+        3)
+            echo "rinoa"
             ;;
         4)
             echo "skip"
             ;;
         *)
             print_error "Invalid selection"
-            select_nixos_host
+            select_server_host
             ;;
     esac
 }
@@ -251,20 +312,25 @@ setup_age_keys() {
 # Apply NixOS configuration
 apply_nixos_config() {
     local host=$1
-    
+    local is_install=${2:-false}
+
     print_info "Building and switching to NixOS configuration: $host"
-    
+
     # Enable flakes if not already enabled
     if ! grep -q "experimental-features.*flakes" /etc/nix/nix.conf 2>/dev/null; then
         echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.conf
     fi
-    
+
     # Setup age keys before applying config
     setup_age_keys
-    
+
     # Build and switch
-    sudo nixos-rebuild switch --flake ".#$host"
-    
+    if [[ "$is_install" == "true" ]]; then
+        nixos-install --flake ".#$host" --no-root-password
+    else
+        sudo nixos-rebuild switch --flake ".#$host"
+    fi
+
     print_success "NixOS configuration applied!"
 }
 
@@ -323,6 +389,156 @@ apply_home_config() {
     print_success "Home Manager configuration applied!"
 }
 
+# Partition and format disk for fresh install
+setup_disk() {
+    local disk=$1
+
+    print_warning "This will completely erase $disk"
+    lsblk "$disk" 2>/dev/null || { print_error "Disk $disk not found"; exit 1; }
+    read -p "Continue? (yes/no): " confirm
+    if [ "$confirm" != "yes" ]; then
+        echo "Aborted"
+        exit 1
+    fi
+
+    print_info "Partitioning disk..."
+
+    # Wipe disk
+    wipefs -af "$disk"
+    sgdisk -Z "$disk"
+
+    # Create partitions
+    parted "$disk" -- mklabel gpt
+    parted "$disk" -- mkpart ESP fat32 1MiB 512MiB
+    parted "$disk" -- set 1 esp on
+    parted "$disk" -- mkpart primary ext4 512MiB 100%
+
+    sleep 2
+
+    # Determine partition naming scheme
+    if [ -b "${disk}p1" ]; then
+        BOOT_PART="${disk}p1"
+        ROOT_PART="${disk}p2"
+    else
+        BOOT_PART="${disk}1"
+        ROOT_PART="${disk}2"
+    fi
+
+    print_info "Formatting partitions..."
+    mkfs.fat -F32 -n boot "$BOOT_PART"
+    mkfs.ext4 -L nixos "$ROOT_PART"
+
+    print_info "Mounting filesystems..."
+    mount "$ROOT_PART" /mnt
+    mkdir -p /mnt/boot
+    mount "$BOOT_PART" /mnt/boot
+
+    print_info "Generating hardware configuration..."
+    nixos-generate-config --root /mnt
+
+    # Clone repository to target location
+    print_info "Cloning dotfiles repository..."
+    mkdir -p /mnt/home/danny/git
+    git clone "$FLAKE_REPO" /mnt/home/danny/git/dotfiles-nix
+
+    # Create symlink at /etc/nixos for convenience
+    mkdir -p /mnt/etc/nixos
+    ln -sf /home/danny/git/dotfiles-nix /mnt/etc/nixos/dotfiles-nix
+
+    # Copy hardware configuration to host directory
+    if [[ -n "$ARG_HOSTNAME" ]]; then
+        mkdir -p "/mnt/etc/nixos/dotfiles-nix/hosts/nixos/$ARG_HOSTNAME"
+        cp /mnt/etc/nixos/hardware-configuration.nix "/mnt/etc/nixos/dotfiles-nix/hosts/nixos/$ARG_HOSTNAME/"
+    fi
+
+    print_success "Disk setup complete"
+}
+
+# NixOS fresh installation flow
+nixos_fresh_install() {
+    print_info "Starting NixOS fresh installation from LiveCD"
+
+    # Check if running as root
+    if [ "$EUID" -ne 0 ]; then
+        print_error "Fresh installation requires root. Use 'sudo -i' on LiveCD"
+        exit 1
+    fi
+
+    # Determine system type
+    system_type=$(select_system_type)
+
+    # Select host configuration based on type
+    local host
+    if [[ "$system_type" == "desktop" ]]; then
+        host=$(select_desktop_host)
+    else
+        host=$(select_server_host)
+    fi
+
+    if [[ "$host" == "skip" ]]; then
+        print_error "Host configuration required for installation"
+        exit 1
+    fi
+
+    # Get installation parameters
+    local disk=$(prompt_with_default "Enter target disk (e.g., /dev/sda, /dev/vda)" "/dev/sda")
+
+    # Setup disk
+    setup_disk "$disk"
+
+    # Change to repository directory
+    cd /mnt/home/danny/git/dotfiles-nix
+
+    # Update hardware configuration for the selected host
+    print_info "Updating hardware configuration for $host"
+    cp /mnt/etc/nixos/hardware-configuration.nix "hosts/nixos/$host/"
+
+    # Setup age keys
+    print_info "Setting up SOPS age keys..."
+    # Create age directory in mounted system
+    mkdir -p /mnt/var/lib/sops-nix
+
+    # Check for existing key or prompt for new one
+    if [[ -f "$HOME/.config/sops/age/keys.txt" ]]; then
+        print_info "Using existing age key"
+        cp "$HOME/.config/sops/age/keys.txt" /mnt/var/lib/sops-nix/key.txt
+        chmod 600 /mnt/var/lib/sops-nix/key.txt
+    else
+        print_info "Age key is required for accessing encrypted secrets (SOPS)"
+        echo "Enter your age private key (starts with AGE-SECRET-KEY):"
+        echo "(Press Enter to skip if you don't have one)"
+        read -r age_key
+        if [[ "$age_key" =~ ^AGE-SECRET-KEY ]]; then
+            echo "$age_key" > /mnt/var/lib/sops-nix/key.txt
+            chmod 600 /mnt/var/lib/sops-nix/key.txt
+            print_success "Age key saved"
+        else
+            print_warning "No age key provided, secrets won't work until configured"
+        fi
+    fi
+
+    # Install system
+    print_info "Installing NixOS with configuration: $host"
+    nixos-install --flake ".#$host" --no-root-password
+
+    print_success "Installation complete!"
+    echo
+    echo "Next steps:"
+    echo "1. Reboot: reboot"
+    echo "2. Set user password after reboot"
+    echo "3. Repository location: ~/git/dotfiles-nix"
+    echo "4. Rebuild command: sudo nixos-rebuild switch --flake ~/git/dotfiles-nix#$host"
+}
+
+# Prompt for input with default value
+prompt_with_default() {
+    local prompt="$1"
+    local default="$2"
+    local value
+    read -p "$prompt [$default]: " value
+    echo "${value:-$default}"
+}
+
 # Main installation flow
 main() {
     clear
@@ -330,22 +546,36 @@ main() {
     echo "   Nix Dotfiles Bootstrap Script"
     echo "======================================"
     echo
-    
+
     # Detect OS
     OS=$(detect_os)
     print_info "Detected OS: $OS"
-    
+
     case "$OS" in
         nixos)
-            print_info "Running on NixOS"
-            clone_flake
-            
-            # Ask if user wants to switch to a specific configuration
-            host=$(select_nixos_host)
-            if [[ "$host" != "skip" ]]; then
-                apply_nixos_config "$host"
+            # Check if running from LiveCD (fresh install)
+            if is_nixos_livecd; then
+                print_info "Detected NixOS LiveCD environment"
+                nixos_fresh_install
             else
-                print_info "Skipping NixOS configuration"
+                # Existing NixOS system
+                print_info "Running on existing NixOS system"
+                clone_flake
+
+                # Determine system type and select configuration
+                system_type=$(select_system_type)
+                local host
+                if [[ "$system_type" == "desktop" ]]; then
+                    host=$(select_desktop_host)
+                else
+                    host=$(select_server_host)
+                fi
+
+                if [[ "$host" != "skip" ]]; then
+                    apply_nixos_config "$host"
+                else
+                    print_info "Skipping NixOS configuration"
+                fi
             fi
             ;;
             

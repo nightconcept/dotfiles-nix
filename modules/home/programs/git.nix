@@ -103,11 +103,10 @@ in
 
         # Automatically rewrite HTTPS URLs to SSH for GitHub
         "url \"git@github.com:\"" = {
-          insteadOf = "https://github.com/";
-        };
-
-        "url \"git@github.com:\"" = {
-          insteadOf = "https://www.github.com/";
+          insteadOf = [
+            "https://github.com/"
+            "https://www.github.com/"
+          ];
         };
 
         "filter \"lfs\"" = {
