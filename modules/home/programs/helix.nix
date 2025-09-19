@@ -74,10 +74,10 @@ in
       
       languages = {
         language-server = {
-          # Nix
-          nil = {
-            command = "${pkgs.nil}/bin/nil";
-          };
+          # Nix (temporarily disabled due to compilation issues)
+          # nil = {
+          #   command = "${pkgs.nil}/bin/nil";
+          # };
           
           # Rust
           rust-analyzer = {
@@ -166,7 +166,7 @@ in
             formatter = {
               command = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
             };
-            language-servers = [ "nil" ];
+            # language-servers = [ "nil" ];  # Temporarily disabled
           }
           {
             name = "rust";
@@ -311,7 +311,7 @@ in
       # Extra packages for language servers and formatters
       extraPackages = with pkgs; [
         # Language servers
-        nil
+        # nil  # Temporarily disabled due to compilation issues
         rust-analyzer
         nodePackages.typescript-language-server
         nodePackages.typescript
