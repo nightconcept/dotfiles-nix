@@ -17,6 +17,8 @@ in
         lix-module.nixosModules.default
         {
           home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
             users.danny.home.stateVersion = "23.11";
             backupFileExtension = "backup";
             users.danny.imports = [
@@ -46,6 +48,8 @@ in
         disko.nixosModules.disko
         {
           home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
             users.danny.home.stateVersion = "23.11";
             users.danny.imports = [
               ../home
@@ -80,10 +84,12 @@ in
         {
           users.users.danny.home = "/Users/danny";
           home-manager = {
-            useGlobalPkgs = false;
+            useGlobalPkgs = true;
+            useUserPackages = true;
             backupFileExtension = "backup";
             users.danny.imports = [
               ../home
+              stylix.homeModules.stylix
               sops-nix.homeManagerModules.sops
             ];
             extraSpecialArgs = {inherit inputs; inherit hostname;};
@@ -107,10 +113,12 @@ in
         {
           users.users.danny.home = "/Users/danny";
           home-manager = {
-            useGlobalPkgs = false;
+            useGlobalPkgs = true;
+            useUserPackages = true;
             backupFileExtension = "backup";
             users.danny.imports = [
               ../home
+              stylix.homeModules.stylix
               sops-nix.homeManagerModules.sops
             ];
             extraSpecialArgs = {inherit inputs; inherit hostname;};
@@ -121,7 +129,10 @@ in
     
   mkHome = hostname:
     home-manager.lib.homeManagerConfiguration {
-      pkgs = import nixpkgs { system = "x86_64-linux"; };
+      pkgs = import nixpkgs { 
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      };
       modules = [ 
         ../home
         stylix.homeModules.stylix
