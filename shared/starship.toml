@@ -72,7 +72,7 @@ format = "[ $user]($style)"
 # Hostname - only show on SSH
 [hostname]
 ssh_only = true
-format = "[@$hostname](fg:#d7af00 bg:#444444 bold)"
+format = "[@$hostname ](fg:#d7af00 bg:#444444 bold)[](fg:#6c6c6c bg:#444444)"
 disabled = false
 
 # Directory with proper spacing and separator

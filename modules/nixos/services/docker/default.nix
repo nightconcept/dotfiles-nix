@@ -1,25 +1,35 @@
-# Docker container service module
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
-  cfg = config.modules.nixos.services.docker;
+  cfg = config.modules.nixos.docker;
 in
 {
-  options.modules.nixos.services.docker = {
-    enable = mkEnableOption "Docker container service";
+  options.modules.nixos.docker = {
+    enable = lib.mkEnableOption "Docker container runtime";
+
+    dockerComposeProjects = lib.mkOption {
+      type = lib.types.attrs;
+      default = {};
+      description = "Docker Compose projects to manage";
+    };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     virtualisation.docker = {
       enable = true;
-      rootless = {
+      enableOnBoot = true;
+      autoPrune = {
         enable = true;
-        setSocketVariable = true;
+        dates = "weekly";
+        flags = [ "--all" ];
       };
     };
 
     users.users.danny.extraGroups = [ "docker" ];
+
+    environment.systemPackages = with pkgs; [
+      docker-compose
+      lazydocker
+    ];
   };
 }

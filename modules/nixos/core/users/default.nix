@@ -27,6 +27,9 @@ in
       description = "Danny";
       extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" "video" "audio" ];
       shell = pkgs.fish;
+      openssh.authorizedKeys.keys = [
+        # Add any default public keys here if needed
+      ];
     };
 
     programs.fish.enable = true;
