@@ -469,31 +469,25 @@ setup_disk() {
     wipefs -af "$disk"
     sgdisk -Z "$disk"
 
-    # Create partitions
-    parted "$disk" -- mklabel gpt
-    parted "$disk" -- mkpart ESP fat32 1MiB 512MiB
-    parted "$disk" -- set 1 esp on
-    parted "$disk" -- mkpart primary ext4 512MiB 100%
+    # Create partitions for BIOS/MBR boot
+    parted "$disk" -- mklabel msdos
+    parted "$disk" -- mkpart primary ext4 1MiB 100%
+    parted "$disk" -- set 1 boot on
 
     sleep 2
 
     # Determine partition naming scheme
     if [ -b "${disk}p1" ]; then
-        BOOT_PART="${disk}p1"
-        ROOT_PART="${disk}p2"
+        ROOT_PART="${disk}p1"
     else
-        BOOT_PART="${disk}1"
-        ROOT_PART="${disk}2"
+        ROOT_PART="${disk}1"
     fi
 
-    print_info "Formatting partitions..."
-    mkfs.fat -F32 -n boot "$BOOT_PART"
+    print_info "Formatting partition..."
     mkfs.ext4 -L nixos "$ROOT_PART"
 
-    print_info "Mounting filesystems..."
+    print_info "Mounting filesystem..."
     mount "$ROOT_PART" /mnt
-    mkdir -p /mnt/boot
-    mount "$BOOT_PART" /mnt/boot
 
     print_info "Generating hardware configuration..."
     nixos-generate-config --root /mnt
@@ -559,16 +553,17 @@ nixos_fresh_install() {
     print_info "Updating hardware configuration for $host"
     cp /mnt/etc/nixos/hardware-configuration.nix "hosts/nixos/$host/"
 
-    # Setup age keys
+    # Setup age keys for user-level secrets
     print_info "Setting up SOPS age keys..."
-    # Create age directory in mounted system
-    mkdir -p /mnt/var/lib/sops-nix
+    # Create age directory in mounted system (user-level location)
+    mkdir -p /mnt/home/danny/.config/sops/age
 
     # Check for existing key or prompt for new one
     if [[ -f "$HOME/.config/sops/age/keys.txt" ]]; then
         print_info "Using existing age key"
-        cp "$HOME/.config/sops/age/keys.txt" /mnt/var/lib/sops-nix/key.txt
-        chmod 600 /mnt/var/lib/sops-nix/key.txt
+        cp "$HOME/.config/sops/age/keys.txt" /mnt/home/danny/.config/sops/age/keys.txt
+        chmod 600 /mnt/home/danny/.config/sops/age/keys.txt
+        chown 1000:100 /mnt/home/danny/.config/sops/age/keys.txt
     else
         print_info "Age key is required for accessing encrypted secrets (SOPS)"
         echo "Enter your age private key (starts with AGE-SECRET-KEY):"
@@ -580,41 +575,126 @@ nixos_fresh_install() {
             read -r age_key </dev/tty || age_key=""
         fi
         if [[ "$age_key" =~ ^AGE-SECRET-KEY ]]; then
-            echo "$age_key" > /mnt/var/lib/sops-nix/key.txt
-            chmod 600 /mnt/var/lib/sops-nix/key.txt
+            echo "$age_key" > /mnt/home/danny/.config/sops/age/keys.txt
+            chmod 600 /mnt/home/danny/.config/sops/age/keys.txt
+            chown 1000:100 /mnt/home/danny/.config/sops/age/keys.txt
             print_success "Age key saved"
         else
             print_warning "No age key provided, secrets won't work until configured"
         fi
     fi
 
+    # Optionally set a password for the user
+    print_info "User account setup"
+    echo "Set a password for user 'danny' now? (recommended for SSH access)"
+    echo "Press Enter to skip and set it after first boot"
+
+    local hashed_password=""
+    if [[ -r /dev/tty ]] && [[ -w /dev/tty ]]; then
+        read -s -p "Enter password (or press Enter to skip): " user_password </dev/tty
+        echo
+        if [[ -n "$user_password" ]]; then
+            # Hash the password using mkpasswd
+            if command -v mkpasswd &>/dev/null; then
+                hashed_password=$(mkpasswd -m sha-512 "$user_password")
+                print_success "Password set for user danny"
+            else
+                print_warning "mkpasswd not found, trying openssl"
+                # Fallback to openssl if available
+                if command -v openssl &>/dev/null; then
+                    local salt=$(openssl rand -base64 16 | tr -d '\n')
+                    hashed_password=$(openssl passwd -6 -salt "$salt" "$user_password")
+                    print_success "Password set for user danny"
+                else
+                    print_warning "Cannot hash password, will need to set after boot"
+                fi
+            fi
+        fi
+    fi
+
     # Create a minimal configuration that just boots
     print_info "Generating minimal bootable configuration..."
-    cat > /mnt/etc/nixos/configuration.nix <<'EOF'
+    if [[ -n "$hashed_password" ]]; then
+        cat > /mnt/etc/nixos/configuration.nix <<EOF
 { config, pkgs, ... }:
 {
   imports = [ ./hardware-configuration.nix ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader = {
+    systemd-boot.enable = false;
+    efi.canTouchEfiVariables = false;
+    grub = {
+      enable = true;
+      device = "DISK_PLACEHOLDER";  # Install GRUB to MBR
+    };
+  };
 
   networking.hostName = "HOSTNAME_PLACEHOLDER";
   networking.networkmanager.enable = true;
 
-  time.timeZone = "America/New_York";
+  time.timeZone = "America/Los_Angeles";
+
+  users.users.danny = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "networkmanager" ];
+    hashedPassword = "$hashed_password";
+  };
+
+  services.openssh = {
+    enable = true;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = true;
+    };
+  };
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  system.stateVersion = "24.11";
+}
+EOF
+    else
+        cat > /mnt/etc/nixos/configuration.nix <<'EOF'
+{ config, pkgs, ... }:
+{
+  imports = [ ./hardware-configuration.nix ];
+
+  boot.loader = {
+    systemd-boot.enable = false;
+    efi.canTouchEfiVariables = false;
+    grub = {
+      enable = true;
+      device = "DISK_PLACEHOLDER";  # Install GRUB to MBR
+    };
+  };
+
+  networking.hostName = "HOSTNAME_PLACEHOLDER";
+  networking.networkmanager.enable = true;
+
+  time.timeZone = "America/Los_Angeles";
 
   users.users.danny = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" ];
   };
 
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = true;
+    };
+  };
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   system.stateVersion = "24.11";
 }
 EOF
-    # Replace hostname placeholder
+    fi
+    # Replace placeholders
     sed -i "s/HOSTNAME_PLACEHOLDER/$host/g" /mnt/etc/nixos/configuration.nix
+    sed -i "s|DISK_PLACEHOLDER|$disk|g" /mnt/etc/nixos/configuration.nix
 
     # Install minimal system
     print_info "Installing minimal NixOS system..."
