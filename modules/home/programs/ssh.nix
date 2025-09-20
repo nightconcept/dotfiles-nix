@@ -17,9 +17,8 @@ in
   config = lib.mkIf config.modules.home.programs.ssh.enable {
     programs.ssh = {
       enable = true;
-      # enableDefaultConfig is only available in unstable home-manager
-      # For stable, we just use matchBlocks which achieves similar results
-
+      enableDefaultConfig = false;
+      
       matchBlocks = {
         "*" = {
           identityFile = "${config.home.homeDirectory}/.ssh/id_sdev";
