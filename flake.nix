@@ -10,6 +10,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    home-manager-stable = {
+      url = "github:nix-community/home-manager/release-25.05";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+    };
+
     nix-darwin = {
       url = "github:LnL7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -60,11 +65,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    astronvim = {
-      url = "github:sum-rock/SumAstroNvim/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     lazyvim-nixvim = {
       url = "github:azuwis/lazyvim-nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -76,6 +76,7 @@
     nixpkgs,
     nixpkgs-stable,
     home-manager,
+    home-manager-stable,
     ...
   } @ inputs: let
     lib = import ./lib/lib.nix { inherit inputs; };

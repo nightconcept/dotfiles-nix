@@ -7,6 +7,7 @@
     ./gaming.nix
     ./git.nix
     ./helix.nix
+    ./nvim
     ./shell
     ./spotify.nix
     ./ssh.nix
