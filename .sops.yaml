@@ -21,6 +21,12 @@ creation_rules:
       - *danny_personal
       - *tidus_host
       # Add other hosts here as you set them up
+
+  # NixOS module secrets (shared across all NixOS hosts)
+  - path_regex: modules/nixos/security/sops/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+    - age:
+      - *danny_personal
   
   # User home secrets (SSH keys, personal tokens)
   - path_regex: home/secrets/[^/]+\.(yaml|json|env|ini)$
