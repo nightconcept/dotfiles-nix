@@ -10,11 +10,7 @@
     ./hardware-configuration.nix
   ];
 
-  # Apply overlays
-  nixpkgs.overlays = [
-    (import ../../../overlays/unstable-packages.nix { inherit inputs; })
-    (import ../../../overlays/plex { inherit inputs; })
-  ];
+  # No overlays needed - everything is on unstable now
 
   # Networking
   modules.nixos.networking.base.hostName = "aerith";
