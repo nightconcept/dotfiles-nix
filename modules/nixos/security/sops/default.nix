@@ -19,7 +19,9 @@ in
     sops = {
       defaultSopsFile = ./common.yaml;
       defaultSopsFormat = "yaml";
-      age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+      # Use danny's personal SSH key for decryption
+      # This key needs to be manually placed on each host
+      age.sshKeyPaths = [ "/home/danny/.ssh/id_sdev" ];
 
       secrets = {
         "ssh_keys/id_sdev" = {
