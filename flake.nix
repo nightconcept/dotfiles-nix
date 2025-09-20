@@ -53,12 +53,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     
-    # Lix - A modern, delicious implementation of Nix  
-    lix-module = {
-      url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    
     # Vicinae - High-performance launcher for Linux
     vicinae = {
       url = "github:vicinaehq/vicinae";
