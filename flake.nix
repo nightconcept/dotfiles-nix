@@ -41,7 +41,11 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
+
+    impermanence = {
+      url = "github:nix-community/impermanence";
+    };
+
     # Vicinae - High-performance launcher for Linux
     vicinae = {
       url = "github:vicinaehq/vicinae";
@@ -92,6 +96,14 @@
       desktop = lib.mkHome "desktop";
       laptop = lib.mkHome "laptop";
       server = lib.mkHome "server";
+    };
+
+    # Custom installer ISO for tidus
+    nixosConfigurations.tidus-installer = inputs.nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./iso/tidus-installer.nix
+      ];
     };
   };
 }
