@@ -37,36 +37,6 @@ ip addr show
 # Note the IP address for SSH access
 ```
 
-Now you can SSH in from another machine:
-```bash
-ssh root@<server-ip>
-```
-
-### 4. Verify Network Connectivity
-
-```bash
-# Test network access
-ping -c 3 github.com
-
-# If network isn't working, configure it:
-# For DHCP (most common):
-dhcpcd
-
-# For static IP (if needed):
-# ip addr add <ip>/<subnet> dev <interface>
-# ip route add default via <gateway>
-# echo "nameserver 8.8.8.8" > /etc/resolv.conf
-```
-
-### 5. Install Essential Tools
-
-The minimal ISO needs git and curl for the bootstrap process:
-
-```bash
-# Install required tools
-nix-env -iA nixos.git nixos.curl
-```
-
 ### 6. Run Bootstrap Script
 
 Now run the bootstrap script which will handle disk partitioning and NixOS installation:
@@ -74,11 +44,6 @@ Now run the bootstrap script which will handle disk partitioning and NixOS insta
 ```bash
 # Download and run bootstrap
 curl -sSL https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh | bash
-```
-
-Or if you prefer wget:
-```bash
-wget -qO- https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh | bash
 ```
 
 ### 7. Bootstrap Process
