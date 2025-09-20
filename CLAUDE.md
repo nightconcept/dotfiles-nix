@@ -2,21 +2,22 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## ⚠️ ARCHITECTURAL MIGRATION IN PROGRESS
+## Architecture
 
-**IMPORTANT**: This codebase is actively migrating from a systems-based to a module-based architecture. See `/docs/architecture.md` for the desired end state. You will encounter both patterns during the transition.
-
-### Migration Guidelines
-- **NEW CODE**: Always use the module-based pattern (`modules.nixos.*`)
-- **EXISTING CODE**: Migrate to modules when making significant changes  
-- **HOSTS**: New hosts should follow the barrett/aerith pattern (module-based)
+This codebase uses a module-based architecture for NixOS, Darwin, and Home Manager configurations. The module system provides composable, reusable configuration units.
 
 ## Project Overview
 
 This is a Nix flake configuration for personal dotfiles supporting multiple platforms:
 - **NixOS**: Full system configurations for Linux desktops and servers
-- **nix-darwin**: macOS system configurations  
+- **nix-darwin**: macOS system configurations
 - **home-manager**: User-level configurations for any system
+
+### Nixpkgs Strategy
+- **Servers** (aerith, barrett, rinoa, vincent): Use `nixpkgs-stable` (25.05) for reliability
+- **Desktop/Laptop** (tidus): Use `nixpkgs` (unstable) for latest features
+- **Darwin** (waver, merlin): Use `nixpkgs` (unstable) for latest features
+- **Overlays**: Selective unstable packages on stable systems via `/overlays/`
 
 ## Common Commands
 
@@ -64,10 +65,18 @@ nix flake show
 ## Architecture
 
 ### Directory Structure
-**NOTE**: The codebase contains both OLD STYLE (systems-based) and NEW STYLE (module-based) patterns during migration.
 
 - `/flake.nix` - Main flake configuration defining all system outputs
 - `/lib/lib.nix` - Helper functions (mkNixos, mkDarwin, mkHome, etc.)
+- `/modules/` - Reusable configuration modules
+  - `nixos/` - NixOS system modules
+  - `darwin/` - macOS system modules
+  - `home/` - Home Manager modules
+  - `shared/` - Cross-platform modules
+- `/overlays/` - Nixpkgs overlays
+  - `unstable-packages.nix` - Exposes `pkgs.unstable.*` namespace
+  - `plex/` - Plex uses unstable version
+  - Additional service-specific overlays as needed
 - `/home/` - Home Manager user configurations
   - `default.nix` - Profile selector based on hostname
   - `profiles/` - Composable configuration profiles
@@ -119,8 +128,8 @@ The home configuration uses a profile-based system where `home/default.nix` sele
 - **desktop/laptop/server**: Generic standalone profiles
 
 ### Key Components
-- **Modules**: NEW STYLE self-contained feature modules in `/modules/{nixos,darwin,home,shared}/`
-
+- **Modules**: Self-contained feature modules in `/modules/{nixos,darwin,home,shared}/`
+- **Overlays**: Package overrides in `/overlays/` for selective unstable packages
 - **Systems**: Base platform configurations in `/systems/{nixos,darwin}/`
 - **Hosts**: Individual machine configs in `/hosts/{nixos,darwin}/<hostname>/`
 - **Programs**: User application configs in `/home/programs/`
@@ -130,12 +139,37 @@ The home configuration uses a profile-based system where `home/default.nix` sele
 - **Wallpapers**: Wallpaper images in `/wallpaper/`
 - **Secrets**: SOPS-managed secrets in `*/secrets/`
 
+### Overlays and Package Management
+
+#### Overlay Strategy
+Servers run on stable nixpkgs but can selectively use unstable packages via overlays:
+
+1. **Base Overlay** (`/overlays/unstable-packages.nix`):
+   - Provides `pkgs.unstable.*` namespace
+   - Imported by all stable servers
+
+2. **Service Overlays** (e.g., `/overlays/plex/default.nix`):
+   - Override specific packages to use unstable
+   - Imported only by hosts that need them
+
+#### Module Package Options
+Modules can expose package options for flexibility:
+```nix
+options.modules.nixos.services.plex = {
+  package = mkOpt lib.types.package pkgs.plex "The plex package to use";
+};
+```
+
+This allows hosts to override package choices without modifying the module.
+
 ### Host Configurations
 
 #### Active NixOS Hosts
-- `aerith` - Plex media server (NEW STYLE - module-based)
-- `barrett` - VPN torrent server (NEW STYLE - module-based)
-- `tidus` - Dell Latitude 7420 laptop with Hyprland (OLD STYLE - to be migrated)
+- `aerith` - Plex media server (stable + unstable plex overlay)
+- `barrett` - VPN torrent server (stable)
+- `rinoa` - General purpose server (stable)
+- `vincent` - CI/CD runner host with Docker (stable)
+- `tidus` - Dell Latitude 7420 laptop with Hyprland (unstable)
 
 #### Active Darwin Hosts  
 - `waver` - MacBook Pro M1

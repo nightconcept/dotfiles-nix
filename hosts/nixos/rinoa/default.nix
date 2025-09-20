@@ -10,6 +10,11 @@
     ./hardware-configuration.nix
   ];
 
+  # Apply shared overlays
+  nixpkgs.overlays = [
+    (import ../../../overlays/unstable-packages.nix { inherit inputs; })
+  ];
+
   # Networking
   modules.nixos.networking.base.hostName = "rinoa";
 

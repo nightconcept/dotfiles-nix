@@ -5,9 +5,9 @@
   ...
 }:
 let
-  inherit (lib) mkIf mkMerge;
+  inherit (lib) mkIf;
   cfg = config.modules.nixos.services.plex;
-  
+
   # Import our custom lib functions
   moduleLib = import ../../../../lib/module { inherit lib; };
   inherit (moduleLib) mkBoolOpt mkOpt enabled disabled;
@@ -15,11 +15,13 @@ in
 {
   options.modules.nixos.services.plex = {
     enable = mkBoolOpt false "Enable Plex Media Server";
-    
+
+    package = mkOpt lib.types.package pkgs.plex "The plex package to use";
+
     user = mkOpt lib.types.str "danny" "User to run Plex service as";
-    
+
     openFirewall = mkBoolOpt true "Open firewall ports for Plex";
-    
+
     ports = mkOpt (lib.types.listOf lib.types.port) [
       32400  # Plex Media Server
       1900   # UPnP/DLNA
@@ -36,6 +38,7 @@ in
   config = mkIf cfg.enable {
     services.plex = {
       enable = true;
+      package = cfg.package;
       openFirewall = cfg.openFirewall;
       user = cfg.user;
     };

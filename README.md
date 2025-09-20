@@ -26,6 +26,9 @@ NixOS, macOS, and Linux system configurations managed by [Nix](https://nixos.org
 |------|------|----------|---------|
 | `tidus` | NixOS | Dell Latitude 7420 | Linux Laptop with Hyprland DE |
 | `aerith` | NixOS | VM | Plex media server |
+| `barrett` | NixOS | VM | VPN torrent server |
+| `rinoa` | NixOS | VM | General purpose server |
+| `vincent` | NixOS | VM | CI/CD runner host |
 | `waver` | Darwin | MacBook Pro M1 | macOS Laptop with Aerospace DE |
 | `merlin` | Darwin | Mac Mini M1 | macOS Desktop HTPC |
 
@@ -42,6 +45,8 @@ NixOS, macOS, and Linux system configurations managed by [Nix](https://nixos.org
 # Universal bootstrap
 wget -qO- https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh | bash
 ```
+
+For fresh NixOS server installations, see the [Server Setup Runbook](docs/server-setup-runbook.md) which covers pre-bootstrap steps like enabling SSH and setting up networking.
 
 ## Manual Usage
 

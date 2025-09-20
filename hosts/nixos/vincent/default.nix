@@ -11,6 +11,11 @@
     ./hardware-configuration.nix
   ];
 
+  # Apply shared overlays
+  nixpkgs.overlays = [
+    (import ../../../overlays/unstable-packages.nix { inherit inputs; })
+  ];
+
   # Networking
   modules.nixos.networking.base.hostName = "vincent";
 
@@ -29,8 +34,6 @@
   # System packages for server management
   environment.systemPackages = with pkgs; [
     home-manager
-    docker-compose
-    lazydocker  # TUI for docker management
   ];
 
   # Enable Docker module and containers

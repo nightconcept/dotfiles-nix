@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -58,6 +59,7 @@
   outputs = {
     self,
     nixpkgs,
+    nixpkgs-stable,
     home-manager,
     ...
   } @ inputs: let
@@ -66,10 +68,10 @@
   in {
     nixosConfigurations = {
       tidus = lib.mkNixos inputs.nixpkgs "tidus";
-      aerith = lib.mkNixosServer inputs.nixpkgs "aerith";
-      barrett = lib.mkNixosServer inputs.nixpkgs "barrett";
-      rinoa = lib.mkNixosServer inputs.nixpkgs "rinoa";
-      vincent = lib.mkNixosServer inputs.nixpkgs "vincent";
+      aerith = lib.mkNixosServer inputs.nixpkgs-stable "aerith";
+      barrett = lib.mkNixosServer inputs.nixpkgs-stable "barrett";
+      rinoa = lib.mkNixosServer inputs.nixpkgs-stable "rinoa";
+      vincent = lib.mkNixosServer inputs.nixpkgs-stable "vincent";
     };
 
     darwinConfigurations = {
