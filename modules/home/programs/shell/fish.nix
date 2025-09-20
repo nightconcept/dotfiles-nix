@@ -105,6 +105,9 @@ in
           if test -d "/etc/profiles/per-user/danny/bin"
               fish_add_path --prepend /etc/profiles/per-user/danny/bin
           end
+          if test -d "/run/current-system/sw/bin"
+              fish_add_path --prepend /run/current-system/sw/bin
+          end
         '' else ''
           if test -d "/home/danny/.nix-profile/bin"
               fish_add_path --prepend /home/danny/.nix-profile/bin
@@ -191,7 +194,7 @@ in
             else if contains $host $darwin_configs
                 echo "Found Darwin configuration for $host"
                 set config_type "darwinConfigurations"
-                set rebuild_cmd "sudo darwin-rebuild switch"
+                set rebuild_cmd "sudo /run/current-system/sw/bin/darwin-rebuild switch"
             else if contains $host $home_configs
                 echo "Found Home Manager configuration for $host"
                 set config_type "homeConfigurations"
