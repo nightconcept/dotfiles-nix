@@ -1,4 +1,4 @@
-# Tidus - NixOS with Impermanence
+# Tidus-Persist - NixOS with Impermanence
 
 This configuration sets up NixOS with impermanence using BTRFS, LUKS encryption, and disko for declarative partitioning.
 
@@ -16,18 +16,18 @@ This configuration sets up NixOS with impermanence using BTRFS, LUKS encryption,
 
 1. Build the custom installer ISO:
 ```bash
-nix build .#nixosConfigurations.tidus-installer.config.system.build.isoImage
+nix build .#nixosConfigurations.tidus-persist-installer.config.system.build.isoImage
 # ISO will be in ./result/iso/
 ```
 
 2. Write ISO to USB drive:
 ```bash
-sudo dd if=./result/iso/tidus-nixos-installer.iso of=/dev/sdX bs=4M status=progress
+sudo dd if=./result/iso/tidus-persist-nixos-installer.iso of=/dev/sdX bs=4M status=progress
 ```
 
 3. Boot from USB and run:
 ```bash
-install-tidus
+install-tidus-persist
 ```
 
 ### Manual Installation
@@ -37,13 +37,13 @@ install-tidus
 ```bash
 nix run github:nix-community/disko/latest -- \
   --mode destroy,format,mount \
-  --flake github:nightconcept/dotfiles-nix#tidus \
+  --flake github:nightconcept/dotfiles-nix#tidus-persist \
   --arg device '"/dev/nvme0n1"'
 ```
 
 3. Install NixOS:
 ```bash
-nixos-install --flake github:nightconcept/dotfiles-nix#tidus
+nixos-install --flake github:nightconcept/dotfiles-nix#tidus-persist
 ```
 
 ## Post-Installation
@@ -63,10 +63,10 @@ Check what needs to be persisted:
 find / -xdev -type f -o -type d | grep -v -E "^/(nix|persist|home|boot)"
 
 # Check persist usage
-tidus-persist-check
+tidus-persist-persist-check
 ```
 
-Add needed paths to `/hosts/nixos/tidus/impermanence.nix`.
+Add needed paths to `/hosts/nixos/tidus-persist/impermanence.nix`.
 
 ### Recovery Options
 
@@ -81,13 +81,13 @@ touch /persist-once
 #### Recovery Tools
 ```bash
 # Interactive recovery menu
-tidus-recovery
+tidus-persist-recovery
 
 # Check persist usage and compression
-tidus-persist-check
+tidus-persist-persist-check
 
 # Backup critical data
-tidus-backup
+tidus-persist-backup
 ```
 
 #### Emergency Recovery

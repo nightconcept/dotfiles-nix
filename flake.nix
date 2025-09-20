@@ -80,6 +80,7 @@
   in {
     nixosConfigurations = {
       tidus = lib.mkNixos inputs.nixpkgs "tidus";
+      tidus-persist = lib.mkNixos inputs.nixpkgs "tidus-persist";
       aerith = lib.mkNixosServer inputs.nixpkgs "aerith";
       barrett = lib.mkNixosServer inputs.nixpkgs "barrett";
       rinoa = lib.mkNixosServer inputs.nixpkgs "rinoa";
@@ -98,11 +99,11 @@
       server = lib.mkHome "server";
     };
 
-    # Custom installer ISO for tidus
-    nixosConfigurations.tidus-installer = inputs.nixpkgs.lib.nixosSystem {
+    # Custom installer ISO for tidus-persist
+    nixosConfigurations.tidus-persist-installer = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        ./iso/tidus-installer.nix
+        ./iso/tidus-persist-installer.nix
       ];
     };
   };
