@@ -49,9 +49,7 @@ in
           gm = "${pkgs.git}/bin/git merge";
           gdev = "${pkgs.git}/bin/git checkout main && ${pkgs.git}/bin/git fetch origin --prune && ${pkgs.git}/bin/git reset --hard origin/main && ${pkgs.git}/bin/git branch dev && ${pkgs.git}/bin/git checkout dev && ${pkgs.git}/bin/git reset --hard main && ${pkgs.git}/bin/git push origin dev --force";
 
-          # Neovim aliases
-          vi = "${pkgs.neovim}/bin/nvim";
-          vim = "${pkgs.neovim}/bin/nvim";
+          # Editor alias
           e = "$EDITOR";
 
           # General aliases
