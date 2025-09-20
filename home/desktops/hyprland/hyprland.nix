@@ -179,16 +179,15 @@
 
       # Gestures configuration
       gestures = {
-        workspace_swipe = true;
-        workspace_swipe_fingers = 3;
-        workspace_swipe_distance = 300;
-        workspace_swipe_invert = true;
-        workspace_swipe_min_speed_to_force = 30;
-        workspace_swipe_cancel_ratio = 0.5;
-        workspace_swipe_create_new = true;
-        workspace_swipe_direction_lock = true;
-        workspace_swipe_direction_lock_threshold = 10;
-        workspace_swipe_forever = false;
+        # New gesture syntax for Hyprland 0.51+
+        # Format: gesture = fingers, direction, action, options
+        # 3-finger horizontal swipe for workspace switching
+        gesture = [
+          "3, l, workspace, +1"  # 3-finger swipe left to next workspace
+          "3, r, workspace, -1"  # 3-finger swipe right to previous workspace
+          "3, u, workspace, special"  # 3-finger swipe up for special workspace
+          "3, d, workspace, special"  # 3-finger swipe down for special workspace
+        ];
       };
 
       # Autostart applications
