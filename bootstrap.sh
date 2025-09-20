@@ -715,9 +715,18 @@ EOF
     print_success "Installation complete!"
     echo
     echo "Next steps:"
-    echo "1. Reboot: reboot"
-    echo "2. Log in as danny and set password: passwd"
-    echo "3. Apply full configuration: ~/apply-full-config.sh"
+    echo "1. Reboot into your new system: reboot"
+    if [[ -z "$hashed_password" ]]; then
+        echo "2. Log in as 'danny' (no password required)"
+        echo "3. Set your password immediately: passwd"
+        echo "4. Apply the full configuration: ~/apply-full-config.sh"
+    else
+        echo "2. Log in as 'danny' with the password you set"
+        echo "3. Apply the full configuration: ~/apply-full-config.sh"
+    fi
+    echo
+    echo "The system is now running a minimal NixOS installation with SSH enabled."
+    echo "The full flake configuration will be applied after reboot."
 }
 
 # Prompt for input with default value
@@ -841,21 +850,9 @@ main() {
             ;;
     esac
     
+    # Installation is handled above in nixos_fresh_install for NixOS
+    # This section is only reached for non-NixOS systems
     print_success "Bootstrap complete!"
-    print_info "Please restart your shell or log out and back in to ensure all changes take effect."
-    
-    # Provide next steps
-    echo
-    echo "Next steps:"
-    echo "  - Review the configuration in $FLAKE_DIR"
-    echo "  - Make any necessary adjustments for your system"
-    echo "  - Commit your changes if you've made modifications"
-    
-    if [[ "$OS" == "nixos" ]]; then
-        echo "  - Run 'nixos-rebuild switch --flake $FLAKE_DIR#<host>' to apply changes"
-    else
-        echo "  - Run 'home-manager switch --flake $FLAKE_DIR#<profile>' to apply changes"
-    fi
 }
 
 # Run main function
