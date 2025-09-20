@@ -9,7 +9,7 @@ in
 {
   options.modules.darwin.core = {
     enable = mkEnableOption "core Darwin configuration";
-    
+
     user = mkOption {
       type = types.str;
       default = "danny";
@@ -77,5 +77,7 @@ in
       nerd-fonts.fira-code
       nerd-fonts.fira-mono
     ];
+
+    ids.gids.nixbld = 350;
   };
 }
