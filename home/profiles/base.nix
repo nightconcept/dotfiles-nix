@@ -12,6 +12,10 @@
       direnv.enable = true;
       git.enable = true;
       helix.enable = true;
+      nvim = {
+        enable = true;
+        distro = "nvchad";
+      };
       ssh.enable = true;
     };
     secrets = {

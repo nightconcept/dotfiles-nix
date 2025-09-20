@@ -7,6 +7,9 @@
 #   curl -sSL https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh | bash
 #   wget -qO- https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh | bash
 #
+#   # Force fresh installation mode (useful when auto-detection fails)
+#   curl -sSL https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh | bash -s -- --install
+#
 # Supports:
 #   - NixOS fresh installation (auto-detected from LiveCD)
 #   - NixOS existing system (configuration switching)
@@ -56,13 +59,22 @@ detect_os() {
     fi
 }
 
-# Check if running from NixOS LiveCD
+# Check if running from NixOS LiveCD/Installer
 is_nixos_livecd() {
     if [[ -f /etc/os-release ]]; then
         . /etc/os-release
-        # NixOS LiveCD typically runs from tmpfs and has no /etc/nixos
-        if [[ "$ID" == "nixos" ]] && [[ ! -d /etc/nixos ]] && mountpoint -q /; then
-            return 0
+        if [[ "$ID" == "nixos" ]]; then
+            # Check multiple indicators of installer environment:
+            # 1. No existing nixos-rebuild command (fresh install)
+            # 2. Root filesystem is tmpfs (common for live systems)
+            # 3. nixos user exists (typical installer user)
+            # 4. No /mnt/etc/nixos/configuration.nix (not installed yet)
+            if { ! command -v nixos-rebuild &>/dev/null; } || \
+               { mountpoint -q / && findmnt -n -o FSTYPE / | grep -q tmpfs; } || \
+               { id nixos &>/dev/null; } || \
+               { [[ ! -f /etc/nixos/configuration.nix ]] && [[ ! -L /etc/nixos/configuration.nix ]]; }; then
+                return 0
+            fi
         fi
     fi
     return 1
@@ -541,6 +553,27 @@ prompt_with_default() {
 
 # Main installation flow
 main() {
+    # Parse command-line arguments
+    local force_install=false
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --install|--fresh-install)
+                force_install=true
+                shift
+                ;;
+            --help|-h)
+                echo "Usage: $0 [OPTIONS]"
+                echo "Options:"
+                echo "  --install, --fresh-install  Force fresh installation mode"
+                echo "  --help, -h                  Show this help message"
+                exit 0
+                ;;
+            *)
+                shift
+                ;;
+        esac
+    done
+
     clear
     echo "======================================"
     echo "   Nix Dotfiles Bootstrap Script"
@@ -553,9 +586,13 @@ main() {
 
     case "$OS" in
         nixos)
-            # Check if running from LiveCD (fresh install)
-            if is_nixos_livecd; then
-                print_info "Detected NixOS LiveCD environment"
+            # Check if running from LiveCD (fresh install) or forced install mode
+            if is_nixos_livecd || [[ "$force_install" == "true" ]]; then
+                if [[ "$force_install" == "true" ]]; then
+                    print_info "Fresh installation mode (forced)"
+                else
+                    print_info "Detected NixOS installer environment"
+                fi
                 nixos_fresh_install
             else
                 # Existing NixOS system

@@ -54,6 +54,21 @@
       url = "github:vicinaehq/vicinae";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nvchad = {
+      url = "github:nix-community/nix4nvchad";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    astronvim = {
+      url = "github:sum-rock/SumAstroNvim/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    lazyvim-nixvim = {
+      url = "github:azuwis/lazyvim-nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
