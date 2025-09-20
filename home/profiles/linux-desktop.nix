@@ -11,6 +11,7 @@
   ];
 
   modules.home.programs = {
+    firefox.enable = true;
     spotify.enable = true;
     wezterm.configOnly = true;
     xdg.enable = true;

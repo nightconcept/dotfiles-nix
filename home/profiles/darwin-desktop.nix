@@ -10,10 +10,13 @@
     ../../modules/home
   ];
 
-  modules.home.programs.shell = {
-    fish.enable = true;
-    starship.enable = true;
-    zoxide.enable = true;
+  modules.home.programs = {
+    firefox.enable = true;
+    shell = {
+      fish.enable = true;
+      starship.enable = true;
+      zoxide.enable = true;
+    };
   };
 
 
