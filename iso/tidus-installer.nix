@@ -6,7 +6,7 @@
   ];
 
   # ISO naming
-  isoImage.isoName = lib.mkForce "tidus-nixos-installer.iso";
+  image.fileName = lib.mkForce "tidus-nixos-installer.iso";
   isoImage.volumeID = lib.mkForce "TIDUS_NIXOS";
   isoImage.makeEfiBootable = true;
   isoImage.makeUsbBootable = true;
