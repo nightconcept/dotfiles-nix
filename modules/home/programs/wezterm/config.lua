@@ -52,8 +52,11 @@ if wezterm.target_triple == 'x86_64-pc-windows-msvc' or wezterm.target_triple ==
     { key = 'Enter', mods = 'CMD', action = act.ToggleFullScreen },
     
     -- Tab navigation
-    { key = 'LeftArrow', mods = 'CMD', action = act.ActivateTabRelative(-1) },
-    { key = 'RightArrow', mods = 'CMD', action = act.ActivateTabRelative(1) },
+    { key = 'LeftArrow', mods = 'CMD|SHIFT', action = act.ActivateTabRelative(-1) },
+    { key = 'RightArrow', mods = 'CMD|SHIFT', action = act.ActivateTabRelative(1) },
+    -- Alternative tab navigation (common patterns)
+    { key = '{', mods = 'CMD|SHIFT', action = act.ActivateTabRelative(-1) },
+    { key = '}', mods = 'CMD|SHIFT', action = act.ActivateTabRelative(1) },
     
     -- Don't bind Cmd+1-9 (let Aerospace handle workspace switching)
     -- Don't bind Ctrl+t (let Zellij handle multiplexing)

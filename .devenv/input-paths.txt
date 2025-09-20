@@ -1,0 +1,7 @@
+/Users/danny/Documents/GitHub/dotfiles-nix/.devenv/flake.json
+/Users/danny/Documents/GitHub/dotfiles-nix/.devenv.flake.nix
+/Users/danny/Documents/GitHub/dotfiles-nix/.env
+/Users/danny/Documents/GitHub/dotfiles-nix/devenv.local.nix
+/Users/danny/Documents/GitHub/dotfiles-nix/devenv.lock
+/Users/danny/Documents/GitHub/dotfiles-nix/devenv.nix
+/Users/danny/Documents/GitHub/dotfiles-nix/devenv.yaml
