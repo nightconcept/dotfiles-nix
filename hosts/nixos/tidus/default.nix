@@ -40,10 +40,5 @@
     # Programs
     modules.nixos.programs.nomachine.enable = true;
 
-    # Install Firefox at system level for tidus only
-    environment.systemPackages = with pkgs; [
-      firefox
-    ];
-
     system.stateVersion = "23.11";
 }

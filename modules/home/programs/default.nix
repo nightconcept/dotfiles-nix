@@ -4,6 +4,7 @@
     ./alacritty.nix
     ./common.nix
     ./direnv.nix
+    ./firefox.nix
     ./gaming.nix
     ./git.nix
     ./helix.nix

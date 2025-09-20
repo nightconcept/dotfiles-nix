@@ -12,6 +12,7 @@
   ];
 
   modules.home.programs = {
+    firefox.enable = true;
     gaming.enable = true;
     spotify.enable = true;
     wezterm.enable = true;
