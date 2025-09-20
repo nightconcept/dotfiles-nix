@@ -88,25 +88,33 @@ in
         set -gx LANG en_US.UTF-8
         set -gx VISUAL nvim
         set -gx GPG_TTY (tty)
-        set -gx XDG_DATA_DIRS /home/danny/.nix-profile/share $XDG_DATA_DIRS
+        ${if pkgs.stdenv.isDarwin then ''
+          set -gx XDG_DATA_DIRS /Users/danny/.nix-profile/share $XDG_DATA_DIRS
+        '' else ''
+          set -gx XDG_DATA_DIRS /home/danny/.nix-profile/share $XDG_DATA_DIRS
+        ''}
 
         # Ensure Nix is in PATH
         if test -d "/nix/var/nix/profiles/default/bin"
             fish_add_path --prepend /nix/var/nix/profiles/default/bin
         end
-        if test -d "/home/danny/.nix-profile/bin"
-            fish_add_path --prepend /home/danny/.nix-profile/bin
-        end
+        ${if pkgs.stdenv.isDarwin then ''
+          if test -d "/Users/danny/.nix-profile/bin"
+              fish_add_path --prepend /Users/danny/.nix-profile/bin
+          end
+          if test -d "/etc/profiles/per-user/danny/bin"
+              fish_add_path --prepend /etc/profiles/per-user/danny/bin
+          end
+        '' else ''
+          if test -d "/home/danny/.nix-profile/bin"
+              fish_add_path --prepend /home/danny/.nix-profile/bin
+          end
+        ''}
 
         # Load API keys from sops if available
         if test -r "$XDG_RUNTIME_DIR/secrets/gemini_api_key"
             set -gx GEMINI_API_KEY (cat "$XDG_RUNTIME_DIR/secrets/gemini_api_key")
         end
-
-        # Shell integrations
-        starship init fish | source
-        zoxide init fish | source
-        any-nix-shell fish --info-right | source
 
         # Conditional brew setup
         if test -d "/home/linuxbrew/"
