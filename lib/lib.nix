@@ -1,7 +1,7 @@
 { inputs }:
 
 let
-  inherit (inputs) nixpkgs home-manager home-manager-stable nix-darwin vscode-server stylix stylix-stable spicetify-nix sops-nix vicinae disko;
+  inherit (inputs) nixpkgs home-manager nix-darwin vscode-server stylix spicetify-nix sops-nix vicinae disko;
 in
 {
   mkNixos = pkgs: hostname:
@@ -40,7 +40,8 @@ in
       modules = [
         ../modules/nixos
         ../hosts/nixos/${hostname}
-        home-manager-stable.nixosModules.home-manager
+        home-manager.nixosModules.home-manager
+        stylix.nixosModules.stylix
         sops-nix.nixosModules.sops
         disko.nixosModules.disko
         {
@@ -51,6 +52,7 @@ in
             backupFileExtension = "backup";
             users.danny.imports = [
               ../home
+              stylix.homeModules.stylix
               sops-nix.homeManagerModules.sops
             ];
             extraSpecialArgs = {inherit inputs; inherit hostname;};

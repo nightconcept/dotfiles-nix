@@ -3,16 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
 
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    home-manager-stable = {
-      url = "github:nix-community/home-manager/release-25.05";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
     nix-darwin = {
@@ -27,11 +21,6 @@
     stylix = {
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    stylix-stable = {
-      url = "github:danth/stylix";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
     spicetify-nix = {
@@ -73,9 +62,7 @@
   outputs = {
     self,
     nixpkgs,
-    nixpkgs-stable,
     home-manager,
-    home-manager-stable,
     ...
   } @ inputs: let
     lib = import ./lib/lib.nix { inherit inputs; };
@@ -83,10 +70,10 @@
   in {
     nixosConfigurations = {
       tidus = lib.mkNixos inputs.nixpkgs "tidus";
-      aerith = lib.mkNixosServer inputs.nixpkgs-stable "aerith";
-      barrett = lib.mkNixosServer inputs.nixpkgs-stable "barrett";
-      rinoa = lib.mkNixosServer inputs.nixpkgs-stable "rinoa";
-      vincent = lib.mkNixosServer inputs.nixpkgs-stable "vincent";
+      aerith = lib.mkNixosServer inputs.nixpkgs "aerith";
+      barrett = lib.mkNixosServer inputs.nixpkgs "barrett";
+      rinoa = lib.mkNixosServer inputs.nixpkgs "rinoa";
+      vincent = lib.mkNixosServer inputs.nixpkgs "vincent";
     };
 
     darwinConfigurations = {

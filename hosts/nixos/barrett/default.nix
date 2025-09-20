@@ -10,10 +10,7 @@
     ./hardware-configuration.nix
   ];
 
-  # Apply shared overlays
-  nixpkgs.overlays = [
-    (import ../../../overlays/unstable-packages.nix { inherit inputs; })
-  ];
+  # No overlays needed - everything is on unstable now
 
   # Networking
   modules.nixos.networking.base.hostName = "barrett";
