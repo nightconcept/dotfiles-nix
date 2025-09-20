@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Build script for tidus installer ISO
+# Build script for tidus-persist installer ISO
 
 set -e
 
 echo "======================================="
-echo "Building Tidus NixOS Installer ISO"
+echo "Building Tidus-Persist NixOS Installer ISO"
 echo "======================================="
 echo
 
@@ -44,7 +44,7 @@ echo "Building ISO image..."
 echo "This may take 10-20 minutes on first build..."
 echo
 
-if nix build .#nixosConfigurations.tidus-installer.config.system.build.isoImage; then
+if nix build .#nixosConfigurations.tidus-persist-installer.config.system.build.isoImage; then
     echo
     echo -e "${GREEN}✓ Build successful!${NC}"
     echo
@@ -61,7 +61,7 @@ if nix build .#nixosConfigurations.tidus-installer.config.system.build.isoImage;
         echo "  sudo dd if=$ISO_PATH of=/dev/sdX bs=4M status=progress"
         echo
         echo "Or copy to a permanent location:"
-        echo "  cp $ISO_PATH ~/tidus-installer-$(date +%Y%m%d).iso"
+        echo "  cp $ISO_PATH ~/tidus-persist-installer-$(date +%Y%m%d).iso"
     else
         echo -e "${YELLOW}Warning: ISO built but not found in expected location${NC}"
         echo "Check ./result/ directory"
@@ -70,6 +70,6 @@ else
     echo
     echo -e "${RED}✗ Build failed!${NC}"
     echo "Try running with --show-trace for more details:"
-    echo "  nix build .#nixosConfigurations.tidus-installer.config.system.build.isoImage --show-trace"
+    echo "  nix build .#nixosConfigurations.tidus-persist-installer.config.system.build.isoImage --show-trace"
     exit 1
 fi

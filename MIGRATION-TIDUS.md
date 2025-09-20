@@ -1,6 +1,8 @@
-# Migrating Tidus to Impermanence
+# Migrating Tidus to Tidus-Persist (Impermanence)
 
-This guide covers migrating your existing Tidus system to the new impermanence setup with BTRFS and LUKS encryption.
+This guide covers migrating your existing Tidus system to the new tidus-persist configuration with impermanence, BTRFS, and LUKS encryption.
+
+**Note:** The original `tidus` configuration remains unchanged and can still be used for normal installs without impermanence.
 
 ## ⚠️ WARNING
 
@@ -74,7 +76,7 @@ podman volume ls
 ```bash
 cd ~/git/dotfiles-nix
 git checkout feat/tidus-impermanence
-./scripts/build-tidus-iso.sh
+./scripts/build-tidus-persist-iso.sh
 ```
 
 2. **Create bootable USB**:
@@ -83,7 +85,7 @@ git checkout feat/tidus-impermanence
 lsblk
 
 # Write ISO (replace sdX with your USB device)
-sudo dd if=result/iso/tidus-nixos-installer.iso of=/dev/sdX bs=4M status=progress sync
+sudo dd if=result/iso/tidus-persist-installer.iso of=/dev/sdX bs=4M status=progress sync
 ```
 
 3. **Boot from USB** and run installer:
@@ -92,7 +94,7 @@ sudo dd if=result/iso/tidus-nixos-installer.iso of=/dev/sdX bs=4M status=progres
 nmtui
 
 # Run automated installer
-install-tidus
+install-tidus-persist
 ```
 
 ### Option B: Manual Installation
@@ -115,13 +117,13 @@ DISK="/dev/nvme0n1"  # Adjust if different
 sudo nix --experimental-features "nix-command flakes" \
   run github:nix-community/disko/latest -- \
   --mode destroy,format,mount \
-  --flake .#tidus \
+  --flake .#tidus-persist \
   --arg device "\"$DISK\""
 ```
 
 4. **Install NixOS**:
 ```bash
-sudo nixos-install --flake .#tidus
+sudo nixos-install --flake .#tidus-persist
 ```
 
 ## Post-Installation
@@ -226,7 +228,7 @@ If something goes wrong and you need to go back:
   vi /persist/home/danny/git/dotfiles-nix/hosts/nixos/tidus/impermanence.nix
   # Add missing paths
   cd /persist/home/danny/git/dotfiles-nix
-  sudo nixos-rebuild switch --flake .#tidus
+  sudo nixos-rebuild switch --flake .#tidus-persist
   ```
 
 ### Performance Issues

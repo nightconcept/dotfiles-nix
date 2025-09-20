@@ -1,4 +1,4 @@
-# Custom NixOS installer ISO for tidus with disko and impermanence
+# Custom NixOS installer ISO for tidus-persist with disko and impermanence
 { config, pkgs, lib, modulesPath, ... }:
 {
   imports = [
@@ -6,8 +6,8 @@
   ];
 
   # ISO naming
-  image.fileName = lib.mkForce "tidus-nixos-installer.iso";
-  isoImage.volumeID = lib.mkForce "TIDUS_NIXOS";
+  image.fileName = lib.mkForce "tidus-persist-installer.iso";
+  isoImage.volumeID = lib.mkForce "TIDUS_PERSIST";
   isoImage.makeEfiBootable = true;
   isoImage.makeUsbBootable = true;
 
@@ -69,14 +69,14 @@
   environment.etc."nixos-config/flake.lock".source = ../flake.lock;
 
   # Install script
-  environment.etc."install-tidus.sh" = {
+  environment.etc."install-tidus-persist.sh" = {
     mode = "0755";
     text = ''
       #!/usr/bin/env bash
       set -e
 
       echo "==================================="
-      echo "Tidus NixOS Installer with Impermanence"
+      echo "Tidus-Persist NixOS Installer with Impermanence"
       echo "==================================="
       echo
       echo "This will ERASE the target disk and install NixOS with:"
@@ -135,7 +135,7 @@
       echo "Running disko to partition and format disk..."
       echo "$DISK_PASSWORD" | nix run github:nix-community/disko/latest -- \
         --mode destroy,format,mount \
-        --flake .#tidus \
+        --flake .#tidus-persist \
         --arg device "\"$DISK_PATH\""
 
       # Generate hardware configuration
@@ -147,7 +147,7 @@
 
       # Install NixOS
       echo "Installing NixOS..."
-      nixos-install --flake .#tidus --no-root-password
+      nixos-install --flake .#tidus-persist --no-root-password
 
       # Set root password in installed system
       echo "Setting root password in installed system..."
@@ -172,15 +172,15 @@
 
   # Convenience aliases
   programs.bash.shellAliases = {
-    install-tidus = "/etc/install-tidus.sh";
+    install-tidus-persist = "/etc/install-tidus-persist.sh";
   };
 
   # Message on boot
   services.getty.helpLine = ''
 
-    === Tidus NixOS Installer ===
+    === Tidus-Persist NixOS Installer ===
 
-    To install: run 'install-tidus'
+    To install: run 'install-tidus-persist'
 
     Default root password: nixos
     WiFi: use 'nmtui' to connect
