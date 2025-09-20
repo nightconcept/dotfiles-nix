@@ -175,7 +175,7 @@ in
         script = ''
           # Install autoremove-torrents if not already installed
           ${pkgs.python3.withPackages (ps: with ps; [ pip ])}/bin/pip install --user autoremove-torrents || true
-          
+
           # Run autoremove-torrents with static config file
           ${pkgs.python3}/bin/python -m autoremove_torrents \
             --conf=/etc/autoremove-torrents/config.yml \

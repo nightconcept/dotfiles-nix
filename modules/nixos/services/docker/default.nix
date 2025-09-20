@@ -50,6 +50,20 @@ in
   options.modules.nixos.docker = {
     enable = lib.mkEnableOption "Docker container runtime";
 
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.docker;
+      defaultText = lib.literalExpression "pkgs.docker";
+      description = "The Docker package to use";
+    };
+
+    composePackage = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.docker-compose;
+      defaultText = lib.literalExpression "pkgs.docker-compose";
+      description = "The docker-compose package to use";
+    };
+
     dockerComposeProjects = lib.mkOption {
       type = lib.types.attrs;
       default = {};
@@ -60,6 +74,7 @@ in
   config = lib.mkIf cfg.enable {
     virtualisation.docker = {
       enable = true;
+      package = cfg.package;
       enableOnBoot = true;
       autoPrune = {
         enable = true;
@@ -70,10 +85,10 @@ in
 
     users.users.danny.extraGroups = [ "docker" ];
 
-    environment.systemPackages = with pkgs; [
-      docker-compose
-      lazydocker
-      yq  # For manipulating docker-compose.yml files
+    environment.systemPackages = [
+      cfg.composePackage
+      pkgs.lazydocker
+      pkgs.yq  # For manipulating docker-compose.yml files
     ];
 
     # Create base directories
