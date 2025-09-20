@@ -8,7 +8,12 @@
 }: {
   imports = [
     ./hardware-configuration.nix
+    ./disko.nix
+    ./impermanence.nix
+    ./recovery.nix
     inputs.nixos-hardware.nixosModules.dell-latitude-7420
+    inputs.disko.nixosModules.disko
+    inputs.impermanence.nixosModules.impermanence
     # Include Lix module for this host
     inputs.lix-module.nixosModules.default
   ];
