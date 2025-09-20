@@ -99,6 +99,47 @@ detect_package_manager() {
     fi
 }
 
+# Detect existing Nix/Lix installation on macOS
+detect_macos_nix_state() {
+    local has_nix=false
+    local has_lix=false
+    local has_darwin=false
+    local install_type="none"
+
+    # Check for Nix command
+    if command -v nix &> /dev/null; then
+        has_nix=true
+        # Check if it's Lix by looking for lix-specific indicators
+        if nix --version 2>/dev/null | grep -qi "lix"; then
+            has_lix=true
+            install_type="lix"
+        else
+            install_type="upstream"
+        fi
+    fi
+
+    # Check for nix-darwin
+    if command -v darwin-rebuild &> /dev/null || [[ -d /run/current-system/sw ]]; then
+        has_darwin=true
+    fi
+
+    # Check for existing Nix store
+    local has_nix_store=false
+    if [[ -d /nix ]]; then
+        has_nix_store=true
+    fi
+
+    echo "$install_type:$has_nix:$has_lix:$has_darwin:$has_nix_store"
+}
+
+# Function to backup file if it exists
+backup_file() {
+    if [ -f "$1" ]; then
+        print_info "Backing up $1"
+        sudo cp "$1" "$1.backup-$(date +%Y%m%d-%H%M%S)"
+    fi
+}
+
 # Install prerequisites based on package manager
 install_prerequisites() {
     local pkg_manager=$1
@@ -403,6 +444,406 @@ install_home_manager() {
         export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
         nix-shell '<home-manager>' -A install
     fi
+}
+
+# Migrate from Lix to upstream Nix on macOS
+migrate_lix_to_upstream() {
+    print_warning "⚠️  This will completely remove Lix and install upstream Nix"
+    print_warning "⚠️  This process is DESTRUCTIVE and will require sudo access"
+    print_warning "⚠️  Make sure you have backups of any important data"
+    echo
+
+    if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+        print_error "/dev/tty not available for user confirmation"
+        return 1
+    fi
+
+    read -p "Are you sure you want to proceed? Type 'yes' to continue: " confirm </dev/tty
+    if [[ "$confirm" != "yes" ]]; then
+        print_info "Migration cancelled"
+        return 1
+    fi
+
+    print_info "🔄 Starting migration from Lix to upstream Nix..."
+
+    # Step 1: Stop nix-darwin and Nix daemon services
+    print_info "1️⃣ Stopping nix-darwin and Nix daemon services..."
+
+    if sudo launchctl list | grep -q org.nixos.nix-daemon; then
+        print_info "   Stopping nix-daemon..."
+        sudo launchctl unload /Library/LaunchDaemons/org.nixos.nix-daemon.plist 2>/dev/null || true
+    fi
+
+    if sudo launchctl list | grep -q org.nixos.darwin-store; then
+        print_info "   Stopping darwin-store..."
+        sudo launchctl unload /Library/LaunchDaemons/org.nixos.darwin-store.plist 2>/dev/null || true
+    fi
+
+    # Step 2: Shell configuration files are managed by nix-darwin
+    print_info "2️⃣ Shell configuration files are managed by nix-darwin, skipping manual cleanup..."
+
+    # Step 3: Remove nixbld users and group
+    print_info "3️⃣ Removing nixbld users and group..."
+
+    if dscl . -read /Groups/nixbld >/dev/null 2>&1; then
+        print_info "   Removing nixbld group..."
+        sudo dscl . -delete /Groups/nixbld 2>/dev/null || true
+    fi
+
+    # Remove _nixbld users
+    for u in $(sudo dscl . -list /Users 2>/dev/null | grep _nixbld || true); do
+        print_info "   Removing user $u..."
+        sudo dscl . -delete /Users/$u 2>/dev/null || true
+    done
+
+    # Step 4: Clean filesystem configuration
+    print_info "4️⃣ Cleaning filesystem configuration..."
+
+    # Clean /etc/synthetic.conf
+    if [ -f /etc/synthetic.conf ]; then
+        backup_file "/etc/synthetic.conf"
+        if grep -q "^nix" /etc/synthetic.conf 2>/dev/null; then
+            print_info "   Removing nix from /etc/synthetic.conf..."
+            sudo sed -i.bak '/^nix/d' /etc/synthetic.conf
+            # Remove file if it's now empty
+            if [ ! -s /etc/synthetic.conf ]; then
+                sudo rm /etc/synthetic.conf
+            fi
+        fi
+    fi
+
+    # Clean /etc/fstab
+    if [ -f /etc/fstab ]; then
+        backup_file "/etc/fstab"
+        if grep -q "/nix" /etc/fstab 2>/dev/null; then
+            print_info "   Removing /nix mount from /etc/fstab..."
+            sudo sed -i.bak '/\/nix/d' /etc/fstab
+        fi
+    fi
+
+    # Step 5: Remove Nix files and directories
+    print_info "5️⃣ Removing Nix files and directories..."
+
+    sudo rm -rf /etc/nix 2>/dev/null || true
+    sudo rm -rf /var/root/.nix-profile 2>/dev/null || true
+    sudo rm -rf /var/root/.nix-defexpr 2>/dev/null || true
+    sudo rm -rf /var/root/.nix-channels 2>/dev/null || true
+    rm -rf ~/.nix-profile 2>/dev/null || true
+    rm -rf ~/.nix-defexpr 2>/dev/null || true
+    rm -rf ~/.nix-channels 2>/dev/null || true
+
+    # Remove LaunchDaemon plists
+    sudo rm -f /Library/LaunchDaemons/org.nixos.nix-daemon.plist 2>/dev/null || true
+    sudo rm -f /Library/LaunchDaemons/org.nixos.darwin-store.plist 2>/dev/null || true
+
+    # Step 6: Force unmount and remove Nix Store volume
+    print_info "6️⃣ Force unmounting and removing Nix Store volume..."
+
+    # Force kill all processes using /nix
+    print_info "   Killing all processes using /nix..."
+    sudo pkill -f /nix 2>/dev/null || true
+
+    # Use timeout for lsof to prevent hanging
+    print_info "   Finding and killing processes holding /nix (with timeout)..."
+    timeout 10s sudo lsof +D /nix 2>/dev/null | awk 'NR>1 {print $2}' | sort -u | xargs -r sudo kill -9 2>/dev/null || true
+
+    # Additional aggressive cleanup
+    sudo pkill -9 -f nix-daemon 2>/dev/null || true
+    sudo pkill -9 -f nix-store 2>/dev/null || true
+    sudo pkill -9 -f lix 2>/dev/null || true
+
+    # Force unmount /nix if mounted
+    if mount | grep -q "/nix"; then
+        print_info "   Force unmounting /nix..."
+        sudo umount -f /nix 2>/dev/null || true
+    fi
+
+    # Check if Nix Store volume exists and remove it
+    if diskutil list | grep -q "Nix Store"; then
+        print_info "   Removing Nix Store volume..."
+        NIX_VOLUME=$(diskutil list | grep "Nix Store" | awk '{print $NF}')
+        if [ -n "$NIX_VOLUME" ]; then
+            sudo diskutil unmount force "$NIX_VOLUME" 2>/dev/null || true
+            sudo diskutil apfs deleteVolume "$NIX_VOLUME" 2>/dev/null || {
+                print_warning "   ⚠️  Still couldn't remove volume, continuing anyway..."
+            }
+        fi
+    else
+        print_info "   No Nix Store volume found to remove"
+    fi
+
+    # Remove /nix directory if it exists
+    if [ -d /nix ]; then
+        print_info "   Removing /nix directory..."
+        sudo rm -rf /nix 2>/dev/null || true
+    fi
+
+    # Step 6.5: Ensure /etc is writable and ready
+    print_info "6.5️⃣ Ensuring /etc is writable and ready..."
+
+    # Make sure /etc exists and is writable
+    if [ ! -d /etc ]; then
+        print_info "   Creating /etc directory..."
+        sudo mkdir -p /etc
+    fi
+
+    # Remove any broken symlinks in /etc that might interfere
+    sudo find /etc -type l -exec test ! -e {} \; -delete 2>/dev/null || true
+
+    # Ensure bashrc and zshrc don't exist as broken symlinks
+    for file in bashrc zshrc; do
+        if [ -L "/etc/$file" ] && [ ! -e "/etc/$file" ]; then
+            print_info "   Removing broken symlink /etc/$file"
+            sudo rm -f "/etc/$file"
+        fi
+    done
+
+    # Create stub files if they don't exist
+    sudo touch /etc/bashrc 2>/dev/null || true
+    sudo touch /etc/zshrc 2>/dev/null || true
+
+    # Step 7: Install upstream Nix
+    print_info "7️⃣ Installing upstream Nix..."
+    print_info "   Downloading and running official Nix installer..."
+
+    sh <(curl -L https://nixos.org/nix/install) --daemon
+
+    # Step 8: Set up environment for new shell
+    print_info "8️⃣ Setting up environment for new shell..."
+
+    # Source Nix for current session
+    if [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+    fi
+
+    # Step 9: Reinstall nix-darwin
+    print_info "9️⃣ Reinstalling nix-darwin..."
+
+    # Clone flake repository
+    clone_flake
+
+    # Install nix-darwin with the flake
+    print_info "   Running nix-darwin installation..."
+
+    # Determine which Darwin configuration to use based on hostname
+    local hostname=$(hostname -s)
+    local darwin_config="waver"  # default
+
+    # Check if merlin config exists and we're on merlin
+    if [[ "$hostname" == "merlin" ]]; then
+        darwin_config="merlin"
+    fi
+
+    print_info "   Using Darwin configuration: $darwin_config"
+    cd "$FLAKE_DIR"
+    nix run nix-darwin -- switch --flake ".#$darwin_config"
+
+    print_success "✅ Migration from Lix to upstream Nix completed!"
+    echo
+    print_info "📋 Next steps:"
+    print_info "   1. Restart your terminal or run: source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+    print_info "   2. Verify installation: nix --version"
+    print_info "   3. Test nix-darwin: darwin-rebuild switch --flake .#$darwin_config"
+    print_info "   4. Consider rebooting to ensure all changes take effect"
+    echo
+    print_info "🔍 The empty /nix directory will disappear after reboot (this is normal)"
+}
+
+# Fresh Nix installation for macOS
+install_fresh_nix_macos() {
+    print_info "🍎 Installing fresh Nix on macOS..."
+    print_info "   Downloading and running official Nix installer..."
+
+    # Install upstream Nix (multi-user)
+    sh <(curl -L https://nixos.org/nix/install) --daemon
+
+    # Source Nix for current session
+    if [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+    fi
+
+    print_success "✅ Fresh Nix installation completed!"
+}
+
+# Install or update nix-darwin
+install_nix_darwin() {
+    local hostname=$(hostname -s)
+    local darwin_config="waver"  # default
+
+    # Check if merlin config exists and we're on merlin
+    if [[ "$hostname" == "merlin" ]]; then
+        darwin_config="merlin"
+    fi
+
+    print_info "🔧 Installing nix-darwin..."
+    print_info "   Using Darwin configuration: $darwin_config"
+
+    # Clone flake if not already done
+    clone_flake
+
+    # Install nix-darwin with the flake
+    cd "$FLAKE_DIR"
+    nix run nix-darwin -- switch --flake ".#$darwin_config"
+
+    print_success "✅ nix-darwin installation completed!"
+    print_info "📋 Next steps:"
+    print_info "   1. Restart your terminal for PATH changes to take effect"
+    print_info "   2. Verify: darwin-rebuild switch --flake .#$darwin_config"
+}
+
+# macOS installation menu
+macos_installation_menu() {
+    local nix_state=$(detect_macos_nix_state)
+    IFS=':' read -r install_type has_nix has_lix has_darwin has_nix_store <<< "$nix_state"
+
+    print_info "🍎 macOS Nix Installation Options"
+    echo
+    print_info "Current system state:"
+
+    if [[ "$install_type" == "none" ]]; then
+        print_info "   ❌ No Nix installation detected"
+    elif [[ "$install_type" == "lix" ]]; then
+        print_warning "   ⚠️  Lix installation detected"
+    else
+        print_success "   ✅ Upstream Nix installation detected"
+    fi
+
+    if [[ "$has_darwin" == "true" ]]; then
+        print_success "   ✅ nix-darwin is installed"
+    else
+        print_info "   ❌ nix-darwin not detected"
+    fi
+    echo
+
+    # Show appropriate menu based on current state
+    if [[ "$install_type" == "lix" ]]; then
+        print_info "Available options:"
+        echo "  1) Migrate from Lix to upstream Nix (DESTRUCTIVE)"
+        echo "  2) Skip and show manual instructions"
+        echo "  3) Cancel"
+        echo
+
+        if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+            print_warning "/dev/tty not available, showing manual instructions"
+            show_macos_manual_instructions
+            return
+        fi
+
+        read -p "Select option (1-3): " -n 1 -r </dev/tty
+        echo
+
+        case "$REPLY" in
+            1)
+                migrate_lix_to_upstream
+                ;;
+            2)
+                show_macos_manual_instructions
+                ;;
+            3)
+                print_info "Cancelled"
+                return
+                ;;
+            *)
+                print_error "Invalid selection"
+                macos_installation_menu
+                ;;
+        esac
+
+    elif [[ "$install_type" == "none" ]]; then
+        print_info "Available options:"
+        echo "  1) Fresh Nix installation + nix-darwin setup"
+        echo "  2) Show manual instructions"
+        echo "  3) Cancel"
+        echo
+
+        if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+            print_warning "/dev/tty not available, showing manual instructions"
+            show_macos_manual_instructions
+            return
+        fi
+
+        read -p "Select option (1-3): " -n 1 -r </dev/tty
+        echo
+
+        case "$REPLY" in
+            1)
+                install_fresh_nix_macos
+                install_nix_darwin
+                ;;
+            2)
+                show_macos_manual_instructions
+                ;;
+            3)
+                print_info "Cancelled"
+                return
+                ;;
+            *)
+                print_error "Invalid selection"
+                macos_installation_menu
+                ;;
+        esac
+
+    else  # upstream nix already installed
+        print_info "Available options:"
+        echo "  1) Install/update nix-darwin configuration"
+        echo "  2) Reinstall Nix (DESTRUCTIVE)"
+        echo "  3) Show manual instructions"
+        echo "  4) Cancel"
+        echo
+
+        if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+            print_warning "/dev/tty not available, installing nix-darwin"
+            install_nix_darwin
+            return
+        fi
+
+        read -p "Select option (1-4): " -n 1 -r </dev/tty
+        echo
+
+        case "$REPLY" in
+            1)
+                install_nix_darwin
+                ;;
+            2)
+                print_warning "This will completely remove and reinstall Nix"
+                read -p "Are you sure? Type 'yes' to continue: " confirm </dev/tty
+                if [[ "$confirm" == "yes" ]]; then
+                    # Use the migration function but skip lix-specific parts
+                    migrate_lix_to_upstream
+                fi
+                ;;
+            3)
+                show_macos_manual_instructions
+                ;;
+            4)
+                print_info "Cancelled"
+                return
+                ;;
+            *)
+                print_error "Invalid selection"
+                macos_installation_menu
+                ;;
+        esac
+    fi
+}
+
+# Show manual macOS instructions
+show_macos_manual_instructions() {
+    print_info "📖 Manual macOS Installation Instructions"
+    echo
+    print_info "1. Install Nix (if not already installed):"
+    print_info "   curl -L https://nixos.org/nix/install | sh -s -- --daemon"
+    echo
+    print_info "2. Clone this repository:"
+    print_info "   git clone $FLAKE_REPO $FLAKE_DIR"
+    echo
+    print_info "3. Install nix-darwin:"
+    print_info "   cd $FLAKE_DIR"
+    print_info "   nix run nix-darwin -- switch --flake .#waver  # for MacBook"
+    print_info "   nix run nix-darwin -- switch --flake .#merlin # for Mac Mini"
+    echo
+    print_info "4. Future updates:"
+    print_info "   darwin-rebuild switch --flake .#<hostname>"
 }
 
 # Apply Home Manager configuration
@@ -837,11 +1278,7 @@ main() {
             
         darwin)
             print_info "Running on macOS"
-            print_warning "macOS support coming soon!"
-            print_info "Please install Nix manually and run:"
-            print_info "  nix-darwin switch --flake $FLAKE_REPO#waver  # for MacBook"
-            print_info "  nix-darwin switch --flake $FLAKE_REPO#merlin # for Mac Mini"
-            exit 0
+            macos_installation_menu
             ;;
             
         *)
