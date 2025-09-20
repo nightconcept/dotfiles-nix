@@ -102,6 +102,12 @@ config.mouse_bindings = {
     action = wezterm.action.SelectTextAtMouseCursor 'SemanticZone',
     mods = 'NONE',
   },
+  -- Make CTRL-Click open hyperlinks on Linux/NixOS
+  {
+    event = { Up = { streak = 1, button = 'Left' } },
+    mods = 'CTRL',
+    action = act.OpenLinkAtMouseCursor,
+  },
 }
 
 -- Disable middle-click closing tabs on Linux only
