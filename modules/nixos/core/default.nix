@@ -3,6 +3,7 @@
   imports = [
     ./bootloader
     ./nix
+    ./lix
     ./locale
     ./users
     ./packages
