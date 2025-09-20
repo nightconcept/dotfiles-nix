@@ -4,7 +4,7 @@ This runbook documents the process for setting up a new NixOS server from a fres
 
 ## Prerequisites
 
-- NixOS minimal ISO (not graphical)
+- NixOS minimal ISO
 - Target server with network access
 - Knowledge of the target hostname (aerith, barrett, rinoa, vincent)
 - (Optional) AGE secret key for SOPS-encrypted secrets
@@ -80,13 +80,13 @@ The bootstrap script will:
 3. **Select server configuration**:
    - aerith (Plex media server)
    - barrett (VPN torrent server)
-   - rinoa (General purpose)
+   - rinoa (Docker server)
    - vincent (CI/CD runner host)
 4. **Disk selection** - Enter target disk (e.g., `/dev/sda`, `/dev/vda`, `/dev/nvme0n1`)
 5. **Partition and format** - Will erase the entire disk
 6. **Hardware detection** - Generates hardware-configuration.nix
 7. **SOPS age key** - Enter existing key or skip (can configure later)
-8. **Install NixOS** - Applies the selected configuration
+8. **Install minimal system** - Creates a bootable system with network and SSH
 
 ### 8. Post-Installation
 
@@ -102,14 +102,12 @@ reboot
 After rebooting into the installed system:
 
 ```bash
-# Set user password (danny is the default user)
-passwd danny
+# Log in as danny (no password set)
+# Set user password immediately
+passwd
 
-# The system should already have:
-# - SSH enabled
-# - Network configured
-# - Base packages installed
-# - Git repository at ~/git/dotfiles-nix
+# Apply the full flake configuration
+~/apply-full-config.sh
 
 # Future configuration changes:
 cd ~/git/dotfiles-nix
@@ -146,6 +144,7 @@ sudo nixos-rebuild switch --flake .#<hostname>
 - Use `ip addr` to verify network interface is up
 - DHCP should work automatically on most networks
 - For static IP, configure before running bootstrap
+
 
 ## Server-Specific Notes
 

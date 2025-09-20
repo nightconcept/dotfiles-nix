@@ -588,17 +588,56 @@ nixos_fresh_install() {
         fi
     fi
 
-    # Install system
-    print_info "Installing NixOS with configuration: $host"
-    nixos-install --flake ".#$host" --no-root-password
+    # Create a minimal configuration that just boots
+    print_info "Generating minimal bootable configuration..."
+    cat > /mnt/etc/nixos/configuration.nix <<'EOF'
+{ config, pkgs, ... }:
+{
+  imports = [ ./hardware-configuration.nix ];
+
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  networking.hostName = "HOSTNAME_PLACEHOLDER";
+  networking.networkmanager.enable = true;
+
+  time.timeZone = "America/New_York";
+
+  users.users.danny = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "networkmanager" ];
+  };
+
+  services.openssh.enable = true;
+
+  system.stateVersion = "24.11";
+}
+EOF
+    # Replace hostname placeholder
+    sed -i "s/HOSTNAME_PLACEHOLDER/$host/g" /mnt/etc/nixos/configuration.nix
+
+    # Install minimal system
+    print_info "Installing minimal NixOS system..."
+    nixos-install --no-root-password
+
+    # Create post-install script
+    cat > /mnt/home/danny/apply-full-config.sh <<'EOF'
+#!/usr/bin/env bash
+echo "Applying full flake configuration..."
+cd ~/git/dotfiles-nix
+sudo nixos-rebuild switch --flake .#HOSTNAME_PLACEHOLDER
+echo "Configuration complete!"
+EOF
+    sed -i "s/HOSTNAME_PLACEHOLDER/$host/g" /mnt/home/danny/apply-full-config.sh
+    chmod +x /mnt/home/danny/apply-full-config.sh
+    chown 1000:100 /mnt/home/danny/apply-full-config.sh
 
     print_success "Installation complete!"
     echo
     echo "Next steps:"
     echo "1. Reboot: reboot"
-    echo "2. Set user password after reboot"
-    echo "3. Repository location: ~/git/dotfiles-nix"
-    echo "4. Rebuild command: sudo nixos-rebuild switch --flake ~/git/dotfiles-nix#$host"
+    echo "2. Log in as danny and set password: passwd"
+    echo "3. Apply full configuration: ~/apply-full-config.sh"
 }
 
 # Prompt for input with default value
