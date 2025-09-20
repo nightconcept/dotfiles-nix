@@ -7,6 +7,7 @@ This runbook documents the process for setting up a new NixOS server from a fres
 - NixOS minimal ISO (not graphical)
 - Target server with network access
 - Knowledge of the target hostname (aerith, barrett, rinoa, vincent)
+- (Optional) AGE secret key for SOPS-encrypted secrets
 
 ## Initial Setup Steps
 
@@ -37,20 +38,44 @@ ip addr show
 # Note the IP address for SSH access
 ```
 
+### 4. Connect via SSH (if enabled)
+
+```bash
+# From another machine
+ssh root@<server-ip>
+# Enter the password you set in step 2
+```
+
+### 5. Verify Network Connectivity
+
+```bash
+# Test network access
+ping -c 3 github.com
+# If no network, configure it first
+```
+
 ### 6. Run Bootstrap Script
 
 Now run the bootstrap script which will handle disk partitioning and NixOS installation:
 
 ```bash
-# Download and run bootstrap
+# Option 1: Auto-detect installer environment
 curl -sSL https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh | bash
+
+# Option 2: Force installation mode (if auto-detection fails)
+curl -sSL https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh | bash -s -- --install
+
+# Alternative using wget:
+wget -qO- https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh | bash -s -- --install
 ```
+
+**Note:** If the script stops immediately after detecting the installer environment, it's likely having issues reading input when piped. Use the `--install` flag to force installation mode.
 
 ### 7. Bootstrap Process
 
 The bootstrap script will:
 
-1. **Detect LiveCD environment** - Confirms you're installing fresh
+1. **Detect installer environment** - Auto-detects NixOS installer (or use `--install` to force)
 2. **Ask for system type** - Select "2" for Server
 3. **Select server configuration**:
    - aerith (Plex media server)
@@ -91,6 +116,37 @@ cd ~/git/dotfiles-nix
 sudo nixos-rebuild switch --flake .#<hostname>
 ```
 
+## Troubleshooting
+
+### Bootstrap Script Issues
+
+**Script stops after "Detected NixOS installer environment":**
+- The script may have issues reading input when piped through curl/wget
+- Solution: Use the `--install` flag to force installation mode
+- Alternative: Download the script first, then run it:
+  ```bash
+  wget https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh
+  chmod +x bootstrap.sh
+  sudo ./bootstrap.sh --install
+  ```
+
+**"Fresh installation requires root" error:**
+- Ensure you're running as root: `sudo -i`
+- Then run the bootstrap script
+
+**AGE key issues:**
+- You can skip AGE key setup during installation
+- Configure it later by placing your key at `~/.config/sops/age/keys.txt`
+- Format: `AGE-SECRET-KEY-...`
+
+### Network Issues
+
+**No network connectivity:**
+- Check cable connection
+- Use `ip addr` to verify network interface is up
+- DHCP should work automatically on most networks
+- For static IP, configure before running bootstrap
+
 ## Server-Specific Notes
 
 ### All Servers
@@ -110,111 +166,12 @@ sudo nixos-rebuild switch --flake .#<hostname>
 - Requires NordVPN token in SOPS
 - Mount: `/mnt/titan` for downloads
 
-### rinoa (General Purpose)
+### rinoa (Docker Server)
 - Docker enabled
 - Ready for containerized services
+- General purpose Docker host
 
 ### vincent (CI/CD)
 - Docker enabled
 - Configured for GitHub/Forgejo runners
 - Requires runner tokens in SOPS
-
-## Troubleshooting
-
-### Network Issues
-```bash
-# Check network interfaces
-ip link show
-
-# Restart networking
-systemctl restart network-manager
-# or
-dhcpcd
-```
-
-### Bootstrap Fails
-```bash
-# Clone manually and run from local
-git clone https://github.com/nightconcept/dotfiles-nix
-cd dotfiles-nix
-sudo nixos-install --flake .#<hostname>
-```
-
-### SOPS/Age Keys
-If you skipped age key setup during bootstrap:
-```bash
-# Generate new key
-age-keygen -o ~/.config/sops/age/keys.txt
-
-# Get public key for .sops.yaml
-age-keygen -y ~/.config/sops/age/keys.txt
-
-# Add public key to .sops.yaml in the repository
-```
-
-### Disk Detection Issues
-```bash
-# List all disks
-lsblk
-
-# Common disk names:
-# SATA/SAS: /dev/sda, /dev/sdb
-# NVMe: /dev/nvme0n1, /dev/nvme1n1
-# Virtual: /dev/vda, /dev/vdb
-```
-
-## Quick Reference
-
-### One-liner for experienced users
-```bash
-# From NixOS ISO as root:
-nix-env -iA nixos.git nixos.curl && \
-curl -sSL https://raw.githubusercontent.com/nightconcept/dotfiles-nix/main/bootstrap.sh | bash
-```
-
-### Manual disk setup (if bootstrap partition fails)
-```bash
-# Partition
-parted /dev/sda -- mklabel gpt
-parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
-parted /dev/sda -- set 1 esp on
-parted /dev/sda -- mkpart primary ext4 512MiB 100%
-
-# Format
-mkfs.fat -F32 /dev/sda1
-mkfs.ext4 /dev/sda2
-
-# Mount
-mount /dev/sda2 /mnt
-mkdir -p /mnt/boot
-mount /dev/sda1 /mnt/boot
-
-# Generate config
-nixos-generate-config --root /mnt
-```
-
-## Security Considerations
-
-1. **Change default passwords immediately** after first boot
-2. **Configure SOPS/age keys** for secret management
-3. **Review firewall rules** in host configurations
-4. **Set up proper SSH keys** and disable password auth when ready
-5. **Configure fail2ban** if exposed to internet
-
-## Maintenance
-
-### Regular Updates
-```bash
-cd ~/git/dotfiles-nix
-nix flake update
-sudo nixos-rebuild switch --flake .#<hostname>
-```
-
-### Garbage Collection
-```bash
-# Remove old generations
-sudo nix-collect-garbage -d
-
-# Keep last 7 days
-sudo nix-collect-garbage --delete-older-than 7d
-```
