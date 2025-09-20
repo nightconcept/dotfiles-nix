@@ -194,7 +194,7 @@ in
             else if contains $host $darwin_configs
                 echo "Found Darwin configuration for $host"
                 set config_type "darwinConfigurations"
-                set rebuild_cmd "sudo /run/current-system/sw/bin/darwin-rebuild switch"
+                set rebuild_cmd "sudo darwin-rebuild switch"
             else if contains $host $home_configs
                 echo "Found Home Manager configuration for $host"
                 set config_type "homeConfigurations"
