@@ -124,7 +124,7 @@ install_prerequisites() {
             ;;
         *)
             print_warning "Unknown package manager. Please ensure curl, git, and xz are installed."
-            read -p "Continue anyway? (y/n): " -n 1 -r
+            read -p "Continue anyway? (y/n): " -n 1 -r </dev/tty
             echo
             [[ ! $REPLY =~ ^[Yy]$ ]] && exit 1
             ;;
@@ -185,13 +185,24 @@ clone_flake() {
 
 # Determine system type
 select_system_type() {
-    print_info "What type of system is this?"
-    echo "  1) Desktop/Laptop (with GUI)"
-    echo "  2) Server (headless, no GUI)"
-    echo
+    print_info "What type of system is this?" >&2
+    echo "  1) Desktop/Laptop (with GUI)" >&2
+    echo "  2) Server (headless, no GUI)" >&2
+    echo >&2
 
-    read -p "Select type (1-2): " -n 1 -r
-    echo
+    # Check if /dev/tty is available
+    if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+        print_warning "/dev/tty not available, defaulting to server configuration" >&2
+        echo "server"
+        return
+    fi
+
+    read -p "Select type (1-2): " -n 1 -r </dev/tty || {
+        print_warning "Failed to read input, defaulting to server configuration" >&2
+        echo "server"
+        return
+    }
+    echo >&2
 
     case "$REPLY" in
         1)
@@ -201,7 +212,7 @@ select_system_type() {
             echo "server"
             ;;
         *)
-            print_error "Invalid selection"
+            print_error "Invalid selection" >&2
             select_system_type
             ;;
     esac
@@ -209,13 +220,23 @@ select_system_type() {
 
 # NixOS host selection menu for desktops
 select_desktop_host() {
-    print_info "Available desktop configurations:"
-    echo "  1) tidus   - Dell Latitude 7420 laptop"
-    echo "  2) Skip    - Don't switch configuration"
-    echo
+    print_info "Available desktop configurations:" >&2
+    echo "  1) tidus   - Dell Latitude 7420 laptop" >&2
+    echo "  2) Skip    - Don't switch configuration" >&2
+    echo >&2
 
-    read -p "Select configuration (1-2): " -n 1 -r
-    echo
+    if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+        print_warning "/dev/tty not available, skipping configuration" >&2
+        echo "skip"
+        return
+    fi
+
+    read -p "Select configuration (1-2): " -n 1 -r </dev/tty || {
+        print_warning "Failed to read input, skipping configuration" >&2
+        echo "skip"
+        return
+    }
+    echo >&2
 
     case "$REPLY" in
         1)
@@ -225,7 +246,7 @@ select_desktop_host() {
             echo "skip"
             ;;
         *)
-            print_error "Invalid selection"
+            print_error "Invalid selection" >&2
             select_desktop_host
             ;;
     esac
@@ -233,15 +254,25 @@ select_desktop_host() {
 
 # NixOS host selection menu for servers
 select_server_host() {
-    print_info "Available server configurations:"
-    echo "  1) aerith  - Plex media server"
-    echo "  2) barrett - VPN torrent server"
-    echo "  3) rinoa   - Docker server"
-    echo "  4) Skip    - Don't switch configuration"
-    echo
+    print_info "Available server configurations:" >&2
+    echo "  1) aerith  - Plex media server" >&2
+    echo "  2) barrett - VPN torrent server" >&2
+    echo "  3) rinoa   - Docker server" >&2
+    echo "  4) Skip    - Don't switch configuration" >&2
+    echo >&2
 
-    read -p "Select configuration (1-4): " -n 1 -r
-    echo
+    if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+        print_warning "/dev/tty not available, defaulting to rinoa" >&2
+        echo "rinoa"
+        return
+    fi
+
+    read -p "Select configuration (1-4): " -n 1 -r </dev/tty || {
+        print_warning "Failed to read input, defaulting to rinoa" >&2
+        echo "rinoa"
+        return
+    }
+    echo >&2
 
     case "$REPLY" in
         1)
@@ -257,7 +288,7 @@ select_server_host() {
             echo "skip"
             ;;
         *)
-            print_error "Invalid selection"
+            print_error "Invalid selection" >&2
             select_server_host
             ;;
     esac
@@ -283,13 +314,25 @@ setup_age_keys() {
     echo "  3) Skip (secrets won't work until configured later)"
     echo
     
-    read -p "Select option (1-3): " -n 1 -r
+    if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+        print_warning "/dev/tty not available, skipping age key setup"
+        return
+    fi
+
+    read -p "Select option (1-3): " -n 1 -r </dev/tty || {
+        print_warning "Failed to read input, skipping age key setup"
+        return
+    }
     echo
     
     case "$REPLY" in
         1)
             echo "Enter your age private key (starts with AGE-SECRET-KEY):"
-            read -r age_key
+            if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+                print_warning "/dev/tty not available, skipping age key input"
+                return 1
+            fi
+            read -r age_key </dev/tty || return 1
             if [[ "$age_key" =~ ^AGE-SECRET-KEY ]]; then
                 echo "$age_key" > "$HOME/.config/sops/age/keys.txt"
                 chmod 600 "$HOME/.config/sops/age/keys.txt"
@@ -407,7 +450,14 @@ setup_disk() {
 
     print_warning "This will completely erase $disk"
     lsblk "$disk" 2>/dev/null || { print_error "Disk $disk not found"; exit 1; }
-    read -p "Continue? (yes/no): " confirm
+
+    if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+        print_warning "/dev/tty not available, auto-confirming disk erase"
+        confirm="yes"
+    else
+        read -p "Continue? (yes/no): " confirm </dev/tty || confirm="yes"
+    fi
+
     if [ "$confirm" != "yes" ]; then
         echo "Aborted"
         exit 1
@@ -476,8 +526,12 @@ nixos_fresh_install() {
         exit 1
     fi
 
+    print_info "Root check passed, EUID=$EUID"
+
     # Determine system type
+    print_info "About to select system type..."
     system_type=$(select_system_type)
+    print_info "System type selected: $system_type"
 
     # Select host configuration based on type
     local host
@@ -519,7 +573,12 @@ nixos_fresh_install() {
         print_info "Age key is required for accessing encrypted secrets (SOPS)"
         echo "Enter your age private key (starts with AGE-SECRET-KEY):"
         echo "(Press Enter to skip if you don't have one)"
-        read -r age_key
+        if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+            print_warning "/dev/tty not available, skipping age key input"
+            age_key=""
+        else
+            read -r age_key </dev/tty || age_key=""
+        fi
         if [[ "$age_key" =~ ^AGE-SECRET-KEY ]]; then
             echo "$age_key" > /mnt/var/lib/sops-nix/key.txt
             chmod 600 /mnt/var/lib/sops-nix/key.txt
@@ -547,7 +606,18 @@ prompt_with_default() {
     local prompt="$1"
     local default="$2"
     local value
-    read -p "$prompt [$default]: " value
+
+    if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+        print_warning "/dev/tty not available, using default: $default"
+        echo "$default"
+        return
+    fi
+
+    read -p "$prompt [$default]: " value </dev/tty || {
+        print_warning "Failed to read input, using default: $default"
+        echo "$default"
+        return
+    }
     echo "${value:-$default}"
 }
 
