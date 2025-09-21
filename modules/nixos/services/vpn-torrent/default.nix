@@ -27,8 +27,6 @@ in
       webUIPort = mkOpt lib.types.port 8080 "Port for qBittorrent Web UI";
       torrentPort = mkOpt lib.types.port 6881 "Port for BitTorrent traffic";
       openFirewall = mkBoolOpt true "Open firewall ports for qBittorrent";
-      username = mkOpt lib.types.str "danny" "qBittorrent Web UI username";
-      password = mkOpt lib.types.str "changeme" "qBittorrent Web UI password (plain text)";
     };
 
     autoremove = {
@@ -152,8 +150,8 @@ in
         qbittorrent_task = {
           client = "qbittorrent";
           host = "http://127.0.0.1:${toString cfg.qbittorrent.webUIPort}";
-          username = cfg.qbittorrent.username;
-          password = cfg.qbittorrent.password;
+          username = "danny";
+          password = "changeme";  # Update this if you change the password in qBittorrent
           strategies = cfg.autoremove.strategies;
         };
       };
