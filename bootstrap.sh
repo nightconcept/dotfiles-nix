@@ -299,7 +299,8 @@ select_server_host() {
     echo "  1) aerith  - Plex media server" >&2
     echo "  2) barrett - VPN torrent server" >&2
     echo "  3) rinoa   - Docker server" >&2
-    echo "  4) Skip    - Don't switch configuration" >&2
+    echo "  4) vincent - CI/CD runner with Docker" >&2
+    echo "  5) Skip    - Don't switch configuration" >&2
     echo >&2
 
     if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
@@ -308,7 +309,7 @@ select_server_host() {
         return
     fi
 
-    read -p "Select configuration (1-4): " -n 1 -r </dev/tty || {
+    read -p "Select configuration (1-5): " -n 1 -r </dev/tty || {
         print_warning "Failed to read input, defaulting to rinoa" >&2
         echo "rinoa"
         return
@@ -326,6 +327,9 @@ select_server_host() {
             echo "rinoa"
             ;;
         4)
+            echo "vincent"
+            ;;
+        5)
             echo "skip"
             ;;
         *)
