@@ -14,10 +14,8 @@ This is a Nix flake configuration for personal dotfiles supporting multiple plat
 - **home-manager**: User-level configurations for any system
 
 ### Nixpkgs Strategy
-- **Servers** (aerith, barrett, rinoa, vincent): Use `nixpkgs-stable` (25.05) for reliability
-- **Desktop/Laptop** (tidus): Use `nixpkgs` (unstable) for latest features
-- **Darwin** (waver, merlin): Use `nixpkgs` (unstable) for latest features
-- **Overlays**: Selective unstable packages on stable systems via `/overlays/`
+- **All systems**: Use `nixpkgs` (unstable) for latest features
+- **Overlays**: Package overrides and customizations via `/overlays/`
 
 ## Common Commands
 
@@ -142,14 +140,10 @@ The home configuration uses a profile-based system where `home/default.nix` sele
 ### Overlays and Package Management
 
 #### Overlay Strategy
-Servers run on stable nixpkgs but can selectively use unstable packages via overlays:
+Overlays provide package customizations and overrides:
 
-1. **Base Overlay** (`/overlays/unstable-packages.nix`):
-   - Provides `pkgs.unstable.*` namespace
-   - Imported by all stable servers
-
-2. **Service Overlays** (e.g., `/overlays/plex/default.nix`):
-   - Override specific packages to use unstable
+1. **Service Overlays** (e.g., `/overlays/plex/default.nix`):
+   - Override specific packages with custom versions
    - Imported only by hosts that need them
 
 #### Module Package Options
@@ -165,11 +159,11 @@ This allows hosts to override package choices without modifying the module.
 ### Host Configurations
 
 #### Active NixOS Hosts
-- `aerith` - Plex media server (stable + unstable plex overlay)
-- `barrett` - VPN torrent server (stable)
-- `rinoa` - General purpose server (stable)
-- `vincent` - CI/CD runner host with Docker (stable)
-- `tidus` - Dell Latitude 7420 laptop with Hyprland (unstable)
+- `aerith` - Plex media server
+- `barrett` - VPN torrent server
+- `rinoa` - General purpose server
+- `vincent` - CI/CD runner host with Docker
+- `tidus` - Dell Latitude 7420 laptop with Hyprland
 
 #### Active Darwin Hosts  
 - `waver` - MacBook Pro M1
