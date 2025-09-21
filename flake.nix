@@ -77,22 +77,13 @@
   } @ inputs: let
     lib = import ./lib/lib.nix { inherit inputs; };
     pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-
-    # Create a fake nixpkgs input for npins-managed hosts
-    mkPinnedNixpkgs = hostPath: {
-      legacyPackages.x86_64-linux = import (import (hostPath + "/npins")).nixpkgs {
-        system = "x86_64-linux";
-        config.allowUnfree = true;
-      };
-      lib = nixpkgs.lib;
-    };
   in {
     nixosConfigurations = {
       tidus = lib.mkNixos inputs.nixpkgs "tidus";
       tidus-persist = lib.mkNixos inputs.nixpkgs "tidus-persist";
       aerith = lib.mkNixosServer inputs.nixpkgs "aerith";
-      barrett = lib.mkNixosServer (mkPinnedNixpkgs ./hosts/nixos/barrett) "barrett";
-      rinoa = lib.mkNixosServer (mkPinnedNixpkgs ./hosts/nixos/rinoa) "rinoa";
+      barrett = lib.mkNixosServer (lib.mkPinnedNixpkgs ./hosts/nixos/barrett) "barrett";
+      rinoa = lib.mkNixosServer (lib.mkPinnedNixpkgs ./hosts/nixos/rinoa) "rinoa";
       vincent = lib.mkNixosServer inputs.nixpkgs "vincent";
     };
 

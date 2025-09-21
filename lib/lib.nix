@@ -4,6 +4,14 @@ let
   inherit (inputs) nixpkgs home-manager nix-darwin vscode-server stylix spicetify-nix sops-nix vicinae disko lix-module;
 in
 {
+  # Create a fake nixpkgs input for npins-managed hosts
+  mkPinnedNixpkgs = hostPath: {
+    legacyPackages.x86_64-linux = import (import (hostPath + "/npins")).nixpkgs {
+      system = "x86_64-linux";
+      config.allowUnfree = true;
+    };
+    lib = nixpkgs.lib;
+  };
   mkNixos = pkgs: hostname:
     pkgs.lib.nixosSystem {
       system = "x86_64-linux";
