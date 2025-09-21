@@ -1022,6 +1022,36 @@ nixos_fresh_install() {
     print_info "Updating hardware configuration for $host"
     cp /mnt/etc/nixos/hardware-configuration.nix "hosts/nixos/$host/"
 
+    # Update the host's default.nix to use GRUB bootloader if needed
+    if ! grep -q "boot.loader.grub" "hosts/nixos/$host/default.nix"; then
+        print_info "Adding GRUB bootloader configuration to host config"
+        # Create a temporary file with bootloader config
+        cat > /tmp/bootloader-config.nix <<EOF
+
+  # Bootloader configuration (override any systemd-boot settings)
+  boot.loader = {
+    systemd-boot.enable = lib.mkForce false;
+    efi.canTouchEfiVariables = lib.mkForce false;
+    grub = {
+      enable = true;
+      device = "$disk";
+    };
+  };
+EOF
+        # Insert bootloader config after imports
+        sed -i '/imports = \[/,/\];/a\
+\
+  # Bootloader configuration (override any systemd-boot settings)\
+  boot.loader = {\
+    systemd-boot.enable = lib.mkForce false;\
+    efi.canTouchEfiVariables = lib.mkForce false;\
+    grub = {\
+      enable = true;\
+      device = "'"$disk"'";\
+    };\
+  };' "hosts/nixos/$host/default.nix"
+    fi
+
     # Setup age keys for both user-level and system-level secrets
     print_info "Setting up SOPS age keys..."
 
@@ -1169,6 +1199,14 @@ EOF
     };
   };
 
+  # Essential packages for post-install management
+  environment.systemPackages = with pkgs; [
+    git
+    wget
+    vim
+    curl
+  ];
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   system.stateVersion = "24.11";
@@ -1187,7 +1225,19 @@ EOF
     cat > /mnt/home/danny/apply-full-config.sh <<'EOF'
 #!/usr/bin/env bash
 echo "Applying full flake configuration..."
-cd ~/git/dotfiles-nix
+
+# Ensure we own the dotfiles directory and have latest changes
+if [ -d ~/git/dotfiles-nix ]; then
+    cd ~/git/dotfiles-nix
+    echo "Pulling latest changes..."
+    git pull
+else
+    echo "Cloning dotfiles repository..."
+    mkdir -p ~/git
+    git clone https://github.com/nightconcept/dotfiles-nix ~/git/dotfiles-nix
+    cd ~/git/dotfiles-nix
+fi
+
 sudo nixos-rebuild switch --flake .#HOSTNAME_PLACEHOLDER
 echo "Configuration complete!"
 EOF
