@@ -27,8 +27,8 @@ in
       webUIPort = mkOpt lib.types.port 8080 "Port for qBittorrent Web UI";
       torrentPort = mkOpt lib.types.port 6881 "Port for BitTorrent traffic";
       openFirewall = mkBoolOpt true "Open firewall ports for qBittorrent";
-      username = mkOpt lib.types.str "admin" "qBittorrent Web UI username";
-      password = mkOpt lib.types.str "admin" "qBittorrent Web UI password (plain text)";
+      username = mkOpt lib.types.str "danny" "qBittorrent Web UI username";
+      password = mkOpt lib.types.str "changeme" "qBittorrent Web UI password (plain text)";
     };
 
     autoremove = {
@@ -76,14 +76,26 @@ in
         requires = [ "mnt-titan.mount" ];  # Ensure titan mount is available
         wantedBy = [ "multi-user.target" ];
 
+        preStart = ''
+          # Ensure config directory exists
+          mkdir -p ${cfg.configDir}/qbittorrent/qBittorrent/config
+
+          # Let qBittorrent handle its own configuration
+          # It will generate a temp password on first run
+          # Users should then set their preferred credentials via the Web UI
+          echo "qBittorrent directory ready at ${cfg.configDir}/qbittorrent"
+        '';
+
         serviceConfig = {
           Type = "simple";
           User = cfg.user;
           Group = "users";  # Use the 'users' group instead of username
+          PermissionsStartOnly = true;  # Allow preStart to run as root
 
           # Configure qBittorrent with download directory and profile location
           ExecStart = ''
             ${pkgs.qbittorrent-nox}/bin/qbittorrent-nox \
+              --confirm-legal-notice \
               --webui-port=${toString cfg.qbittorrent.webUIPort} \
               --profile=${cfg.configDir}/qbittorrent \
               --save-path=${cfg.downloadDir}
@@ -295,13 +307,16 @@ in
 
           echo "Connecting to $SERVER_NAME..."
 
-          # Create WireGuard config
+          # Create WireGuard config with split tunneling
           cat > /etc/wireguard/wgnord.conf << EOF
           [Interface]
           PrivateKey = $PRIVKEY
           Address = 10.5.0.2/16
           DNS = 103.86.96.100,103.86.99.100
           MTU = 1420
+          # Split tunneling - exclude local network from VPN (ignore errors if rules already exist)
+          PostUp = ip rule add from 192.168.1.0/24 table main priority 100 2>/dev/null || true; ip rule add to 192.168.1.0/24 table main priority 101 2>/dev/null || true
+          PostDown = ip rule del from 192.168.1.0/24 table main priority 100 2>/dev/null || true; ip rule del to 192.168.1.0/24 table main priority 101 2>/dev/null || true
 
           [Peer]
           PublicKey = $SERVER_PUBKEY
