@@ -20,7 +20,6 @@ creation_rules:
     key_groups:
     - age:
       - *danny_personal
-      - *tidus_host
       # Add other hosts here as you set them up
 
   # NixOS module secrets (shared across all NixOS hosts)
