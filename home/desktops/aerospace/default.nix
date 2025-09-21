@@ -52,18 +52,24 @@
           alt-comma = "layout accordion horizontal vertical";
 
           # Close window
+          alt-q = "close";
           alt-shift-c = "close";
 
           # Application launching (keeping cmd for these as they're app shortcuts)
           alt-enter = "exec-and-forget open -n /Applications/WezTerm.app";
           alt-b = "exec-and-forget open -a 'Firefox'";
           alt-f = "exec-and-forget open -a 'Finder'";
+          alt-v = "exec-and-forget open -a 'Visual Studio Code'";
 
-          # Navigation - vim-style hjkl
+          # Navigation - vim-style hjkl and arrow keys
           alt-h = ["focus left" "move-mouse window-lazy-center"];
           alt-j = ["focus down" "move-mouse window-lazy-center"];
           alt-k = ["focus up" "move-mouse window-lazy-center"];
           alt-l = ["focus right" "move-mouse window-lazy-center"];
+          alt-left = ["focus left" "move-mouse window-lazy-center"];
+          alt-down = ["focus down" "move-mouse window-lazy-center"];
+          alt-up = ["focus up" "move-mouse window-lazy-center"];
+          alt-right = ["focus right" "move-mouse window-lazy-center"];
 
           # Move windows
           alt-shift-h = "move left";
@@ -99,9 +105,9 @@
           alt-shift-9 = "move-node-to-workspace 9";
           alt-shift-0 = "move-node-to-workspace 10";
 
-          # Workspace switching
-          alt-tab = "workspace-back-and-forth";
-          alt-shift-tab = "move-workspace-to-monitor --wrap-around next";
+          # Workspace switching - cycle through all workspaces with windows
+          ctrl-tab = "workspace next";
+          ctrl-shift-tab = "workspace prev";
 
           # Tiling controls
           alt-shift-f = "fullscreen";
