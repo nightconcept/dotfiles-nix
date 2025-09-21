@@ -33,12 +33,12 @@ in
 
     systemd.services."docker-container-${containerName}" = {
       description = "Watchtower Auto-Update Container";
-      after = [ "docker.service" ];
-      requires = [ "docker.service" ];
+      after = [ "docker.service" "docker-network-proxy.service" ];
+      requires = [ "docker.service" "docker-network-proxy.service" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        # Copy docker-compose.yml if exists, otherwise create basic one
+        # Use docker-compose.yml with proxy network
         if [ -f ${./docker-compose.yml} ]; then
           cp ${./docker-compose.yml} ${containerPath}/docker-compose.yml
         else
@@ -54,6 +54,12 @@ in
               - WATCHTOWER_SCHEDULE=${cfg.schedule}
             volumes:
               - /var/run/docker.sock:/var/run/docker.sock
+            networks:
+              - proxy
+
+        networks:
+          proxy:
+            external: true
         COMPOSE
         fi
 

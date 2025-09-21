@@ -39,15 +39,13 @@ in
 
     systemd.services."docker-container-${containerName}" = {
       description = "Portainer Docker Management Container";
-      after = [ "docker.service" ];
-      requires = [ "docker.service" ];
+      after = [ "docker.service" "docker-network-proxy.service" ];
+      requires = [ "docker.service" "docker-network-proxy.service" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        if [ -f ${./docker-compose.yml} ]; then
-          cp ${./docker-compose.yml} ${containerPath}/docker-compose.yml
-        else
-          cat > ${containerPath}/docker-compose.yml <<'COMPOSE'
+        # Generate docker-compose.yml with proper port mappings
+        cat > ${containerPath}/docker-compose.yml <<'COMPOSE'
         services:
           portainer:
             container_name: portainer
@@ -56,11 +54,19 @@ in
             ports:
               - ${toString cfg.port}:9000
               - ${toString cfg.edgePort}:8000
+              - 9443:9443
             volumes:
               - /var/run/docker.sock:/var/run/docker.sock
               - ${cfg.dataPath}:/data
+            networks:
+              - proxy
+            labels:
+              - "com.centurylinklabs.watchtower.enable=true"
+
+        networks:
+          proxy:
+            external: true
         COMPOSE
-        fi
       '';
 
       serviceConfig = {

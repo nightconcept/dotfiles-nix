@@ -95,5 +95,21 @@ in
     systemd.tmpfiles.rules = [
       "d /var/lib/docker-containers 0755 root root -"
     ];
+
+    # Create proxy network for containers
+    systemd.services.docker-network-proxy = {
+      description = "Create Docker proxy network";
+      after = [ "docker.service" ];
+      requires = [ "docker.service" ];
+      wantedBy = [ "multi-user.target" ];
+      script = ''
+        ${pkgs.docker}/bin/docker network ls | grep -q proxy || \
+        ${pkgs.docker}/bin/docker network create proxy
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+    };
   };
 }
