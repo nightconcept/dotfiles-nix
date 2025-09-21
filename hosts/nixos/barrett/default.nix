@@ -5,14 +5,7 @@
   lib,
   inputs,
   ...
-}: let
-  # Use pinned nixpkgs from npins
-  sources = import ./npins;
-  pinnedPkgs = import sources.nixpkgs {
-    system = pkgs.system;
-    config = config.nixpkgs.config;
-  };
-in {
+}: {
   imports = [
     ./hardware-configuration.nix
   ];
@@ -84,12 +77,8 @@ in {
   };
 
 
-  # Use pinned nixpkgs for this host
-  # This ensures barrett stays on a known-good nixpkgs revision
-  nixpkgs.pkgs = pinnedPkgs;
-
   # System packages for server management
-  environment.systemPackages = with pinnedPkgs; [
+  environment.systemPackages = with pkgs; [
     home-manager
   ];
 
