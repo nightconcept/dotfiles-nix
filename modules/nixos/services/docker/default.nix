@@ -11,6 +11,7 @@ in
     ./containers/watchtower
 
     # CI/CD runners
+    ./containers/ci-runners.nix
     ./containers/github-runner
     ./containers/forgejo-runner
 

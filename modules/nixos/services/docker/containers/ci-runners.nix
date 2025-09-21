@@ -9,8 +9,20 @@ in
   options.services.ci-runners = {
     enable = lib.mkEnableOption "CI/CD runner containers";
 
+    workingDirectory = lib.mkOption {
+      type = lib.types.path;
+      default = "/var/lib/ci-runners";
+      description = "Base directory for CI runner data";
+    };
+
     github = {
       enable = lib.mkEnableOption "GitHub Actions runners";
+
+      image = lib.mkOption {
+        type = lib.types.str;
+        default = "myoung34/github-runner:latest";
+        description = "Docker image to use for GitHub runners";
+      };
 
       replicas = lib.mkOption {
         type = lib.types.int;
@@ -47,10 +59,28 @@ in
         default = null;
         description = "Repository name (null for org-wide runners)";
       };
+
+      environment = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = {};
+        description = "Additional environment variables for runners";
+      };
+
+      workingDirectory = lib.mkOption {
+        type = lib.types.path;
+        default = "/var/lib/github-runners";
+        description = "Working directory for GitHub runners";
+      };
     };
 
     forgejo = {
       enable = lib.mkEnableOption "Forgejo Actions runners";
+
+      image = lib.mkOption {
+        type = lib.types.str;
+        default = "code.forgejo.org/forgejo/runner:latest";
+        description = "Docker image to use for Forgejo runners";
+      };
 
       replicas = lib.mkOption {
         type = lib.types.int;
@@ -63,6 +93,12 @@ in
         description = "URL of your Forgejo instance";
       };
 
+      runnerName = lib.mkOption {
+        type = lib.types.str;
+        default = "${config.networking.hostName}-runner";
+        description = "Name for the Forgejo runner";
+      };
+
       labels = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ "docker" "amd64" "linux" ];
@@ -73,6 +109,18 @@ in
         type = lib.types.path;
         default = "/run/secrets/forgejo-runner-token";
         description = "Path to file containing Forgejo registration token";
+      };
+
+      environment = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = {};
+        description = "Additional environment variables for runners";
+      };
+
+      workingDirectory = lib.mkOption {
+        type = lib.types.path;
+        default = "/var/lib/forgejo-runners";
+        description = "Working directory for Forgejo runners";
       };
     };
   };
@@ -94,31 +142,34 @@ in
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
-            WorkingDirectory = "/var/lib/github-runners";
-            ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/github-runners";
+            WorkingDirectory = cfg.github.workingDirectory;
+            ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${cfg.github.workingDirectory}";
             ExecStart = let
+              # Build environment variables
+              baseEnvVars = [
+                "      - RUNNER_SCOPE=${if cfg.github.repo != null then "repo" else "org"}"
+                "      - LABELS=${lib.concatStringsSep "," cfg.github.labels}"
+                "      - EPHEMERAL=${if cfg.github.ephemeral then "true" else "false"}"
+                "      - DISABLE_AUTO_UPDATE=true"
+              ];
+              repoEnvVars = lib.optional (cfg.github.repo != null) "      - REPO_URL=https://github.com/${cfg.github.owner}/${cfg.github.repo}";
+              orgEnvVars = lib.optional (cfg.github.repo == null) "      - ORG_NAME=${cfg.github.owner}";
+              customEnvVars = lib.mapAttrsToList (name: value: "      - ${name}=${value}") cfg.github.environment;
+              envVars = lib.concatStringsSep "\n" (baseEnvVars ++ repoEnvVars ++ orgEnvVars ++ customEnvVars);
+
               dockerComposeFile = pkgs.writeText "github-docker-compose.yml" ''
                 version: '3.8'
 
                 services:
                   github-runner:
-                    image: myoung34/github-runner:latest
+                    image: ${cfg.github.image}
                     restart: unless-stopped
                     deploy:
                       replicas: ${toString cfg.github.replicas}
                     environment:
-                      - RUNNER_SCOPE=${if cfg.github.repo != null then "repo" else "org"}
-                      ${lib.optionalString (cfg.github.repo != null) ''
-                      - REPO_URL=https://github.com/${cfg.github.owner}/${cfg.github.repo}
-                      ''}
-                      ${lib.optionalString (cfg.github.repo == null) ''
-                      - ORG_NAME=${cfg.github.owner}
-                      ''}
-                      - LABELS=${lib.concatStringsSep "," cfg.github.labels}
-                      - EPHEMERAL=${if cfg.github.ephemeral then "true" else "false"}
-                      - DISABLE_AUTO_UPDATE=true
+${envVars}
                     env_file:
-                      - /var/lib/github-runners/.env
+                      - ${cfg.github.workingDirectory}/.env
                     volumes:
                       - /var/run/docker.sock:/var/run/docker.sock
                       - github-runner-work:/home/runner/_work
@@ -133,12 +184,12 @@ in
                     driver: bridge
               '';
             in ''
-              ${pkgs.coreutils}/bin/cp ${dockerComposeFile} /var/lib/github-runners/docker-compose.yml
-              echo "ACCESS_TOKEN=$(cat ${cfg.github.tokenFile})" > /var/lib/github-runners/.env
-              ${pkgs.docker-compose}/bin/docker-compose -f /var/lib/github-runners/docker-compose.yml up -d --scale github-runner=${toString cfg.github.replicas}
+              ${pkgs.coreutils}/bin/cp ${dockerComposeFile} ${cfg.github.workingDirectory}/docker-compose.yml
+              echo "ACCESS_TOKEN=$(cat ${cfg.github.tokenFile})" > ${cfg.github.workingDirectory}/.env
+              ${pkgs.docker-compose}/bin/docker-compose -f ${cfg.github.workingDirectory}/docker-compose.yml up -d --scale github-runner=${toString cfg.github.replicas}
             '';
             ExecStop = ''
-              ${pkgs.docker-compose}/bin/docker-compose -f /var/lib/github-runners/docker-compose.yml down
+              ${pkgs.docker-compose}/bin/docker-compose -f ${cfg.github.workingDirectory}/docker-compose.yml down
             '';
             Restart = "on-failure";
           };
@@ -156,24 +207,31 @@ in
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
-            WorkingDirectory = "/var/lib/forgejo-runners";
-            ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/forgejo-runners";
+            WorkingDirectory = cfg.forgejo.workingDirectory;
+            ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${cfg.forgejo.workingDirectory}";
             ExecStart = let
+              # Build environment variables
+              baseEnvVars = [
+                "      - FORGEJO_INSTANCE_URL=${cfg.forgejo.instanceUrl}"
+                "      - FORGEJO_RUNNER_NAME=${cfg.forgejo.runnerName}"
+                "      - FORGEJO_RUNNER_LABELS=${lib.concatStringsSep "," cfg.forgejo.labels}"
+              ];
+              customEnvVars = lib.mapAttrsToList (name: value: "      - ${name}=${value}") cfg.forgejo.environment;
+              envVars = lib.concatStringsSep "\n" (baseEnvVars ++ customEnvVars);
+
               dockerComposeFile = pkgs.writeText "forgejo-docker-compose.yml" ''
                 version: '3.8'
 
                 services:
                   forgejo-runner:
-                    image: code.forgejo.org/forgejo/runner:latest
+                    image: ${cfg.forgejo.image}
                     restart: unless-stopped
                     deploy:
                       replicas: ${toString cfg.forgejo.replicas}
                     environment:
-                      - FORGEJO_INSTANCE_URL=${cfg.forgejo.instanceUrl}
-                      - FORGEJO_RUNNER_NAME=vincent-runner
-                      - FORGEJO_RUNNER_LABELS=${lib.concatStringsSep "," cfg.forgejo.labels}
+${envVars}
                     env_file:
-                      - /var/lib/forgejo-runners/.env
+                      - ${cfg.forgejo.workingDirectory}/.env
                     volumes:
                       - /var/run/docker.sock:/var/run/docker.sock
                       - forgejo-runner-data:/data
@@ -188,12 +246,12 @@ in
                     driver: bridge
               '';
             in ''
-              ${pkgs.coreutils}/bin/cp ${dockerComposeFile} /var/lib/forgejo-runners/docker-compose.yml
-              echo "FORGEJO_RUNNER_REGISTRATION_TOKEN=$(cat ${cfg.forgejo.tokenFile})" > /var/lib/forgejo-runners/.env
-              ${pkgs.docker-compose}/bin/docker-compose -f /var/lib/forgejo-runners/docker-compose.yml up -d --scale forgejo-runner=${toString cfg.forgejo.replicas}
+              ${pkgs.coreutils}/bin/cp ${dockerComposeFile} ${cfg.forgejo.workingDirectory}/docker-compose.yml
+              echo "FORGEJO_RUNNER_REGISTRATION_TOKEN=$(cat ${cfg.forgejo.tokenFile})" > ${cfg.forgejo.workingDirectory}/.env
+              ${pkgs.docker-compose}/bin/docker-compose -f ${cfg.forgejo.workingDirectory}/docker-compose.yml up -d --scale forgejo-runner=${toString cfg.forgejo.replicas}
             '';
             ExecStop = ''
-              ${pkgs.docker-compose}/bin/docker-compose -f /var/lib/forgejo-runners/docker-compose.yml down
+              ${pkgs.docker-compose}/bin/docker-compose -f ${cfg.forgejo.workingDirectory}/docker-compose.yml down
             '';
             Restart = "on-failure";
           };
@@ -201,10 +259,11 @@ in
       })
     ];
 
-    # Monitoring for runner containers
-    services.prometheus.exporters.docker = lib.mkIf (cfg.github.enable || cfg.forgejo.enable) {
-      enable = true;
-      port = 9323;
-    };
+    # Monitoring for runner containers (optional)
+    # Note: Requires prometheus module to be enabled
+    # services.prometheus.exporters.docker = lib.mkIf (cfg.github.enable || cfg.forgejo.enable) {
+    #   enable = true;
+    #   port = 9323;
+    # };
   };
 }

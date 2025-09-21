@@ -35,44 +35,44 @@
     home-manager
   ];
 
-  # Enable Docker module and containers
-  modules.nixos.docker = {
+  # Enable Docker module
+  modules.nixos.docker.enable = true;
+
+  # CI/CD Runners
+  services.ci-runners = {
     enable = true;
 
-    containers = {
-      # GitHub Actions runners
-      github-runner = {
-        enable = true;
-        replicas = 3;
-        ephemeral = true;
-        scope = "org";  # Organization-wide runners
-        owner = "nightconcept";  # Your GitHub org/username
-        repo = null;  # Not needed for org-wide runners
-        labels = [ "docker" "self-hosted" "linux" "x64" "vincent" ];
-        tokenFile = "/run/secrets/github-runner-token";
-      };
+    github = {
+      enable = true;
+      replicas = 3;
+      ephemeral = true;
+      owner = "nightconcept";
+      repo = null;  # Organization-wide runners
+      labels = [ "docker" "self-hosted" "linux" "x64" "vincent" ];
+      tokenFile = "/run/secrets/github-runner-token";
+    };
 
-      # Forgejo runners
-      forgejo-runner = {
-        enable = true;
-        replicas = 3;
-        instanceUrl = "https://forge.local.solivan.dev";  # Update this
-        runnerName = "vincent-runner";
-        labels = [ "docker" "amd64" "linux" "vincent" ];
-        tokenFile = "/run/secrets/forgejo-runner-token";
-      };
+    forgejo = {
+      enable = true;
+      replicas = 3;
+      instanceUrl = "https://forge.local.solivan.dev";
+      labels = [ "docker" "amd64" "linux" "vincent" ];
+      tokenFile = "/run/secrets/forgejo-runner-token";
+    };
+  };
 
-      # Container management
-      portainer = {
-        enable = true;
-        port = 9000;
-      };
+  # Additional container management
+  modules.nixos.docker.containers = {
+    # Container management
+    portainer = {
+      enable = true;
+      port = 9000;
+    };
 
-      # Auto-update containers (optional)
-      watchtower = {
-        enable = false;  # Disabled by default for CI runners
-        schedule = "0 0 4 * * *";
-      };
+    # Auto-update containers (optional)
+    watchtower = {
+      enable = false;  # Disabled by default for CI runners
+      schedule = "0 0 4 * * *";
     };
   };
 
