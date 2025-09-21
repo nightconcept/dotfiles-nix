@@ -1055,9 +1055,15 @@ EOF
     # Setup age keys for both user-level and system-level secrets
     print_info "Setting up SOPS age keys..."
 
-    # Create directories in mounted system
+    # Create directories in mounted system with correct ownership
     mkdir -p /mnt/home/danny/.config/sops/age
+    mkdir -p /mnt/home/danny/.ssh
     mkdir -p /mnt/var/lib/sops-nix
+
+    # Ensure .config and .ssh directories have correct ownership
+    chown -R 1000:100 /mnt/home/danny/.config
+    chown -R 1000:100 /mnt/home/danny/.ssh
+    chmod 700 /mnt/home/danny/.ssh
 
     local age_key=""
 

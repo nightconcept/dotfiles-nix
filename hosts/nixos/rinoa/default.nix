@@ -42,6 +42,12 @@
   # Enable Docker
   modules.nixos.docker.enable = true;
 
+  # Enable Docker containers
+  modules.nixos.docker.containers = {
+    portainer.enable = true;
+    watchtower.enable = true;
+  };
+
   # System packages for server management
   environment.systemPackages = with pkgs; [
     home-manager
