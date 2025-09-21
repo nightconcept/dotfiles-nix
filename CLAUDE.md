@@ -283,6 +283,9 @@ Secrets are managed using sops-nix:
 - Automatic deployment to runtime directories
 ### Secret Storage Conventions
 
+#### SOPS Encryption Key
+**ALWAYS use `danny_personal` age key for all secrets** - Do not use host-specific keys as the personal key provides access across all systems.
+
 #### Deployed Secret Paths
 System services (NixOS) should use:
 - `/run/secrets/<service>-<secret>` - Standard SOPS deployment path
