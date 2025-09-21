@@ -182,6 +182,7 @@ Server hosts can be pinned to specific nixpkgs commits using [npins](https://git
 
 ### Current Pinned Hosts
 - `rinoa` - Uses npins-managed nixpkgs at `/hosts/nixos/rinoa/npins/`
+- `barrett` - Uses npins-managed nixpkgs at `/hosts/nixos/barrett/npins/`
 
 ### Setting Up npins for a Host
 
