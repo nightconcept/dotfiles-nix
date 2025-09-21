@@ -5,7 +5,14 @@
   lib,
   inputs,
   ...
-}: {
+}: let
+  # Use pinned nixpkgs from npins
+  sources = import ./npins;
+  pinnedPkgs = import sources.nixpkgs {
+    system = pkgs.system;
+    config = config.nixpkgs.config;
+  };
+in {
   imports = [
     ./hardware-configuration.nix
   ];
@@ -48,8 +55,12 @@
     watchtower.enable = true;
   };
 
+  # Use pinned nixpkgs for this host
+  # This ensures rinoa stays on a known-good nixpkgs revision
+  nixpkgs.pkgs = pinnedPkgs;
+
   # System packages for server management
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = with pinnedPkgs; [
     home-manager
   ];
 
