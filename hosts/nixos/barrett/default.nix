@@ -51,7 +51,7 @@
         webUIPort = 8080;
         torrentPort = 6881;
         username = "danny";
-        password = "changeme";
+        passwordFile = config.sops.secrets."vpn/qbittorrent_password".path;
       };
 
       autoremove = {
@@ -64,11 +64,6 @@
             delete_data = true;
           };
         };
-      };
-
-      qbittorrent = {
-        enable = true;
-        passwordFile = config.sops.secrets."vpn/qbittorrent_password".path;
       };
 
       nordvpn = {
