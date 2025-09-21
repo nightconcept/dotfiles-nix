@@ -198,42 +198,144 @@ in
 
     # NordVPN configuration using wgnord
     (mkIf cfg.nordvpn.enable {
+      # Create necessary directories for wgnord
+      systemd.tmpfiles.rules = [
+        "d /etc/wireguard 0755 root root -"
+        "d /var/lib/wgnord 0755 root root -"
+      ];
+
+      # Setup wgnord required files
+      system.activationScripts.wgnord-setup = ''
+        # Create wgnord data directory
+        mkdir -p /var/lib/wgnord
+
+        # Copy template.conf if it doesn't exist
+        if [ ! -f /var/lib/wgnord/template.conf ]; then
+          cat > /var/lib/wgnord/template.conf << 'EOF'
+        [Interface]
+        PrivateKey = <privatekey>
+        Address = <address>
+        DNS = 103.86.96.100,103.86.99.100
+        MTU = 1420
+
+        [Peer]
+        PublicKey = <publickey>
+        AllowedIPs = 0.0.0.0/0, ::/0
+        Endpoint = <endpoint>
+        EOF
+        fi
+
+        # Copy country files from the wgnord package
+        if [ ! -f /var/lib/wgnord/countries.txt ]; then
+          cp ${pkgs.wgnord}/share/countries.txt /var/lib/wgnord/countries.txt
+        fi
+        if [ ! -f /var/lib/wgnord/countries_iso31662.txt ]; then
+          cp ${pkgs.wgnord}/share/countries_iso31662.txt /var/lib/wgnord/countries_iso31662.txt
+        fi
+      '';
+
       # wgnord service for NordVPN WireGuard connection
       # Note: NordVPN automatically routes P2P traffic through appropriate servers
       # even when connected to regular servers in P2P-supported countries
       systemd.services.wgnord = {
         description = "NordVPN WireGuard (wgnord) service - P2P optimized";
-        after = [ "network.target" ];
+        after = [ "network.target" "network-online.target" ];
+        wants = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
 
-        preStart = ''
-          # Login with token if token file is provided
-          ${lib.optionalString (cfg.nordvpn.tokenFile != null) ''
-            if [ -f "${cfg.nordvpn.tokenFile}" ]; then
-              TOKEN=$(cat "${cfg.nordvpn.tokenFile}")
-              ${pkgs.wgnord}/bin/wgnord l "$TOKEN"
-            else
-              echo "Warning: NordVPN token file not found at ${cfg.nordvpn.tokenFile}"
-              exit 1
-            fi
-          ''}
+        path = [
+          pkgs.wireguard-tools
+          pkgs.iproute2
+          pkgs.jq
+          pkgs.curl
+          pkgs.coreutils
+          pkgs.gnused
+        ];
+
+        script = ''
+          # Ensure directories exist
+          mkdir -p /var/lib/wgnord
+          mkdir -p /etc/wireguard
+
+          # Login if credentials don't exist
+          if [ ! -f /var/lib/wgnord/credentials.json ]; then
+            ${lib.optionalString (cfg.nordvpn.tokenFile != null) ''
+              if [ -f "${cfg.nordvpn.tokenFile}" ]; then
+                echo "Logging in with NordVPN token..."
+                TOKEN=$(cat "${cfg.nordvpn.tokenFile}")
+                ${pkgs.wgnord}/bin/wgnord l "$TOKEN"
+              else
+                echo "Warning: NordVPN token file not found at ${cfg.nordvpn.tokenFile}"
+                exit 1
+              fi
+            ''}
+          fi
+
+          # Clean up any existing connection
+          ${pkgs.wgnord}/bin/wgnord d 2>/dev/null || true
+          ${pkgs.wireguard-tools}/bin/wg-quick down wgnord 2>/dev/null || true
+          rm -f /etc/wireguard/wgnord.conf
+
+          # Extract credentials
+          PRIVKEY=$(cat /var/lib/wgnord/credentials.json | ${pkgs.jq}/bin/jq -r '.nordlynx_private_key')
+
+          # Get P2P server
+          echo "Finding best P2P server..."
+          SERVER_INFO=$(${pkgs.curl}/bin/curl -s "https://api.nordvpn.com/v1/servers/recommendations?filters%5Bservers_technologies%5D%5Bidentifier%5D=wireguard_udp&filters%5Bservers_groups%5D%5Bidentifier%5D=legacy_p2p&limit=1")
+
+          # Fallback to US servers if P2P fails
+          if [ -z "$SERVER_INFO" ] || [ "$SERVER_INFO" = "[]" ]; then
+            echo "No P2P servers found, using US servers..."
+            SERVER_INFO=$(${pkgs.curl}/bin/curl -s "https://api.nordvpn.com/v1/servers/recommendations?filters%5Bservers_technologies%5D%5Bidentifier%5D=wireguard_udp&filters%5Bcountry_id%5D=228&limit=1")
+          fi
+
+          SERVER_IP=$(echo "$SERVER_INFO" | ${pkgs.jq}/bin/jq -r '.[0].station')
+          SERVER_PUBKEY=$(echo "$SERVER_INFO" | ${pkgs.jq}/bin/jq -r '.[0].technologies[] | select(.identifier == "wireguard_udp") | .metadata[0].value')
+          SERVER_NAME=$(echo "$SERVER_INFO" | ${pkgs.jq}/bin/jq -r '.[0].hostname')
+
+          echo "Connecting to $SERVER_NAME..."
+
+          # Create WireGuard config
+          cat > /etc/wireguard/wgnord.conf << EOF
+          [Interface]
+          PrivateKey = $PRIVKEY
+          Address = 10.5.0.2/16
+          DNS = 103.86.96.100,103.86.99.100
+          MTU = 1420
+
+          [Peer]
+          PublicKey = $SERVER_PUBKEY
+          AllowedIPs = 0.0.0.0/0, ::/0
+          Endpoint = ''${SERVER_IP}:51820
+          EOF
+
+          chmod 600 /etc/wireguard/wgnord.conf
+
+          # Bring up the interface
+          ${pkgs.wireguard-tools}/bin/wg-quick up wgnord
+
+          echo "Connected successfully!"
         '';
 
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          # Connect to country - NordVPN will handle P2P routing automatically
-          ExecStart = "${pkgs.wgnord}/bin/wgnord c \"${cfg.nordvpn.country}\"";
-          ExecStop = "${pkgs.wgnord}/bin/wgnord d";
+
+          # Disconnect on stop
+          ExecStop = "${pkgs.wireguard-tools}/bin/wg-quick down wgnord";
+
+          # Restart policy
           Restart = "on-failure";
           RestartSec = "30s";
+          StartLimitBurst = 3;
+          StartLimitIntervalSec = 300;
 
-          # Run as root for network configuration
-          User = "root";
+          # Environment - include all necessary tools
+          Environment = "PATH=${pkgs.wireguard-tools}/bin:${pkgs.iproute2}/bin:${pkgs.coreutils}/bin:${pkgs.jq}/bin:${pkgs.curl}/bin:${pkgs.gnused}/bin";
 
-          # Security
-          PrivateTmp = true;
-          ProtectHome = true;
+          # Security - but allow network access
+          PrivateTmp = false;  # wgnord might need tmp access
+          ProtectHome = false;  # wgnord needs to access config files
         };
       };
 

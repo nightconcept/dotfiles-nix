@@ -23,18 +23,12 @@ in
           };
           credentials = mkOption {
             type = types.str;
-            default = "/run/secrets/network/titan_credentials";
+            default = null;
             description = "Path to credentials file";
           };
         };
       });
-      default = [
-        {
-          name = "titan";
-          source = "//192.168.1.167/titan";
-          credentials = "/run/secrets/network/titan_credentials";
-        }
-      ];
+      default = [];  # Don't set defaults here, let the host configure it
       description = "Network mounts to configure";
     };
   };

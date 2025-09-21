@@ -335,74 +335,102 @@ select_server_host() {
     esac
 }
 
-# Setup SOPS age keys
+# Setup SOPS age keys (both user and system level)
 setup_age_keys() {
     print_info "Setting up SOPS age keys..."
-    
-    # Create age directory
-    mkdir -p "$HOME/.config/sops/age"
-    
-    # Check if age key already exists
-    if [[ -f "$HOME/.config/sops/age/keys.txt" ]]; then
-        print_info "Age key file already exists"
-        return
-    fi
-    
-    print_info "Age key is required for accessing encrypted secrets (SOPS)"
-    print_info "You can either:"
-    echo "  1) Enter an existing age key"
-    echo "  2) Generate a new age key (will need to be added to .sops.yaml)"
-    echo "  3) Skip (secrets won't work until configured later)"
-    echo
-    
-    if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
-        print_warning "/dev/tty not available, skipping age key setup"
-        return
+
+    local age_key=""
+    local setup_system_key=false
+
+    # Check if we're setting up system-level keys (NixOS only)
+    if [[ "$1" == "--system" ]]; then
+        setup_system_key=true
     fi
 
-    read -p "Select option (1-3): " -n 1 -r </dev/tty || {
-        print_warning "Failed to read input, skipping age key setup"
-        return
-    }
-    echo
-    
-    case "$REPLY" in
-        1)
-            echo "Enter your age private key (starts with AGE-SECRET-KEY):"
-            if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
-                print_warning "/dev/tty not available, skipping age key input"
-                return 1
-            fi
-            read -r age_key </dev/tty || return 1
-            if [[ "$age_key" =~ ^AGE-SECRET-KEY ]]; then
-                echo "$age_key" > "$HOME/.config/sops/age/keys.txt"
-                chmod 600 "$HOME/.config/sops/age/keys.txt"
-                print_success "Age key saved successfully"
-            else
-                print_error "Invalid age key format"
-                return 1
-            fi
-            ;;
-        2)
-            if command -v age-keygen &> /dev/null; then
-                age-keygen -o "$HOME/.config/sops/age/keys.txt"
-                print_success "New age key generated"
-                print_warning "You'll need to add the public key to .sops.yaml for secrets access"
-                print_info "Public key: $(age-keygen -y "$HOME/.config/sops/age/keys.txt")"
-            else
-                print_error "age-keygen not available. Install age package first."
-                return 1
-            fi
-            ;;
-        3)
-            print_warning "Skipping age key setup. Secrets won't work until configured."
+    # Create user age directory
+    mkdir -p "$HOME/.config/sops/age"
+
+    # Check if user age key already exists
+    if [[ -f "$HOME/.config/sops/age/keys.txt" ]]; then
+        print_info "User age key file already exists"
+        age_key=$(cat "$HOME/.config/sops/age/keys.txt")
+    else
+        print_info "Age key is required for accessing encrypted secrets (SOPS)"
+        print_info "You can either:"
+        echo "  1) Enter an existing age key"
+        echo "  2) Generate a new age key (will need to be added to .sops.yaml)"
+        echo "  3) Skip (secrets won't work until configured later)"
+        echo
+
+        if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+            print_warning "/dev/tty not available, skipping age key setup"
             return
-            ;;
-        *)
-            print_error "Invalid selection"
-            setup_age_keys
-            ;;
-    esac
+        fi
+
+        read -p "Select option (1-3): " -n 1 -r </dev/tty || {
+            print_warning "Failed to read input, skipping age key setup"
+            return
+        }
+        echo
+
+        case "$REPLY" in
+            1)
+                echo "Enter your age private key (starts with AGE-SECRET-KEY):"
+                if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
+                    print_warning "/dev/tty not available, skipping age key input"
+                    return 1
+                fi
+                read -r age_key </dev/tty || return 1
+                if [[ "$age_key" =~ ^AGE-SECRET-KEY ]]; then
+                    echo "$age_key" > "$HOME/.config/sops/age/keys.txt"
+                    chmod 600 "$HOME/.config/sops/age/keys.txt"
+                    print_success "User age key saved successfully"
+                else
+                    print_error "Invalid age key format"
+                    return 1
+                fi
+                ;;
+            2)
+                if command -v age-keygen &> /dev/null; then
+                    age-keygen -o "$HOME/.config/sops/age/keys.txt"
+                    print_success "New age key generated"
+                    print_warning "You'll need to add the public key to .sops.yaml for secrets access"
+                    print_info "Public key: $(age-keygen -y "$HOME/.config/sops/age/keys.txt")"
+                    age_key=$(cat "$HOME/.config/sops/age/keys.txt")
+                else
+                    print_error "age-keygen not available. Install age package first."
+                    return 1
+                fi
+                ;;
+            3)
+                print_warning "Skipping age key setup. Secrets won't work until configured."
+                return
+                ;;
+            *)
+                print_error "Invalid selection"
+                setup_age_keys
+                return
+                ;;
+        esac
+    fi
+
+    # Setup system-level key for NixOS (requires sudo)
+    if [[ "$setup_system_key" == "true" ]] && [[ -n "$age_key" ]]; then
+        print_info "Setting up system-level SOPS age key..."
+        if command -v sudo &> /dev/null; then
+            sudo mkdir -p /var/lib/sops-nix
+            echo "$age_key" | sudo tee /var/lib/sops-nix/key.txt > /dev/null
+            sudo chmod 600 /var/lib/sops-nix/key.txt
+            sudo chown root:root /var/lib/sops-nix/key.txt
+            print_success "System-level age key configured"
+        else
+            print_warning "sudo not available, system-level key setup skipped"
+            print_info "To manually set up system key later, run:"
+            print_info "  sudo mkdir -p /var/lib/sops-nix"
+            print_info "  echo '$age_key' | sudo tee /var/lib/sops-nix/key.txt"
+            print_info "  sudo chmod 600 /var/lib/sops-nix/key.txt"
+        fi
+    fi
 }
 
 # Apply NixOS configuration
@@ -417,8 +445,8 @@ apply_nixos_config() {
         echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.conf
     fi
 
-    # Setup age keys before applying config
-    setup_age_keys
+    # Setup age keys before applying config (including system-level for NixOS)
+    setup_age_keys --system
 
     # Build and switch
     if [[ "$is_install" == "true" ]]; then
@@ -994,17 +1022,19 @@ nixos_fresh_install() {
     print_info "Updating hardware configuration for $host"
     cp /mnt/etc/nixos/hardware-configuration.nix "hosts/nixos/$host/"
 
-    # Setup age keys for user-level secrets
+    # Setup age keys for both user-level and system-level secrets
     print_info "Setting up SOPS age keys..."
-    # Create age directory in mounted system (user-level location)
+
+    # Create directories in mounted system
     mkdir -p /mnt/home/danny/.config/sops/age
+    mkdir -p /mnt/var/lib/sops-nix
+
+    local age_key=""
 
     # Check for existing key or prompt for new one
     if [[ -f "$HOME/.config/sops/age/keys.txt" ]]; then
         print_info "Using existing age key"
-        cp "$HOME/.config/sops/age/keys.txt" /mnt/home/danny/.config/sops/age/keys.txt
-        chmod 600 /mnt/home/danny/.config/sops/age/keys.txt
-        chown 1000:100 /mnt/home/danny/.config/sops/age/keys.txt
+        age_key=$(cat "$HOME/.config/sops/age/keys.txt")
     else
         print_info "Age key is required for accessing encrypted secrets (SOPS)"
         echo "Enter your age private key (starts with AGE-SECRET-KEY):"
@@ -1015,14 +1045,26 @@ nixos_fresh_install() {
         else
             read -r age_key </dev/tty || age_key=""
         fi
-        if [[ "$age_key" =~ ^AGE-SECRET-KEY ]]; then
-            echo "$age_key" > /mnt/home/danny/.config/sops/age/keys.txt
-            chmod 600 /mnt/home/danny/.config/sops/age/keys.txt
-            chown 1000:100 /mnt/home/danny/.config/sops/age/keys.txt
-            print_success "Age key saved"
-        else
-            print_warning "No age key provided, secrets won't work until configured"
-        fi
+    fi
+
+    if [[ "$age_key" =~ ^AGE-SECRET-KEY ]]; then
+        # Save user-level age key
+        echo "$age_key" > /mnt/home/danny/.config/sops/age/keys.txt
+        chmod 600 /mnt/home/danny/.config/sops/age/keys.txt
+        chown 1000:100 /mnt/home/danny/.config/sops/age/keys.txt
+
+        # Save system-level age key (required for system services)
+        echo "$age_key" > /mnt/var/lib/sops-nix/key.txt
+        chmod 600 /mnt/var/lib/sops-nix/key.txt
+        chown 0:0 /mnt/var/lib/sops-nix/key.txt
+
+        print_success "Age keys saved (both user and system level)"
+    else
+        print_warning "No age key provided, secrets won't work until configured"
+        print_info "To configure later, run:"
+        print_info "  1. Place age key at: ~/.config/sops/age/keys.txt"
+        print_info "  2. Copy to system: sudo cp ~/.config/sops/age/keys.txt /var/lib/sops-nix/key.txt"
+        print_info "  3. Set permissions: sudo chmod 600 /var/lib/sops-nix/key.txt"
     fi
 
     # Optionally set a password for the user
