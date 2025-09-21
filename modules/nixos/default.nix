@@ -15,6 +15,7 @@
     ./networking
     ./programs
     ./services/docker
+    ./services/openssh
     ./security
   ];
 }

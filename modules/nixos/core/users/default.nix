@@ -28,7 +28,7 @@ in
       extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" "video" "audio" ];
       shell = pkgs.fish;
       openssh.authorizedKeys.keys = [
-        # Add any default public keys here if needed
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMJKTm63zFmYfGauCBlUWq7lvHFq+NVPT5RqIfjLM7MN danny@solivan.dev"
       ];
     };
 

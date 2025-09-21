@@ -76,7 +76,6 @@
     };
   };
 
-  services.openssh.enable = true;
 
   # System packages for server management
   environment.systemPackages = with pkgs; [
