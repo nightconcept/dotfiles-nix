@@ -68,7 +68,10 @@ in
         gtk.enable = true;  # Enable GTK theming for dark mode
         gnome.enable = false;
         vscode.enable = false;
-        firefox.enable = true;  # Let Stylix handle Firefox theming
+        firefox = {
+          enable = true;  # Let Stylix handle Firefox theming
+          profileNames = [ "danny" ];  # Specify the profile to theme
+        };
         spicetify.enable = true;  # Enable Spicetify theming with Tokyo Night colors
         vencord.enable = true;  # Enable Vencord Discord theming with Tokyo Night colors
       };
