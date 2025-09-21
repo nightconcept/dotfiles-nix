@@ -233,7 +233,7 @@
         # Workspace cycling with Alt+Tab (cycle through workspaces with windows)
         "ALT, Tab, workspace, m+1"
         "ALT SHIFT, Tab, workspace, m-1"
-        
+
         # Window cycling within workspace with Super+Left/Right
         "$mod, Right, focuswindow, next"
         "$mod, Left, focuswindow, prev"

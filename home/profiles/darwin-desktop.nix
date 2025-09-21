@@ -11,7 +11,6 @@
   ];
 
   modules.home.programs = {
-    firefox.enable = true;
     shell = {
       fish.enable = true;
       starship.enable = true;

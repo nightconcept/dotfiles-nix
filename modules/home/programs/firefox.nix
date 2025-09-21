@@ -322,8 +322,8 @@ in
       };
     };
 
-    # Set Firefox as default browser
-    xdg.mimeApps = {
+    # Set Firefox as default browser (Linux only)
+    xdg.mimeApps = lib.mkIf pkgs.stdenv.isLinux {
       enable = true;
       defaultApplications = {
         "text/html" = ["firefox.desktop"];
