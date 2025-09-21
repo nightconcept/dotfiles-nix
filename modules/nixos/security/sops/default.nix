@@ -45,6 +45,11 @@ in
           owner = "root";
           mode = "0400";
         };
+        "vpn/qbittorrent_password" = {
+          # SOPS will handle the path automatically
+          owner = "danny";
+          mode = "0400";
+        };
       };
     };
   };

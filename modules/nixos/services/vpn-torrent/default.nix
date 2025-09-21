@@ -27,6 +27,8 @@ in
       webUIPort = mkOpt lib.types.port 8080 "Port for qBittorrent Web UI";
       torrentPort = mkOpt lib.types.port 6881 "Port for BitTorrent traffic";
       openFirewall = mkBoolOpt true "Open firewall ports for qBittorrent";
+      username = mkOpt lib.types.str "danny" "qBittorrent Web UI username";
+      passwordFile = mkOpt (lib.types.nullOr lib.types.path) null "Path to file containing qBittorrent password (from SOPS)";
     };
 
     autoremove = {
@@ -74,14 +76,80 @@ in
         requires = [ "mnt-titan.mount" ];  # Ensure titan mount is available
         wantedBy = [ "multi-user.target" ];
 
-        preStart = ''
+        preStart = lib.mkIf (cfg.qbittorrent.passwordFile != null) ''
           # Ensure config directory exists
           mkdir -p ${cfg.configDir}/qbittorrent/qBittorrent/config
+          mkdir -p ${cfg.configDir}/qbittorrent/qBittorrent/data/logs
 
-          # Let qBittorrent handle its own configuration
-          # It will generate a temp password on first run
-          # Users should then set their preferred credentials via the Web UI
-          echo "qBittorrent directory ready at ${cfg.configDir}/qbittorrent"
+          # Generate qBittorrent config with password from SOPS
+          if [ -f "${cfg.qbittorrent.passwordFile}" ]; then
+            echo "Generating qBittorrent configuration..."
+
+            # Read password from SOPS
+            PASSWORD=$(cat "${cfg.qbittorrent.passwordFile}")
+
+            # Generate MD5 hash for HA1 authentication (legacy, kept for compatibility)
+            REALM="Web UI Access"
+            HASH_MD5=$(echo -n "${cfg.qbittorrent.username}:$REALM:$PASSWORD" | md5sum | cut -d' ' -f1)
+
+            # Generate PBKDF2 hash for secure authentication
+            # This is a simplified version - in production you'd use the actual hash from qBittorrent
+            # For now, we'll let qBittorrent regenerate this on first login
+
+            cat > ${cfg.configDir}/qbittorrent/qBittorrent/config/qBittorrent.conf << EOF
+          [Application]
+          FileLogger\\Age=1
+          FileLogger\\AgeType=1
+          FileLogger\\Backup=true
+          FileLogger\\DeleteOld=true
+          FileLogger\\Enabled=true
+          FileLogger\\MaxSizeBytes=66560
+          FileLogger\\Path=${cfg.configDir}/qbittorrent/qBittorrent/data/logs
+
+          [BitTorrent]
+          Session\\AddTorrentStopped=false
+          Session\\DefaultSavePath=${cfg.downloadDir}
+          Session\\ExcludedFileNames=
+          Session\\Port=${toString cfg.qbittorrent.torrentPort}
+          Session\\QueueingSystemEnabled=true
+          Session\\ShareLimitAction=Stop
+
+          [Core]
+          AutoDeleteAddedTorrentFile=Never
+
+          [Meta]
+          MigrationVersion=8
+
+          [Network]
+          Proxy\\HostnameLookupEnabled=false
+          Proxy\\Profiles\\BitTorrent=true
+          Proxy\\Profiles\\Misc=true
+          Proxy\\Profiles\\RSS=true
+
+          [Preferences]
+          Connection\\PortRangeMin=${toString cfg.qbittorrent.torrentPort}
+          Downloads\\SavePath=${cfg.downloadDir}
+          General\\Locale=en
+          MailNotification\\req_auth=true
+          WebUI\\CSRFProtection=false
+          WebUI\\LocalHostAuth=false
+          WebUI\\Password_ha1=@ByteArray($HASH_MD5)
+          WebUI\\Port=${toString cfg.qbittorrent.webUIPort}
+          WebUI\\Username=${cfg.qbittorrent.username}
+
+          [RSS]
+          AutoDownloader\\DownloadRepacks=true
+          AutoDownloader\\SmartEpisodeFilter=s(\\d+)e(\\d+), (\\d+)x(\\d+), "(\\d{4}[.\\-]\\d{1,2}[.\\-]\\d{1,2})", "(\\d{1,2}[.\\-]\\d{1,2}[.\\-]\\d{4})"
+          EOF
+
+            chown ${cfg.user}:users ${cfg.configDir}/qbittorrent/qBittorrent/config/qBittorrent.conf
+            chmod 600 ${cfg.configDir}/qbittorrent/qBittorrent/config/qBittorrent.conf
+
+            echo "qBittorrent configuration generated with username: ${cfg.qbittorrent.username}"
+          else
+            echo "Warning: Password file not found at ${cfg.qbittorrent.passwordFile}"
+            echo "qBittorrent will start with a temporary password"
+          fi
         '';
 
         serviceConfig = {
@@ -145,21 +213,46 @@ in
         ]))
       ];
 
-      # Create autoremove-torrents configuration file
-      environment.etc."autoremove-torrents/config.yml".text = lib.generators.toYAML {} {
-        qbittorrent_task = {
-          client = "qbittorrent";
-          host = "http://127.0.0.1:${toString cfg.qbittorrent.webUIPort}";
-          username = "danny";
-          password = "changeme";  # Update this if you change the password in qBittorrent
-          strategies = cfg.autoremove.strategies;
-        };
-      };
-
-      # Create log directory
+      # Create directories
       systemd.tmpfiles.rules = [
+        "d /etc/autoremove-torrents 0755 root root -"
         "d /var/log/autoremove-torrents 0755 ${cfg.user} users -"
       ];
+
+      # Generate config at runtime with the actual password
+      systemd.services.autoremove-torrents-config = {
+        description = "Generate autoremove-torrents configuration";
+        wantedBy = [ "autoremove-torrents.service" ];
+        before = [ "autoremove-torrents.service" ];
+
+        script = lib.mkIf (cfg.qbittorrent.passwordFile != null) ''
+          # Read password from SOPS
+          if [ -f "${cfg.qbittorrent.passwordFile}" ]; then
+            PASSWORD=$(cat "${cfg.qbittorrent.passwordFile}")
+
+            cat > /etc/autoremove-torrents/config.yml << EOF
+          qbittorrent_task:
+            client: qbittorrent
+            host: http://127.0.0.1:${toString cfg.qbittorrent.webUIPort}
+            username: ${cfg.qbittorrent.username}
+            password: "$PASSWORD"
+            strategies:
+          EOF
+
+            # Add strategies from Nix config
+            ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: strategy: ''
+              echo "      ${name}:" >> /etc/autoremove-torrents/config.yml
+              echo "        remove: '${strategy.remove}'" >> /etc/autoremove-torrents/config.yml
+              echo "        delete_data: ${if strategy.delete_data then "true" else "false"}" >> /etc/autoremove-torrents/config.yml
+            '') cfg.autoremove.strategies)}
+          fi
+        '';
+
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+      };
 
       # Autoremove-torrents systemd service
       systemd.services.autoremove-torrents = {

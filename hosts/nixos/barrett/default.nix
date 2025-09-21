@@ -66,6 +66,11 @@
         };
       };
 
+      qbittorrent = {
+        enable = true;
+        passwordFile = config.sops.secrets."vpn/qbittorrent_password".path;
+      };
+
       nordvpn = {
         enable = true;
         # Use the actual path where SOPS deploys the secret
