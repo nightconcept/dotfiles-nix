@@ -19,6 +19,17 @@
   # Networking
   modules.nixos.networking.base.hostName = "vincent";
 
+  # Bootloader configuration (override systemd-boot for BIOS/MBR systems)
+  modules.nixos.core.bootloader.enable = false;
+  boot.loader = {
+    systemd-boot.enable = false;
+    efi.canTouchEfiVariables = false;
+    grub = {
+      enable = true;
+      device = "/dev/sda"; # Update this to match your actual disk
+    };
+  };
+
   # Standard NixOS modules
   modules.nixos = {
     kernel.type = "lts";
