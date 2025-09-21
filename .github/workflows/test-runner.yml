@@ -1,0 +1,38 @@
+name: Test Self-Hosted Runner
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/test-runner.yml'
+
+jobs:
+  test-runner:
+    runs-on: [self-hosted, vincent, docker]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Show runner info
+        run: |
+          echo "Runner name: $RUNNER_NAME"
+          echo "Runner OS: $RUNNER_OS"
+          echo "Runner arch: $RUNNER_ARCH"
+          echo "Working directory: $PWD"
+
+      - name: Test Docker availability
+        run: |
+          docker --version
+          docker ps
+
+      - name: Test Nix availability
+        run: |
+          nix --version || echo "Nix not available"
+
+      - name: Success message
+        run: |
+          echo "✅ Self-hosted runner on vincent is working!"
+          echo "Runner successfully executed workflow on $(hostname)"
