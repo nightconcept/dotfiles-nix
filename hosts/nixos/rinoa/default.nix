@@ -38,7 +38,6 @@
     };
   };
 
-  services.openssh.enable = true;
 
   # Enable Docker
   modules.nixos.docker.enable = true;
