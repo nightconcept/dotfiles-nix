@@ -10,6 +10,16 @@
     ./hardware-configuration.nix
   ];
 
+  # Bootloader configuration (override any systemd-boot settings)
+  boot.loader = {
+    systemd-boot.enable = lib.mkForce false;
+    efi.canTouchEfiVariables = lib.mkForce false;
+    grub = {
+      enable = true;
+      device = "/dev/sda";
+    };
+  };
+
   # Apply shared overlays
   nixpkgs.overlays = [
     (import ../../../overlays/unstable-packages.nix { inherit inputs; })
