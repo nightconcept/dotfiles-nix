@@ -28,7 +28,7 @@ in
 
     passwordAuthentication = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = "Whether to allow password authentication";
     };
   };
@@ -44,13 +44,12 @@ in
         PasswordAuthentication = cfg.passwordAuthentication;
         KbdInteractiveAuthentication = false;
 
-        # Key-based authentication only
+        # Enable both key and password authentication (keys preferred)
         PubkeyAuthentication = true;
-        AuthenticationMethods = "publickey";
 
         # Disable unused authentication methods
         ChallengeResponseAuthentication = false;
-        UsePAM = false;
+        UsePAM = true;  # Required for password authentication
 
         # Connection limits
         MaxAuthTries = 3;
