@@ -129,6 +129,16 @@ in
     # Ensure Docker is enabled
     virtualisation.docker.enable = true;
 
+    # Create required directories with proper permissions
+    systemd.tmpfiles.rules = lib.mkMerge [
+      (lib.mkIf cfg.github.enable [
+        "d ${cfg.github.workingDirectory} 0755 root root -"
+      ])
+      (lib.mkIf cfg.forgejo.enable [
+        "d ${cfg.forgejo.workingDirectory} 0755 root root -"
+      ])
+    ];
+
     # Create docker-compose files
     systemd.services = lib.mkMerge [
       # GitHub Runners Service
