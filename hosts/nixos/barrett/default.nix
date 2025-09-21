@@ -36,7 +36,8 @@
     # Mount titan network drive for downloads
     network-drives.titan = {
       enable = true;
-      # Uses default settings for server, mount point, etc.
+      # Reference the SOPS secret path
+      credentialsFile = config.sops.secrets."network/titan_credentials".path;
     };
 
     services.vpn-torrent = {
@@ -67,6 +68,7 @@
 
       nordvpn = {
         enable = true;
+        # Use the actual path where SOPS deploys the secret
         tokenFile = config.sops.secrets."vpn/nordvpn_token".path;
         country = "United States";  # P2P servers are available in most US locations
       };

@@ -1,0 +1,24 @@
+building the system configuration...
+updating GRUB 2 menu...
+activating the configuration...
+setting up /etc...
+sops-install-secrets: Imported /etc/ssh/ssh_host_rsa_key as GPG key with fingerprint aa62f82724024d203f5dd65b106a1060c4cd7e78
+sops-install-secrets: Imported /etc/ssh/ssh_host_ed25519_key as age key with fingerprint age1h2d5g29ddmx3u9gtcz4v34xnpyc4e40dltuxz9nvtlk7c3marszqs08ugh
+reloading user units for danny...
+restarting sysinit-reactivation.target
+the following new units were started: NetworkManager-dispatcher.service
+warning: the following units failed: wgnord.service
+● wgnord.service - NordVPN WireGuard (wgnord) service - P2P optimized
+     Loaded: loaded (/etc/systemd/system/wgnord.service; enabled; preset: ignored)
+     Active: activating (auto-restart) (Result: exit-code) since Sat 2025-09-20 21:57:23 PDT; 325ms ago
+ Invocation: 4c01c6573e044c9e8650234ef940368d
+    Process: 5764 ExecStartPre=/nix/store/lvbalaq24z5632ghnsc3acw5fs5ay84s-unit-script-wgnord-pre-start/bin/wgnord-pre-start (code=exited, status=0/SUCCESS)
+    Process: 5931 ExecStart=/nix/store/c4gp12ci4ydzr5a236ksiwh4lh892w1k-wgnord-0.2.1/bin/wgnord c United States (code=exited, status=1/FAILURE)
+   Main PID: 5931 (code=exited, status=1/FAILURE)
+         IP: 41.4K in, 5.9K out
+         IO: 0B read, 0B written
+   Mem peak: 5.1M
+        CPU: 137ms
+
+Sep 20 21:57:23 barrett systemd[1]: wgnord.service: Consumed 137ms CPU time, 5.1M memory peak, 41.4K incoming IP traffic, 5.9K outgoing IP traffic.
+Command 'systemd-run -E LOCALE_ARCHIVE -E NIXOS_INSTALL_BOOTLOADER --collect --no-ask-password --pipe --quiet --service-type=exec --unit=nixos-rebuild-switch-to-configuration /nix/store/hp9kka9ms3hpcx0gd1zj6pjfi741ddap-nixos-system-barrett-25.11.20250919.8eaee11/bin/switch-to-configuration switch' returned non-zero exit status 4.
