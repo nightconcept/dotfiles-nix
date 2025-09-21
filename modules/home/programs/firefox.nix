@@ -30,9 +30,9 @@ in
         # Search engines configuration
         search = {
           force = true;
-          default = "DuckDuckGo";
-          privateDefault = "DuckDuckGo";
-          order = [ "DuckDuckGo" "Google" ];
+          default = "ddg";
+          privateDefault = "ddg";
+          order = [ "ddg" "google" ];
           engines = {
             "Nix Packages" = {
               urls = [{
@@ -47,49 +47,49 @@ in
             };
             "NixOS Wiki" = {
               urls = [{ template = "https://wiki.nixos.org/w/index.php?search={searchTerms}"; }];
-              iconUpdateURL = "https://wiki.nixos.org/favicon.png";
-              updateInterval = 24 * 60 * 60 * 1000; # every day
+              icon = "https://wiki.nixos.org/favicon.png";
               definedAliases = [ "@nw" ];
             };
             "GitHub" = {
               urls = [{ template = "https://github.com/search?q={searchTerms}&type=code"; }];
-              iconUpdateURL = "https://github.com/favicon.ico";
-              updateInterval = 24 * 60 * 60 * 1000;
+              icon = "https://github.com/favicon.ico";
               definedAliases = [ "@gh" ];
             };
             "YouTube" = {
               urls = [{ template = "https://www.youtube.com/results?search_query={searchTerms}"; }];
-              iconUpdateURL = "https://www.youtube.com/favicon.ico";
-              updateInterval = 24 * 60 * 60 * 1000;
+              icon = "https://www.youtube.com/favicon.ico";
               definedAliases = [ "@yt" ];
             };
-            "Google".metaData.alias = "@g";
-            "Wikipedia".metaData.alias = "@wiki";
-            "Bing".metaData.hidden = true;
+            "google".metaData.alias = "@g";
+            "wikipedia".metaData.alias = "@wiki";
+            "bing".metaData.hidden = true;
           };
         };
 
         # Bookmarks configuration
-        bookmarks = [
-          {
-            name = "Development";
-            toolbar = true;
-            bookmarks = [
-              {
-                name = "GitHub";
-                url = "https://github.com";
-              }
-              {
-                name = "NixOS Search";
-                url = "https://search.nixos.org";
-              }
-              {
-                name = "Home Manager Options";
-                url = "https://nix-community.github.io/home-manager/options.html";
-              }
-            ];
-          }
-        ];
+        bookmarks = {
+          force = true;
+          settings = [
+            {
+              name = "Development";
+              toolbar = true;
+              bookmarks = [
+                {
+                  name = "GitHub";
+                  url = "https://github.com";
+                }
+                {
+                  name = "NixOS Search";
+                  url = "https://search.nixos.org";
+                }
+                {
+                  name = "Home Manager Options";
+                  url = "https://nix-community.github.io/home-manager/options.html";
+                }
+              ];
+            }
+          ];
+        };
 
         # Settings for better integration and privacy
         settings = {
@@ -123,13 +123,17 @@ in
           "browser.startup.preXulSkeletonUI" = false; # Disable skeleton UI
 
           # UI customization
-          "browser.toolbars.bookmarks.visibility" = "never";
+          "browser.toolbars.bookmarks.visibility" = "always"; # Show bookmarks toolbar
           "browser.compactmode.show" = true;
           "browser.uidensity" = 1; # Compact mode
           "browser.tabs.inTitlebar" = 1;
           "browser.newtabpage.enabled" = true;
           "browser.urlbar.suggest.quicksuggest.sponsored" = false;
           "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
+
+          # Homepage
+          "browser.startup.homepage" = "https://heimdall.local.solivan.dev/";
+          "browser.startup.page" = 3; # Restore previous session
 
           # Better scrolling
           "apz.overscroll.enabled" = true; # Elastic overscroll
@@ -145,8 +149,12 @@ in
           "privacy.trackingprotection.fingerprinting.enabled" = true;
           "privacy.firstparty.isolate" = false; # Can break some sites
           "privacy.resistFingerprinting" = false; # Can break sites
-          "network.cookie.cookieBehavior" = 5; # Strict tracking protection
-          "browser.contentblocking.category" = "strict";
+          "network.cookie.cookieBehavior" = 0; # Accept all cookies (matches your setting)
+          "browser.contentblocking.category" = "custom"; # Custom tracking protection
+
+          # Container support
+          "privacy.userContext.enabled" = true;
+          "privacy.userContext.ui.enabled" = true;
 
           # Security
           "dom.security.https_only_mode" = true;
@@ -198,6 +206,8 @@ in
           "browser.download.useDownloadDir" = false; # Always ask where to save
           "browser.download.alwaysOpenPanel" = false;
           "browser.download.manager.addToRecentDocs" = false;
+          "browser.download.autohideButton" = false;
+          "browser.download.lastDir" = "/home/danny/Downloads";
 
           # Developer tools
           "devtools.chrome.enabled" = true;
@@ -205,58 +215,30 @@ in
 
           # Media
           "media.eme.enabled" = true; # Enable DRM for streaming services
-          "media.videocontrols.picture-in-picture.video-toggle.enabled" = true;
+          "media.videocontrols.picture-in-picture.video-toggle.enabled" = false; # Disabled per your settings
+
+          # Other preferences from your profile
+          "general.autoScroll" = true; # Enable autoscroll
+          "accessibility.typeaheadfind.flashBar" = 0;
+          "app.shield.optoutstudies.enabled" = false;
+          "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
+          "browser.newtabpage.activity-stream.feeds.topsites" = false;
+          "browser.newtabpage.activity-stream.showSponsored" = false;
+          "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+          "network.dns.disablePrefetch" = true;
+          "network.predictor.enabled" = false;
+          "network.prefetch-next" = false;
+          "network.http.speculative-parallel-limit" = 0;
 
           # PDF viewer
           "pdfjs.enableScripting" = false; # Security
         };
 
-        # Extensions - using nixpkgs firefox-addons
-        extensions = with pkgs; [
-          # Privacy & Security
-          (fetchFirefoxAddon {
-            name = "ublock-origin";
-            url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
-            sha256 = ""; # Will be filled by nix
-          })
-          (fetchFirefoxAddon {
-            name = "bitwarden";
-            url = "https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi";
-            sha256 = "";
-          })
-
-          # Productivity
-          (fetchFirefoxAddon {
-            name = "dark-reader";
-            url = "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi";
-            sha256 = "";
-          })
-          (fetchFirefoxAddon {
-            name = "sponsorblock";
-            url = "https://addons.mozilla.org/firefox/downloads/latest/sponsorblock/latest.xpi";
-            sha256 = "";
-          })
-
-          # Development
-          (fetchFirefoxAddon {
-            name = "react-devtools";
-            url = "https://addons.mozilla.org/firefox/downloads/latest/react-devtools/latest.xpi";
-            sha256 = "";
-          })
-          (fetchFirefoxAddon {
-            name = "refined-github";
-            url = "https://addons.mozilla.org/firefox/downloads/latest/refined-github-/latest.xpi";
-            sha256 = "";
-          })
-        ] ++ lib.optionals (pkgs ? nur && pkgs ? nur.repos.rycee) (with pkgs.nur.repos.rycee.firefox-addons; [
-          # If NUR is available, use these pre-packaged extensions
-          ublock-origin
-          bitwarden
-          darkreader
-          sponsorblock
-          refined-github
-          react-devtools
-        ]);
+        # Extensions - will be installed manually or via sync
+        # Your extensions include: uBlock Origin, Bitwarden, Dark Reader, SponsorBlock,
+        # 2FAS, Tampermonkey, Kagi Search, Obsidian Clipper, Multi-Account Containers, etc.
+        # These will sync via Firefox Sync or can be installed manually
+        extensions.packages = [];
 
         # Custom CSS for UI tweaks (userChrome.css)
         userChrome = ''
@@ -310,7 +292,7 @@ in
         DisablePocket = true;
         DisableFirefoxAccounts = false; # Keep enabled for sync if desired
         DisableSetDesktopBackground = true;
-        DisplayBookmarksToolbar = "never";
+        DisplayBookmarksToolbar = "always"; # Show bookmarks toolbar
         DontCheckDefaultBrowser = true;
         EnableTrackingProtection = {
           Value = true;
@@ -326,7 +308,7 @@ in
           Pocket = false;
           SponsoredPocket = false;
         };
-        NoDefaultBookmarks = true;
+        NoDefaultBookmarks = lib.mkForce true;
         OfferToSaveLogins = false; # We use Bitwarden
         OverrideFirstRunPage = "";
         OverridePostUpdatePage = "";
@@ -359,10 +341,6 @@ in
       };
     };
 
-    # Environment variables for better Wayland support
-    home.sessionVariables = lib.mkIf (config.desktops.hyprland.enable or false) {
-      MOZ_ENABLE_WAYLAND = 1;
-      MOZ_USE_XINPUT2 = 1;
-    };
+    # Wayland environment variables are set in the Hyprland desktop module
   };
 }
