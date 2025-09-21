@@ -50,6 +50,11 @@ in
           owner = "danny";
           mode = "0400";
         };
+        "vpn/qbittorrent_password_hash" = {
+          # PBKDF2 hash for qBittorrent WebUI authentication
+          owner = "danny";
+          mode = "0400";
+        };
       };
     };
   };

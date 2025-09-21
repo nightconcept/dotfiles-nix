@@ -29,6 +29,7 @@ in
       openFirewall = mkBoolOpt true "Open firewall ports for qBittorrent";
       username = mkOpt lib.types.str "danny" "qBittorrent Web UI username";
       passwordFile = mkOpt (lib.types.nullOr lib.types.path) null "Path to file containing qBittorrent password (from SOPS)";
+      passwordHashFile = mkOpt (lib.types.nullOr lib.types.path) null "Path to file containing qBittorrent PBKDF2 hash (from SOPS)";
     };
 
     autoremove = {
@@ -76,18 +77,68 @@ in
         requires = [ "mnt-titan.mount" ];  # Ensure titan mount is available
         wantedBy = [ "multi-user.target" ];
 
-        preStart = ''
+        preStart = lib.mkIf (cfg.qbittorrent.passwordHashFile != null) ''
           # Ensure config directory exists
           mkdir -p ${cfg.configDir}/qbittorrent/qBittorrent/config
           mkdir -p ${cfg.configDir}/qbittorrent/qBittorrent/data/logs
 
-          # Don't generate config - let qBittorrent handle it
-          # Modern qBittorrent uses PBKDF2 hashing which is complex to generate
-          # User should set password once via WebUI and it will persist
+          # Generate qBittorrent config with PBKDF2 hash from SOPS
+          if [ -f "${cfg.qbittorrent.passwordHashFile}" ]; then
+            echo "Generating qBittorrent configuration with SOPS hash..."
 
-          if [ ! -f "${cfg.configDir}/qbittorrent/qBittorrent/config/qBittorrent.conf" ]; then
-            echo "No qBittorrent config found. qBittorrent will start with a temporary password."
-            echo "Set your password via the WebUI and it will persist."
+            # Read PBKDF2 hash from SOPS
+            HASH=$(cat "${cfg.qbittorrent.passwordHashFile}")
+
+            cat > ${cfg.configDir}/qbittorrent/qBittorrent/config/qBittorrent.conf << EOF
+          [Application]
+          FileLogger\\Age=1
+          FileLogger\\AgeType=1
+          FileLogger\\Backup=true
+          FileLogger\\DeleteOld=true
+          FileLogger\\Enabled=true
+          FileLogger\\MaxSizeBytes=66560
+          FileLogger\\Path=${cfg.configDir}/qbittorrent/qBittorrent/data/logs
+
+          [BitTorrent]
+          Session\\AddTorrentStopped=false
+          Session\\DefaultSavePath=${cfg.downloadDir}
+          Session\\Port=${toString cfg.qbittorrent.torrentPort}
+          Session\\QueueingSystemEnabled=true
+          Session\\ShareLimitAction=Stop
+
+          [Core]
+          AutoDeleteAddedTorrentFile=Never
+
+          [LegalNotice]
+          Accepted=true
+
+          [Meta]
+          MigrationVersion=8
+
+          [Network]
+          Proxy\\HostnameLookupEnabled=false
+
+          [Preferences]
+          Connection\\PortRangeMin=${toString cfg.qbittorrent.torrentPort}
+          Downloads\\SavePath=${cfg.downloadDir}
+          General\\Locale=en
+          WebUI\\CSRFProtection=false
+          WebUI\\LocalHostAuth=false
+          WebUI\\Password_PBKDF2="@ByteArray($HASH)"
+          WebUI\\Port=${toString cfg.qbittorrent.webUIPort}
+          WebUI\\Username=${cfg.qbittorrent.username}
+
+          [RSS]
+          AutoDownloader\\DownloadRepacks=true
+          EOF
+
+            chown ${cfg.user}:users ${cfg.configDir}/qbittorrent/qBittorrent/config/qBittorrent.conf
+            chmod 600 ${cfg.configDir}/qbittorrent/qBittorrent/config/qBittorrent.conf
+
+            echo "qBittorrent configuration generated with username: ${cfg.qbittorrent.username}"
+          else
+            echo "Warning: Password hash file not found at ${cfg.qbittorrent.passwordHashFile}"
+            echo "qBittorrent will start with a temporary password"
           fi
         '';
 

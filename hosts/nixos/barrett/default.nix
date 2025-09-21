@@ -52,6 +52,7 @@
         torrentPort = 6881;
         username = "danny";
         passwordFile = config.sops.secrets."vpn/qbittorrent_password".path;
+        passwordHashFile = config.sops.secrets."vpn/qbittorrent_password_hash".path;
       };
 
       autoremove = {
