@@ -157,14 +157,14 @@ in
             ExecStart = let
               # Build environment variables
               baseEnvVars = [
-                "      - RUNNER_SCOPE=${if cfg.github.repo != null then "repo" else "org"}"
-                "      - LABELS=${lib.concatStringsSep "," cfg.github.labels}"
-                "      - EPHEMERAL=${if cfg.github.ephemeral then "true" else "false"}"
-                "      - DISABLE_AUTO_UPDATE=true"
+                "      RUNNER_SCOPE: '${if cfg.github.repo != null then "repo" else "org"}'"
+                "      LABELS: '${lib.concatStringsSep "," cfg.github.labels}'"
+                "      EPHEMERAL: '${if cfg.github.ephemeral then "true" else "false"}'"
+                "      DISABLE_AUTO_UPDATE: 'true'"
               ];
-              repoEnvVars = lib.optional (cfg.github.repo != null) "      - REPO_URL=https://github.com/${cfg.github.owner}/${cfg.github.repo}";
-              orgEnvVars = lib.optional (cfg.github.repo == null) "      - ORG_NAME=${cfg.github.owner}";
-              customEnvVars = lib.mapAttrsToList (name: value: "      - ${name}=${value}") cfg.github.environment;
+              repoEnvVars = lib.optional (cfg.github.repo != null) "      REPO_URL: 'https://github.com/${cfg.github.owner}/${cfg.github.repo}'";
+              orgEnvVars = lib.optional (cfg.github.repo == null) "      ORG_NAME: '${cfg.github.owner}'";
+              customEnvVars = lib.mapAttrsToList (name: value: "      ${name}: '${value}'") cfg.github.environment;
               envVars = lib.concatStringsSep "\n" (baseEnvVars ++ repoEnvVars ++ orgEnvVars ++ customEnvVars);
 
               dockerComposeFile = pkgs.writeText "github-docker-compose.yml" ''
@@ -222,11 +222,11 @@ ${envVars}
             ExecStart = let
               # Build environment variables
               baseEnvVars = [
-                "      - FORGEJO_INSTANCE_URL=${cfg.forgejo.instanceUrl}"
-                "      - FORGEJO_RUNNER_NAME=${cfg.forgejo.runnerName}"
-                "      - FORGEJO_RUNNER_LABELS=${lib.concatStringsSep "," cfg.forgejo.labels}"
+                "      FORGEJO_INSTANCE_URL: '${cfg.forgejo.instanceUrl}'"
+                "      FORGEJO_RUNNER_NAME: '${cfg.forgejo.runnerName}'"
+                "      FORGEJO_RUNNER_LABELS: '${lib.concatStringsSep "," cfg.forgejo.labels}'"
               ];
-              customEnvVars = lib.mapAttrsToList (name: value: "      - ${name}=${value}") cfg.forgejo.environment;
+              customEnvVars = lib.mapAttrsToList (name: value: "      ${name}: '${value}'") cfg.forgejo.environment;
               envVars = lib.concatStringsSep "\n" (baseEnvVars ++ customEnvVars);
 
               dockerComposeFile = pkgs.writeText "forgejo-docker-compose.yml" ''
