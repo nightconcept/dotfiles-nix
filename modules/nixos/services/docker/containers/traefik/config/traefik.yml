@@ -4,16 +4,8 @@ api:
 entryPoints:
   http:
     address: ":80"
-    http:
-      redirections:
-        entryPoint:
-          to: https
-          scheme: https
   https:
     address: ":443"
-    
-log:
-  level: DEBUG
 serversTransport:
   insecureSkipVerify: true
 providers:
@@ -34,3 +26,14 @@ certificatesResolvers:
           - "1.1.1.1:53"
           - "1.0.0.1:53"
         delayBeforeCheck: 15
+experimental:
+  plugins:
+    souin:
+      moduleName: github.com/darkweak/souin
+      version: v1.6.45
+
+log:
+  level: "INFO"
+  filePath: "/var/log/traefik/traefik.log"
+accessLog:
+  filePath: "/var/log/traefik/access.log"

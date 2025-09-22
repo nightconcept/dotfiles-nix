@@ -15,6 +15,14 @@ in
       default = "${containerPath}/config";
       description = "Path to DDClient configuration file";
     };
+
+    passwordFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = if config.modules.nixos.security.sops.enable
+               then "/run/secrets/ddclient-password"
+               else null;
+      description = "Path to file containing DDClient password";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -43,6 +51,16 @@ in
         cat > ${containerPath}/.env <<EOF
         CONFIG_PATH=${cfg.configPath}
         EOF
+
+        # Copy and process config template
+        ${lib.optionalString (builtins.pathExists ./config/ddclient.conf.template) ''
+          if [ -n "${toString cfg.passwordFile}" ] && [ -f "${cfg.passwordFile}" ]; then
+            PASSWORD=$(cat ${cfg.passwordFile})
+            sed "s/SOPS_PASSWORD/$PASSWORD/g" ${./config/ddclient.conf.template} > ${cfg.configPath}/ddclient.conf
+          else
+            cp ${./config/ddclient.conf.template} ${cfg.configPath}/ddclient.conf
+          fi
+        ''}
       '';
 
       serviceConfig = {

@@ -1,18 +1,30 @@
 http:
-#region routers 
+ #region routers 
   routers:
-    pihole-primary:
+    pihole:
       entryPoints:
         - "https"
-      rule: "Host(`pihole-primary.local.solivan.dev`)"
+      rule: "Host(`pihole.local.solivan.dev`)"
       middlewares:
+        - authelia
         - redirectregex-pihole
         - default-headers
         - addprefix-pihole
         - https-redirectscheme
       tls: {}
-      service: pihole-primary
-
+      service: pihole
+    pihole-proxy:
+      entryPoints:
+        - "https"
+      rule: "Host(`pihole-proxy.local.solivan.dev`)"
+      middlewares:
+        - authelia
+        - redirectregex-pihole
+        - default-headers
+        - addprefix-pihole
+        - https-redirectscheme
+      tls: {}
+      service: pihole-proxy
     plex:
       entryPoints:
         - "https"
@@ -23,18 +35,110 @@ http:
       tls: {}
       service: plex
 
-    # Expose a ping endpoint, for healthcheck services to check traefik is still up.
-    ping:
-      rule: "(Host(`localhost`) || Host(`traefik-dashboard.local.solivan.dev`)) && PathPrefix(`/ping`)"
-      service: "ping@internal"
+    jellyfin:
+      entrypoints:
+        - "https"
+      rule: "Host(`jellyfin.local.solivan.dev`) || Host(`jellyfin.solivan.dev`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
       tls: {}
-      entryPoints:
-        - ping
-#endregion
+      service: jellyfin
 
+    valefor:
+      entryPoints:
+        - "https"
+      rule: "Host(`valefor.local.solivan.dev`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: valefor
+
+    locke:
+      entryPoints:
+        - "https"
+      rule: "Host(`locke.local.solivan.dev`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: locke
+
+    mog:
+      entryPoints:
+        - "https"
+      rule: "Host(`mog.local.solivan.dev`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: mog
+
+    router:
+      entryPoints:
+        - "https"
+      rule: "Host(`router.local.solivan.dev`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: router
+
+    qbittorrent:
+      entryPoints:
+        - "https"
+      rule: "Host(`qbittorrent.local.solivan.dev`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: qbittorrent
+
+    calibre:
+      entryPoints:
+        - "https"
+      rule: "Host(`calibre.local.solivan.dev`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: calibre
+
+#    ai:
+#      entryPoints:
+#        - "https"
+#      rule: "Host(`ai.local.solivan.dev`)"
+#      middlewares:
+#        - default-headers
+#        - https-redirectscheme
+#      tls: {}
+#      service: ai
+
+    lazylibrarian:
+      entryPoints:
+        - "https"
+      rule: "Host(`lazylibrarian.local.solivan.dev`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: lazylibrarian
+
+    bank:
+      entryPoints:
+        - "https"
+      rule: "Host(`bank.local.solivan.dev`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: bank
+
+#endregion
 #region services
   services:
-    pihole-primary:
+    pihole:
       loadBalancer:
         servers:
           - url: "http://192.168.1.101:80"
@@ -43,11 +147,76 @@ http:
     plex:
       loadBalancer:
         servers:
-          - url: "https://192.168.1.111:32400"
+          - url: "https://192.168.1.118:32400"
         passHostHeader: true
+
+    jellyfin:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.1.106:8096"
+        passHostHeader: true
+
+    pihole-proxy:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.1.110:80"
+        passHostHeader: true
+
+    lazylibrarian:
+      loadBalancer:
+        servers:
+          - url: "http://"
+
+    valefor:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.1.119:8006"
+        passHostHeader: true
+
+    locke:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.1.188:8006"
+        passHostHeader: true
+
+    mog:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.1.167:80"
+        passHostHeader: true
+
+    router:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.1.1:80"
+        passHostHeader: true
+
+    qbittorrent:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.1.114:8112"
+        passHostHeader: true
+
+    calibre:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.1.110:8080"
+        passHostHeader: true
+
+    ai:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.1.213:8080"
+        passHostHeader: true
+
+    bank:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.1.185:8080"
+        passHostHeader: true
+
 #endregion
 
-#region middlewares
   middlewares:
     addprefix-pihole:
       addPrefix:
@@ -74,17 +243,6 @@ http:
         customRequestHeaders:
           X-Forwarded-Proto: https
 
-    idrac:
-      headers:
-        frameDeny: true
-        browserXssFilter: true
-        forceSTSHeader: true
-        stsIncludeSubdomains: true
-        stsSeconds: 15552000
-        customFrameOptionsValue: SAMEORIGIN
-        customRequestHeaders:
-          X-Forwarded-Proto: https
-
     default-whitelist:
       ipWhiteList:
         sourceRange:
@@ -97,4 +255,12 @@ http:
         middlewares:
         - default-whitelist
         - default-headers
-#end region
+
+    authelia:
+      forwardAuth:
+        address: "http://authelia:9091/api/verify?rd=https://auth.local.solivan.dev"
+        
+    crowdsec-bouncer:
+      forwardauth:
+        address: http://bouncer-traefik:8080/api/v1/forwardAuth
+        trustForwardHeader: true

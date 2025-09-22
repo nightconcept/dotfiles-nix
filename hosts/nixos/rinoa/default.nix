@@ -48,7 +48,7 @@
       enable = true;
       domain = "local.solivan.dev";
       dashboard.enable = true;
-      cloudflareTokenFile = "/home/danny/docker/traefik/cloudflare-token";
+      # cloudflareTokenFile automatically uses SOPS when sops.enable = true
     };
     authelia = {
       enable = true;

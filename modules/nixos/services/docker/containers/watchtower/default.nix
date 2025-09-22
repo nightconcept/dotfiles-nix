@@ -16,11 +16,12 @@ in
       description = "Cron schedule for updates";
     };
 
-    environmentFile = lib.mkOption {
+    apiTokenFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
-      description = "Path to environment file containing secrets";
-      example = "/run/secrets/watchtower-env";
+      default = if config.modules.nixos.security.sops.enable
+               then "/run/secrets/watchtower-api-token"
+               else null;
+      description = "Path to file containing Watchtower API token";
     };
   };
 
@@ -64,13 +65,12 @@ in
         fi
 
         # Generate .env file
-        echo "WATCHTOWER_SCHEDULE=${cfg.schedule}" > ${containerPath}/.env
-
-        ${lib.optionalString (cfg.environmentFile != null) ''
-          if [ -f ${cfg.environmentFile} ]; then
-            cat ${cfg.environmentFile} >> ${containerPath}/.env
-          fi
+        cat > ${containerPath}/.env <<EOF
+        WATCHTOWER_SCHEDULE=${cfg.schedule}
+        ${lib.optionalString (cfg.apiTokenFile != null) ''
+        WATCHTOWER_HTTP_API_TOKEN=$(cat ${cfg.apiTokenFile})
         ''}
+        EOF
       '';
 
       serviceConfig = {
