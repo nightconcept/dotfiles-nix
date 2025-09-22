@@ -55,6 +55,16 @@ in
           owner = "danny";
           mode = "0400";
         };
+        "ci_runners/github_token" = {
+          path = "/run/secrets/github-runner-token";
+          owner = "root";
+          mode = "0400";
+        };
+        "ci_runners/forgejo_token" = {
+          path = "/run/secrets/forgejo-runner-token";
+          owner = "root";
+          mode = "0400";
+        };
       };
     };
   };
