@@ -1026,35 +1026,6 @@ nixos_fresh_install() {
     print_info "Updating hardware configuration for $host"
     cp /mnt/etc/nixos/hardware-configuration.nix "hosts/nixos/$host/"
 
-    # Update the host's default.nix to use GRUB bootloader if needed
-    if ! grep -q "boot.loader.grub" "hosts/nixos/$host/default.nix"; then
-        print_info "Adding GRUB bootloader configuration to host config"
-        # Create a temporary file with bootloader config
-        cat > /tmp/bootloader-config.nix <<EOF
-
-  # Bootloader configuration (override any systemd-boot settings)
-  boot.loader = {
-    systemd-boot.enable = lib.mkForce false;
-    efi.canTouchEfiVariables = lib.mkForce false;
-    grub = {
-      enable = true;
-      device = "$disk";
-    };
-  };
-EOF
-        # Insert bootloader config after imports
-        sed -i '/imports = \[/,/\];/a\
-\
-  # Bootloader configuration (override any systemd-boot settings)\
-  boot.loader = {\
-    systemd-boot.enable = lib.mkForce false;\
-    efi.canTouchEfiVariables = lib.mkForce false;\
-    grub = {\
-      enable = true;\
-      device = "'"$disk"'";\
-    };\
-  };' "hosts/nixos/$host/default.nix"
-    fi
 
     # Setup age keys for both user-level and system-level secrets
     print_info "Setting up SOPS age keys..."
