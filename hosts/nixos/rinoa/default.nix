@@ -44,6 +44,12 @@
 
   # Enable Docker containers
   modules.nixos.docker.containers = {
+    traefik = {
+      enable = true;
+      domain = "local.solivan.dev";
+      dashboard.enable = true;
+      cloudflareTokenFile = "/home/danny/docker/traefik/cloudflare-token";
+    };
     portainer.enable = true;
     watchtower.enable = true;
   };
