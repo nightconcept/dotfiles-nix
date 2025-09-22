@@ -161,13 +161,46 @@ This allows hosts to override package choices without modifying the module.
 #### Active NixOS Hosts
 - `aerith` - Plex media server
 - `barrett` - VPN torrent server
-- `rinoa` - General purpose server
+- `rinoa` - General purpose server (Docker services)
 - `vincent` - CI/CD runner host with Docker
 - `tidus` - Dell Latitude 7420 laptop with Hyprland
 
-#### Active Darwin Hosts  
+#### Active Darwin Hosts
 - `waver` - MacBook Pro M1
 - `merlin` - Mac Mini M1 HTPC
+
+### Docker Container Configuration
+
+For hosts running Docker services (e.g., `rinoa`), containers are organized as follows:
+
+#### Directory Structure
+```
+~/docker/
+├── <service-name>/
+│   ├── docker-compose.yml
+│   ├── .env
+│   └── config/
+│       └── <service configuration files>
+```
+
+#### Common Docker Operations
+```bash
+# Start a service
+cd ~/docker/<service-name>
+docker compose up -d
+
+# View logs
+docker logs <container-name>
+
+# Check status
+docker ps
+
+# Stop a service
+docker compose down
+```
+
+#### Docker Networks
+- `proxy` - Shared network for services behind reverse proxy
 
 ## Development Workflow
 

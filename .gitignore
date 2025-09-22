@@ -4,3 +4,4 @@ result-*
 
 # Environment files
 .env
+MIGRATION_LOOP.md

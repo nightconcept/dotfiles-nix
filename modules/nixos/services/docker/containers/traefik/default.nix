@@ -83,18 +83,6 @@ in
       "d ${containerPath}/logs 0755 root root -"
     ];
 
-    # Create Docker network for proxy
-    systemd.services.docker-network-proxy = {
-      description = "Create Docker proxy network";
-      after = [ "docker.service" ];
-      requires = [ "docker.service" ];
-      before = [ "docker-container-${containerName}.service" ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = "${pkgs.docker}/bin/docker network create proxy || true";
-      };
-    };
 
     # Traefik container service
     systemd.services."docker-container-${containerName}" = {

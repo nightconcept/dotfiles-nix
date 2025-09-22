@@ -10,7 +10,7 @@ services:
       - 443:443
     environment:
       - CLOUDFLARE_DNS_API_TOKEN=$CLOUDFLARE_DNS_API_TOKEN
-      - CONFIG_PATH=~/config/traefik
+      - CONFIG_PATH=${CONFIG_PATH}
     volumes:
       - type: bind
         source: /etc/localtime
@@ -21,14 +21,14 @@ services:
         target: /var/run/docker.sock
         read_only: true
       - type: bind
-        source: ~/config/traefik/traefik.yml
+        source: ${CONFIG_PATH}/traefik.yml
         target: /traefik.yml
         read_only: true
       - type: bind
-        source: ~/config/traefik/acme.json
+        source: ${CONFIG_PATH}/acme.json
         target: /acme.json
       - type: bind
-        source: ~/config/traefik/config.yml
+        source: ${CONFIG_PATH}/config.yml
         target: /config.yml
         read_only: true
       - traefik-logs:/var/log/traefik
