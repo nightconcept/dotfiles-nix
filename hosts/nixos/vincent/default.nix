@@ -60,7 +60,7 @@
       owner = "nightconcept";
       repo = null;  # Organization-wide runners
       labels = [ "docker" "self-hosted" "linux" "x64" "vincent" ];
-      tokenFile = "/run/secrets/github-runner-token";
+      tokenFile = config.sops.secrets."ci_runners/github_token".path;
     };
 
     forgejo = {
@@ -68,7 +68,7 @@
       replicas = 3;
       instanceUrl = "https://forge.local.solivan.dev";
       labels = [ "docker" "amd64" "linux" "vincent" ];
-      tokenFile = "/run/secrets/forgejo-runner-token";
+      tokenFile = config.sops.secrets."ci_runners/forgejo_token".path;
     };
   };
 

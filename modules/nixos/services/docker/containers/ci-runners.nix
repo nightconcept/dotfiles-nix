@@ -193,7 +193,8 @@ ${envVars}
                   runner-network:
                     driver: bridge
               '';
-            in ''
+            in pkgs.writeScript "start-github-runners" ''
+              #!${pkgs.bash}/bin/bash
               ${pkgs.coreutils}/bin/cp ${dockerComposeFile} ${cfg.github.workingDirectory}/docker-compose.yml
               echo "ACCESS_TOKEN=$(cat ${cfg.github.tokenFile})" > ${cfg.github.workingDirectory}/.env
               ${pkgs.docker-compose}/bin/docker-compose -f ${cfg.github.workingDirectory}/docker-compose.yml up -d --scale github-runner=${toString cfg.github.replicas}
@@ -255,7 +256,8 @@ ${envVars}
                   runner-network:
                     driver: bridge
               '';
-            in ''
+            in pkgs.writeScript "start-forgejo-runners" ''
+              #!${pkgs.bash}/bin/bash
               ${pkgs.coreutils}/bin/cp ${dockerComposeFile} ${cfg.forgejo.workingDirectory}/docker-compose.yml
               echo "FORGEJO_RUNNER_REGISTRATION_TOKEN=$(cat ${cfg.forgejo.tokenFile})" > ${cfg.forgejo.workingDirectory}/.env
               ${pkgs.docker-compose}/bin/docker-compose -f ${cfg.forgejo.workingDirectory}/docker-compose.yml up -d --scale forgejo-runner=${toString cfg.forgejo.replicas}
