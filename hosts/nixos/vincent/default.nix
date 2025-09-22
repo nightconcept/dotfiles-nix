@@ -9,7 +9,6 @@
 }: {
   imports = [
     ./hardware-configuration.nix
-    ../../../systems/nixos/secrets/sops.nix
   ];
 
   # Apply shared overlays
