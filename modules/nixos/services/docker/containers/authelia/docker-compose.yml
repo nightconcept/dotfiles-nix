@@ -3,10 +3,10 @@ services:
     image: authelia/authelia
     container_name: authelia
     environment:
-      - CONFIG_PATH=~/config/authelia
+      - CONFIG_PATH=${CONFIG_PATH}
     volumes:
       - type: bind
-        source: ~/config/authelia
+        source: ${CONFIG_PATH}
         target: /config
     networks:
       - proxy

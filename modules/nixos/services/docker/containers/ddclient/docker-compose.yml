@@ -11,10 +11,10 @@ services:
     restart: always
     volumes:
       - type: bind
-        source: ~/config/ddclient
+        source: ${CONFIG_PATH}
         target: /config
       - type: bind
-        source: ~/config/ddclient
+        source: ${CONFIG_PATH}
         target: /etc/ddclient
     networks:
       - default

@@ -25,11 +25,11 @@ in
 
     # Add other containers as default.nix files are created
     # ./containers/audiobookshelf
-    # ./containers/authelia
+    ./containers/authelia
     # ./containers/calibre
     # ./containers/calibre-web
     # ./containers/cloudflare-tunnel
-    # ./containers/ddclient
+    ./containers/ddclient
     # ./containers/enshrouded
     # ./containers/flaresolverr
     # ./containers/forgejo
