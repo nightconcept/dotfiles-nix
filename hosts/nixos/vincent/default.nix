@@ -58,7 +58,7 @@
       replicas = 3;
       ephemeral = true;
       owner = "nightconcept";
-      repo = null;  # Organization-wide runners
+      repo = "dotfiles-nix";  # Repository-specific runners for user account
       labels = [ "docker" "self-hosted" "linux" "x64" "vincent" ];
       tokenFile = "/run/secrets/github-runner-token";
     };
