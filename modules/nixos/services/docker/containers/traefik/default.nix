@@ -66,7 +66,9 @@ in
 
     cloudflareTokenFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
+      default = if config.modules.nixos.security.sops.enable
+               then "/run/secrets/traefik-cloudflare-token"
+               else null;
       description = "Path to file containing Cloudflare DNS API token";
       example = "/run/secrets/cloudflare-dns-token";
     };
@@ -104,6 +106,14 @@ in
         DOMAIN=${cfg.domain}
         DASHBOARD_SUBDOMAIN=${cfg.dashboard.subdomain}
         EOF
+
+        # Copy static configs if they exist in the module
+        ${lib.optionalString (builtins.pathExists ./config/traefik.yml) ''
+          cp ${./config/traefik.yml} ${cfg.configPath}/traefik.yml
+        ''}
+        ${lib.optionalString (builtins.pathExists ./config/config.yml) ''
+          cp ${./config/config.yml} ${cfg.configPath}/config.yml
+        ''}
 
         # Ensure acme.json exists with correct permissions
         touch ${cfg.configPath}/acme.json

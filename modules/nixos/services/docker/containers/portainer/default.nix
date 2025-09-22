@@ -44,29 +44,13 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        # Generate docker-compose.yml with proper port mappings
-        cat > ${containerPath}/docker-compose.yml <<'COMPOSE'
-        services:
-          portainer:
-            container_name: portainer
-            image: portainer/portainer-ce:latest
-            restart: unless-stopped
-            ports:
-              - ${toString cfg.port}:9000
-              - ${toString cfg.edgePort}:8000
-              - 9443:9443
-            volumes:
-              - /var/run/docker.sock:/var/run/docker.sock
-              - ${cfg.dataPath}:/data
-            networks:
-              - proxy
-            labels:
-              - "com.centurylinklabs.watchtower.enable=true"
+        # Copy docker-compose.yml to runtime directory
+        cp ${./docker-compose.yml} ${containerPath}/docker-compose.yml
 
-        networks:
-          proxy:
-            external: true
-        COMPOSE
+        # Generate .env file
+        cat > ${containerPath}/.env <<EOF
+        DATA_PATH=${cfg.dataPath}
+        EOF
       '';
 
       serviceConfig = {

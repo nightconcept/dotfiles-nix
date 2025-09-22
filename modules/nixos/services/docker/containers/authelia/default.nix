@@ -27,6 +27,48 @@ in
       default = "${containerPath}/config";
       description = "Path to Authelia configuration files";
     };
+
+    secrets = {
+      jwtSecretFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = if config.modules.nixos.security.sops.enable
+                 then "/run/secrets/authelia-jwt-secret"
+                 else null;
+        description = "Path to file containing JWT secret";
+      };
+
+      sessionSecretFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = if config.modules.nixos.security.sops.enable
+                 then "/run/secrets/authelia-session-secret"
+                 else null;
+        description = "Path to file containing session secret";
+      };
+
+      encryptionKeyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = if config.modules.nixos.security.sops.enable
+                 then "/run/secrets/authelia-encryption-key"
+                 else null;
+        description = "Path to file containing encryption key";
+      };
+
+      hmacSecretFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = if config.modules.nixos.security.sops.enable
+                 then "/run/secrets/authelia-hmac-secret"
+                 else null;
+        description = "Path to file containing HMAC secret";
+      };
+
+      storageEncryptionKeyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = if config.modules.nixos.security.sops.enable
+                 then "/run/secrets/authelia-storage-encryption-key"
+                 else null;
+        description = "Path to file containing storage encryption key";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -50,12 +92,33 @@ in
         # Copy docker-compose.yml to runtime directory
         cp ${./docker-compose.yml} ${containerPath}/docker-compose.yml
 
-        # Generate .env file if needed
+        # Generate .env file with secrets
         cat > ${containerPath}/.env <<EOF
         CONFIG_PATH=${cfg.configPath}
         DOMAIN=${cfg.domain}
         SUBDOMAIN=${cfg.subdomain}
+        ${lib.optionalString (cfg.secrets.jwtSecretFile != null) ''
+        AUTHELIA_JWT_SECRET=$(cat ${cfg.secrets.jwtSecretFile})
+        ''}
+        ${lib.optionalString (cfg.secrets.sessionSecretFile != null) ''
+        AUTHELIA_SESSION_SECRET=$(cat ${cfg.secrets.sessionSecretFile})
+        ''}
+        ${lib.optionalString (cfg.secrets.encryptionKeyFile != null) ''
+        AUTHELIA_STORAGE_ENCRYPTION_KEY=$(cat ${cfg.secrets.encryptionKeyFile})
+        ''}
         EOF
+
+        # Copy static config if it exists in the module
+        ${lib.optionalString (builtins.pathExists ./config/configuration.yml) ''
+          cp ${./config/configuration.yml} ${cfg.configPath}/configuration.yml
+        ''}
+
+        # Create users database if it doesn't exist
+        if [ ! -f ${cfg.configPath}/users_database.yml ]; then
+          cat > ${cfg.configPath}/users_database.yml <<'USERS_DB'
+        users: {}
+        USERS_DB
+        fi
       '';
 
       serviceConfig = {

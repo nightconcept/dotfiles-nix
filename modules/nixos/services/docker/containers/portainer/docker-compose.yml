@@ -21,7 +21,7 @@ services:
         target: /etc/localtime
         read_only: true
       - type: bind
-        source: ~/config/portainer
+        source: ${DATA_PATH}
         target: /data
       - type: bind
         source: /var/run/docker.sock
