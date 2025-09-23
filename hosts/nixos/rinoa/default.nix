@@ -36,6 +36,9 @@
       networkManager = true;
       mdns = true;
     };
+
+    # Enable SOPS for secret management
+    security.sops.enable = true;
   };
 
 
