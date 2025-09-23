@@ -94,15 +94,23 @@ in
         IMMICH_VERSION=${cfg.version}
 
         # Database credentials
-        ${lib.optionalString (cfg.dbPasswordFile != null) ''
-        DB_PASSWORD=$(cat ${cfg.dbPasswordFile})
-        ''}
-        ${lib.optionalString (cfg.dbPasswordFile == null) ''
-        DB_PASSWORD=a61aspOBhStQkX5vwrzV
-        ''}
         DB_USERNAME=postgres
         DB_DATABASE_NAME=immich
         EOF
+
+        # Add password from secrets file
+        ${lib.optionalString (cfg.dbPasswordFile != null) ''
+        if [ -f ${cfg.dbPasswordFile} ]; then
+          echo "DB_PASSWORD=$(cat ${cfg.dbPasswordFile})" >> ${containerPath}/.env
+        else
+          echo "Error: Database password file not found at ${cfg.dbPasswordFile}"
+          exit 1
+        fi
+        ''}
+        ${lib.optionalString (cfg.dbPasswordFile == null) ''
+        echo "Error: No database password configured"
+        exit 1
+        ''}
 
         # Update docker-compose.yml with proper subdomain
         ${pkgs.yq}/bin/yq -i -y '
