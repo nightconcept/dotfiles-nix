@@ -35,16 +35,6 @@ http:
       tls: {}
       service: plex
 
-    jellyfin:
-      entrypoints:
-        - "https"
-      rule: "Host(`jellyfin.local.solivan.dev`) || Host(`jellyfin.solivan.dev`)"
-      middlewares:
-        - default-headers
-        - https-redirectscheme
-      tls: {}
-      service: jellyfin
-
     valefor:
       entryPoints:
         - "https"
@@ -148,12 +138,6 @@ http:
       loadBalancer:
         servers:
           - url: "https://192.168.1.118:32400"
-        passHostHeader: true
-
-    jellyfin:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.1.106:8096"
         passHostHeader: true
 
     pihole-proxy:
