@@ -78,7 +78,7 @@ in
 
       image = lib.mkOption {
         type = lib.types.str;
-        default = "data.forgejo.org/forgejo/runner:latest";
+        default = "data.forgejo.org/forgejo/runner:11";
         description = "Docker image to use for Forgejo runners";
       };
 
@@ -259,18 +259,18 @@ ${envVars}
                     networks:
                       - runner-network
                     user: "1000:1000"
-                    command:
-                      - sh
-                      - -c
-                      - |
+                    command: |
+                      sh -c "
                         if [ ! -f /data/.runner ]; then
+                          sleep 5
                           forgejo-runner register --no-interactive \
-                            --instance "$${FORGEJO_INSTANCE_URL}" \
-                            --token "$${FORGEJO_RUNNER_REGISTRATION_TOKEN}" \
-                            --name "$${FORGEJO_RUNNER_NAME}" \
-                            --labels "$${FORGEJO_RUNNER_LABELS}"
+                            --instance '$${cfg.forgejo.instanceUrl}' \
+                            --token \$(cat ${cfg.forgejo.tokenFile}) \
+                            --name '$${cfg.forgejo.runnerName}-\$${HOSTNAME}' \
+                            --labels '${lib.concatStringsSep "," cfg.forgejo.labels}'
                         fi
                         forgejo-runner daemon
+                      "
 
                 volumes:
                   forgejo-runner-data:
