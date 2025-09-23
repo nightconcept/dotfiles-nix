@@ -3,7 +3,7 @@
 Forgejo is a self-hosted lightweight software forge. Easy to install and low maintenance, it just does the job.
 
 ## Service Details
-- **URL**: https://forge.local.solivan.dev (local) / https://forge.solivan.dev (via Cloudflare tunnel)
+- **URL**: https://forge.solivan.dev
 - **SSH**: Port 2222
 - **Container**: codeberg.org/forgejo/forgejo:11
 - **Database**: PostgreSQL 16
@@ -28,7 +28,7 @@ mkdir -p ~/config/forgejo/db
 docker compose up -d
 ```
 
-4. Access Forgejo at https://forge.local.solivan.dev and complete initial setup
+4. Access Forgejo at https://forge.solivan.dev and complete initial setup
 
 ## SSH Configuration
 
@@ -36,10 +36,6 @@ To use SSH for git operations, configure your SSH client:
 
 ```bash
 # Add to ~/.ssh/config
-Host forge.local.solivan.dev
-    Port 2222
-    User git
-    
 Host forge.solivan.dev
     Port 2222
     User git
