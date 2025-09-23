@@ -78,7 +78,7 @@ in
 
       image = lib.mkOption {
         type = lib.types.str;
-        default = "code.forgejo.org/forgejo/runner:latest";
+        default = "data.forgejo.org/forgejo/runner:11";
         description = "Docker image to use for Forgejo runners";
       };
 
@@ -234,20 +234,42 @@ ${envVars}
                 version: '3.8'
 
                 services:
+                  docker-in-docker:
+                    image: docker:dind
+                    privileged: true
+                    command: ['dockerd', '-H', 'tcp://0.0.0.0:2375', '--tls=false']
+                    restart: unless-stopped
+                    networks:
+                      - runner-network
+
                   forgejo-runner:
                     image: ${cfg.forgejo.image}
                     restart: unless-stopped
                     deploy:
                       replicas: ${toString cfg.forgejo.replicas}
+                    depends_on:
+                      - docker-in-docker
                     environment:
 ${envVars}
+                      DOCKER_HOST: 'tcp://docker-in-docker:2375'
                     env_file:
                       - ${cfg.forgejo.workingDirectory}/.env
                     volumes:
-                      - /var/run/docker.sock:/var/run/docker.sock
                       - forgejo-runner-data:/data
                     networks:
                       - runner-network
+                    user: "1000:1000"
+                    command: |
+                      sh -c "
+                        if [ ! -f /data/.runner ]; then
+                          forgejo-runner register --no-interactive \
+                            --instance \$${FORGEJO_INSTANCE_URL} \
+                            --token \$${FORGEJO_RUNNER_REGISTRATION_TOKEN} \
+                            --name \$${FORGEJO_RUNNER_NAME} \
+                            --labels \$${FORGEJO_RUNNER_LABELS}
+                        fi
+                        forgejo-runner daemon
+                      "
 
                 volumes:
                   forgejo-runner-data:
