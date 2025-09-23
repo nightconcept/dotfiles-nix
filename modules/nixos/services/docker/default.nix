@@ -34,9 +34,9 @@ in
     ./containers/flaresolverr
     # ./containers/forgejo
     # ./containers/homepage
-    # ./containers/immich
+    ./containers/immich
     # ./containers/minecraft
-    # ./containers/nextcloud
+    ./containers/nextcloud
     # ./containers/open-webui
     # ./containers/palworld
     ./containers/prowlarr-abb
