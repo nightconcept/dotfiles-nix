@@ -13,7 +13,7 @@ services:
       - ADMIN_TOKEN=$ADMIN_TOKEN
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ~/docker/vaultwarden/data:/data
+      - /home/danny/docker/vaultwarden/data:/data
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.vaultwarden.entrypoints=http"
