@@ -267,9 +267,9 @@ ${envVars}
                         if [ ! -f .runner ]; then
                           sleep 5
                           forgejo-runner register --no-interactive \
-                            --instance "$${cfg.forgejo.instanceUrl}" \
-                            --token "$$FORGEJO_RUNNER_REGISTRATION_TOKEN" \
-                            --name "$${cfg.forgejo.runnerName}-$$HOSTNAME" \
+                            --instance "${cfg.forgejo.instanceUrl}" \
+                            --token "$FORGEJO_RUNNER_REGISTRATION_TOKEN" \
+                            --name "${cfg.forgejo.runnerName}-$HOSTNAME" \
                             --labels "${lib.concatStringsSep "," cfg.forgejo.labels}"
                         fi
                         forgejo-runner daemon
