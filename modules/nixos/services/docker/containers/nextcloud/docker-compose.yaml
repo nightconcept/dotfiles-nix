@@ -68,44 +68,6 @@ services:
       - OVERWRITEHOST=nextcloud.local.solivan.dev
       - TRUSTED_PROXIES=172.16.0.0/12
 
-  # Collabora Office
-  collabora:
-    image: collabora/code:24.04.12.3.1
-    container_name: collabora
-    networks:
-      - proxy
-    environment:
-      # Allowed WOPI hosts - using domain for compatibility
-      domain: nextcloud\\.local\\.solivan\\.dev|nextcloud\\.solivan\\.dev
-      # SSL is terminated at Traefik
-      extra_params: |
-        --o:ssl.enable=false \
-        --o:ssl.termination=true
-      username: admin
-      password: ${COLLABORA_PASSWORD:-admin}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.collabora.entrypoints=http"
-      - "traefik.http.routers.collabora.rule=Host(`collabora.local.solivan.dev`)"
-      - "traefik.http.middlewares.collabora-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.collabora.middlewares=collabora-https-redirect"
-      - "traefik.http.routers.collabora-secure.entrypoints=https"
-      - "traefik.http.routers.collabora-secure.rule=Host(`collabora.local.solivan.dev`)"
-      - "traefik.http.routers.collabora-secure.tls=true"
-      - "traefik.http.routers.collabora-secure.service=collabora"
-      - "traefik.http.services.collabora.loadbalancer.server.port=9980"
-      - "traefik.docker.network=proxy"
-      - "com.centurylinklabs.watchtower.enable=true"
-    cap_add:
-      - MKNOD
-    logging:
-      driver: ${LOG_DRIVER:-local}
-    restart: always
-    command: ["bash", "-c", "coolconfig generate-proof-key ; /start-collabora-online.sh"]
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9980/hosting/discovery" ]
-    depends_on:
-      - nextcloud
 
   # OnlyOffice Document Server
   onlyoffice:

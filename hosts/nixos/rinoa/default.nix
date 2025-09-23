@@ -20,6 +20,14 @@
     };
   };
 
+  # Swap configuration - 8GB swap file
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 8192; # 8GB in MB
+    }
+  ];
+
   # Apply shared overlays
   nixpkgs.overlays = [
     (import ../../../overlays/unstable-packages.nix { inherit inputs; })
@@ -41,7 +49,12 @@
     security.sops.enable = true;
 
     # Enable titan network drive mount
-    network-drives.titan.enable = true;
+    network-drives.titan = {
+      enable = true;
+      # Disable automount timeout to prevent services from stopping
+      # Sonarr and Radarr require this mount, and the 60s timeout causes them to stop
+      idleTimeout = 0;
+    };
   };
 
 
