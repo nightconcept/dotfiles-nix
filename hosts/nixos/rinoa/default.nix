@@ -87,6 +87,7 @@
     audiobookshelf.enable = true;
     nextcloud.enable = true;
     immich.enable = true;
+    jellyfin.enable = true;
   };
 
   # System packages for server management

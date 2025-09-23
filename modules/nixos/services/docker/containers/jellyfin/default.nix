@@ -12,7 +12,7 @@ in
 
     publishedServerUrl = lib.mkOption {
       type = lib.types.str;
-      default = "";
+      default = "https://jellyfin.local.solivan.dev";
       description = "Published server URL for Jellyfin";
       example = "https://jellyfin.example.com";
     };
@@ -113,50 +113,33 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        # Copy docker-compose.yml to runtime directory
-        cp ${./docker-compose.yml} ${containerPath}/docker-compose.yml
+        # Generate docker-compose.yml directly
+        cat > ${containerPath}/docker-compose.yml <<EOF
+        version: "3"
 
-        # Generate .env file
-        cat > ${containerPath}/.env <<EOF
-        JELLYFIN_PublishedServerUrl=${cfg.publishedServerUrl}
-        TZ=${cfg.timezone}
-        CONFIG_PATH=${cfg.configPath}
-        TVSHOWS_PATH=${cfg.mediaPaths.tvShows}
-        MOVIES_PATH=${cfg.mediaPaths.movies}
-        WEBUI_PORT=${toString cfg.ports.webUI}
-        HTTPS_PORT=${toString cfg.ports.https}
-        DISCOVERY_PORT=${toString cfg.ports.discovery}
-        DLNA_PORT=${toString cfg.ports.dlna}
-        EOF
-
-        # Update docker-compose.yml with runtime values
-        ${pkgs.yq}/bin/yq -i '
-          .services.jellyfin.environment[0] = "JELLYFIN_PublishedServerUrl=${cfg.publishedServerUrl}" |
-          .services.jellyfin.environment[1] = "TZ=${cfg.timezone}" |
-          .services.jellyfin.ports[0].published = "${toString cfg.ports.webUI}" |
-          .services.jellyfin.ports[1].published = "${toString cfg.ports.https}" |
-          .services.jellyfin.ports[2].published = "${toString cfg.ports.discovery}" |
-          .services.jellyfin.ports[3].published = "${toString cfg.ports.dlna}" |
-          .services.jellyfin.volumes[0].source = "${cfg.configPath}" |
-          .services.jellyfin.volumes[1].source = "${cfg.mediaPaths.tvShows}" |
-          .services.jellyfin.volumes[2].source = "${cfg.mediaPaths.movies}"
-        ' ${containerPath}/docker-compose.yml
-
-        # Add additional media paths if configured
+        services:
+          jellyfin:
+            image: linuxserver/jellyfin:latest
+            container_name: jellyfin
+            restart: unless-stopped
+            environment:
+              - JELLYFIN_PublishedServerUrl=${cfg.publishedServerUrl}
+              - TZ=${cfg.timezone}
+            ports:
+              - "${toString cfg.ports.webUI}:8096"
+              - "${toString cfg.ports.https}:8920"
+              - "${toString cfg.ports.discovery}:7359/udp"
+              - "${toString cfg.ports.dlna}:1900/udp"
+            volumes:
+              - ${cfg.configPath}:/config
+              - ${cfg.mediaPaths.tvShows}:/data/tvshows
+              - ${cfg.mediaPaths.movies}:/data/movies
         ${lib.concatMapStrings (path: ''
-          ${pkgs.yq}/bin/yq -i '
-            .services.jellyfin.volumes += [{
-              "type": "bind",
-              "source": "${path.hostPath}",
-              "target": "/data/${path.name}"
-            }]
-          ' ${containerPath}/docker-compose.yml
+              - ${path.hostPath}:/data/${path.name}
         '') cfg.mediaPaths.additionalPaths}
-
-        # Update watchtower label
-        ${pkgs.yq}/bin/yq -i '
-          .services.jellyfin.labels[0] = "com.centurylinklabs.watchtower.enable=${toString cfg.enableWatchtower}"
-        ' ${containerPath}/docker-compose.yml
+            labels:
+              - "com.centurylinklabs.watchtower.enable=${toString cfg.enableWatchtower}"
+        EOF
       '';
 
       serviceConfig = {
