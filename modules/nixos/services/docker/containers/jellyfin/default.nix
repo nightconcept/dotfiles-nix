@@ -108,8 +108,8 @@ in
     # Jellyfin container service
     systemd.services."docker-container-${containerName}" = {
       description = "Jellyfin Media Server Container";
-      after = [ "docker.service" ];
-      requires = [ "docker.service" ];
+      after = [ "docker.service" "docker-network-proxy.service" ];
+      requires = [ "docker.service" "docker-network-proxy.service" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
@@ -122,6 +122,8 @@ in
             image: linuxserver/jellyfin:latest
             container_name: jellyfin
             restart: unless-stopped
+            networks:
+              - proxy
             environment:
               - JELLYFIN_PublishedServerUrl=${cfg.publishedServerUrl}
               - TZ=${cfg.timezone}
@@ -138,7 +140,22 @@ in
               - ${path.hostPath}:/data/${path.name}
         '') cfg.mediaPaths.additionalPaths}
             labels:
+              - "traefik.enable=true"
+              - "traefik.http.routers.jellyfin.entrypoints=http"
+              - "traefik.http.routers.jellyfin.rule=Host(\`jellyfin.local.solivan.dev\`) || Host(\`jellyfin.solivan.dev\`)"
+              - "traefik.http.middlewares.jellyfin-https-redirect.redirectscheme.scheme=https"
+              - "traefik.http.routers.jellyfin.middlewares=jellyfin-https-redirect"
+              - "traefik.http.routers.jellyfin-secure.entrypoints=https"
+              - "traefik.http.routers.jellyfin-secure.rule=Host(\`jellyfin.local.solivan.dev\`) || Host(\`jellyfin.solivan.dev\`)"
+              - "traefik.http.routers.jellyfin-secure.tls=true"
+              - "traefik.http.routers.jellyfin-secure.service=jellyfin"
+              - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+              - "traefik.docker.network=proxy"
               - "com.centurylinklabs.watchtower.enable=${toString cfg.enableWatchtower}"
+
+        networks:
+          proxy:
+            external: true
         EOF
       '';
 
