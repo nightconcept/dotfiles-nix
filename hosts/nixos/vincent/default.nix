@@ -66,7 +66,7 @@
     forgejo = {
       enable = true;
       replicas = 3;
-      instanceUrl = "https://forge.local.solivan.dev";
+      instanceUrl = "https://forge.solivan.dev";
       labels = [ "docker" "amd64" "linux" "vincent" ];
       tokenFile = "/run/secrets/ci_runners/forgejo_token";
     };
