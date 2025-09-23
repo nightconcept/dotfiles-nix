@@ -36,6 +36,10 @@ To use SSH for git operations, configure your SSH client:
 
 ```bash
 # Add to ~/.ssh/config
+Host forge.local.solivan.dev
+    Port 2222
+    User git
+
 Host forge.solivan.dev
     Port 2222
     User git
