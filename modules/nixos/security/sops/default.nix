@@ -68,45 +68,37 @@ in
 
         # Docker container service secrets
         "services/traefik/cloudflare_token" = {
-          path = "/run/secrets/traefik-cloudflare-token";
           owner = "root";
           mode = "0400";
         };
 
         "services/authelia/jwt_secret" = {
-          path = "/run/secrets/authelia-jwt-secret";
           owner = "root";
           mode = "0400";
         };
         "services/authelia/session_secret" = {
-          path = "/run/secrets/authelia-session-secret";
           owner = "root";
           mode = "0400";
         };
         "services/authelia/encryption_key" = {
-          path = "/run/secrets/authelia-encryption-key";
           owner = "root";
           mode = "0400";
         };
         "services/authelia/hmac_secret" = {
-          path = "/run/secrets/authelia-hmac-secret";
           owner = "root";
           mode = "0400";
         };
         "services/authelia/storage_encryption_key" = {
-          path = "/run/secrets/authelia-storage-encryption-key";
           owner = "root";
           mode = "0400";
         };
 
         "services/ddclient/password" = {
-          path = "/run/secrets/ddclient-password";
           owner = "root";
           mode = "0400";
         };
 
         "services/watchtower/api_token" = {
-          path = "/run/secrets/watchtower-api-token";
           owner = "root";
           mode = "0400";
         };

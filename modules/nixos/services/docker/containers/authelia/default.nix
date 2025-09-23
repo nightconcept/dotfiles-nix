@@ -32,7 +32,7 @@ in
       jwtSecretFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = if config.modules.nixos.security.sops.enable
-                 then "/run/secrets/authelia-jwt-secret"
+                 then "/run/secrets/services/authelia/jwt_secret"
                  else null;
         description = "Path to file containing JWT secret";
       };
@@ -40,7 +40,7 @@ in
       sessionSecretFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = if config.modules.nixos.security.sops.enable
-                 then "/run/secrets/authelia-session-secret"
+                 then "/run/secrets/services/authelia/session_secret"
                  else null;
         description = "Path to file containing session secret";
       };
@@ -48,7 +48,7 @@ in
       encryptionKeyFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = if config.modules.nixos.security.sops.enable
-                 then "/run/secrets/authelia-encryption-key"
+                 then "/run/secrets/services/authelia/encryption_key"
                  else null;
         description = "Path to file containing encryption key";
       };
@@ -56,7 +56,7 @@ in
       hmacSecretFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = if config.modules.nixos.security.sops.enable
-                 then "/run/secrets/authelia-hmac-secret"
+                 then "/run/secrets/services/authelia/hmac_secret"
                  else null;
         description = "Path to file containing HMAC secret";
       };
@@ -64,7 +64,7 @@ in
       storageEncryptionKeyFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = if config.modules.nixos.security.sops.enable
-                 then "/run/secrets/authelia-storage-encryption-key"
+                 then "/run/secrets/services/authelia/storage_encryption_key"
                  else null;
         description = "Path to file containing storage encryption key";
       };
