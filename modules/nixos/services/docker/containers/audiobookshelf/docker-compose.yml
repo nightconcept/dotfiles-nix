@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   audiobookshelf:
     image: ghcr.io/advplyr/audiobookshelf:latest
@@ -11,8 +13,8 @@ services:
     volumes:
       - /mnt/titan/Audiobooks:/audiobooks
       - /mnt/titan/Podcasts:/podcasts
-      - ~/config/audiobookshelf/metadata:/metadata
-      - ~/config/audiobookshelf/config:/config
+      - ~/docker/audiobookshelf/audiobookshelf/metadata:/metadata
+      - ~/docker/audiobookshelf/audiobookshelf/config:/config
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.audiobookshelf.entrypoints=http"

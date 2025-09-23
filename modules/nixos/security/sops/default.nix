@@ -107,6 +107,11 @@ in
           owner = "root";
           mode = "0400";
         };
+
+        "services/vaultwarden/admin_token" = {
+          owner = "root";
+          mode = "0400";
+        };
       };
     };
   };

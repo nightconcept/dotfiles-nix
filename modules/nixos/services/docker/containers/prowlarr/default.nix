@@ -81,18 +81,6 @@ in
       "d ${cfg.configPath} 0755 ${toString cfg.uid} ${toString cfg.gid} -"
     ];
 
-    # Ensure proxy network exists if using Traefik
-    systemd.services."docker-network-proxy" = lib.mkIf cfg.enableTraefik {
-      description = "Create Docker proxy network";
-      after = [ "docker.service" ];
-      requires = [ "docker.service" ];
-      before = [ "docker-container-${containerName}.service" ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = "${pkgs.docker}/bin/docker network create proxy || true";
-      };
-    };
 
     # Prowlarr container service
     systemd.services."docker-container-${containerName}" = {
@@ -117,7 +105,7 @@ in
         EOF
 
         # Update docker-compose.yml with runtime values
-        ${pkgs.yq}/bin/yq -i '
+        ${pkgs.yq}/bin/yq -i -y '
           .services.prowlarr.environment[0] = "PUID=${toString cfg.uid}" |
           .services.prowlarr.environment[1] = "PGID=${toString cfg.gid}" |
           .services.prowlarr.environment[2] = "TZ=${cfg.timezone}" |
@@ -127,16 +115,16 @@ in
 
         # Update Traefik labels if enabled
         ${lib.optionalString cfg.enableTraefik ''
-          ${pkgs.yq}/bin/yq -i '
-            .services.prowlarr.labels[1] = "traefik.http.routers.prowlarr.rule=Host(\`${cfg.subdomain}.${cfg.domain}\`)" |
-            .services.prowlarr.labels[5] = "traefik.http.routers.prowlarr-secure.rule=Host(\`${cfg.subdomain}.${cfg.domain}\`)" |
+          ${pkgs.yq}/bin/yq -i -y '
+            .services.prowlarr.labels[1] = "traefik.http.routers.prowlarr.rule=Host(`${cfg.subdomain}.${cfg.domain}`)" |
+            .services.prowlarr.labels[5] = "traefik.http.routers.prowlarr-secure.rule=Host(`${cfg.subdomain}.${cfg.domain}`)" |
             .services.prowlarr.labels[8] = "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
           ' ${containerPath}/docker-compose.yml
         ''}
 
         # Disable Traefik if not needed
         ${lib.optionalString (!cfg.enableTraefik) ''
-          ${pkgs.yq}/bin/yq -i '
+          ${pkgs.yq}/bin/yq -i -y '
             .services.prowlarr.labels[0] = "traefik.enable=false" |
             del(.services.prowlarr.networks) |
             del(.networks)
@@ -145,19 +133,19 @@ in
 
         # Configure Authelia middleware
         ${lib.optionalString (cfg.enableTraefik && cfg.enableAuthelia) ''
-          ${pkgs.yq}/bin/yq -i '
+          ${pkgs.yq}/bin/yq -i -y '
             .services.prowlarr.labels[10] = "traefik.http.routers.prowlarr-secure.middlewares=authelia@docker"
           ' ${containerPath}/docker-compose.yml
         ''}
         ${lib.optionalString (cfg.enableTraefik && !cfg.enableAuthelia) ''
-          ${pkgs.yq}/bin/yq -i '
+          ${pkgs.yq}/bin/yq -i -y '
             del(.services.prowlarr.labels[10])
           ' ${containerPath}/docker-compose.yml
         ''}
 
         # Update Watchtower label
-        ${pkgs.yq}/bin/yq -i '
-          .services.prowlarr.labels[] |= select(. == "*watchtower*").= "com.centurylinklabs.watchtower.enable=${toString cfg.enableWatchtower}"
+        ${pkgs.yq}/bin/yq -i -y '
+          .services.prowlarr.labels = [.services.prowlarr.labels[] | if test("watchtower") then "com.centurylinklabs.watchtower.enable=${toString cfg.enableWatchtower}" else . end]
         ' ${containerPath}/docker-compose.yml
       '';
 
