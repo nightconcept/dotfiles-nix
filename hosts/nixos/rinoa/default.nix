@@ -69,6 +69,8 @@
     vaultwarden.enable = true;
     prowlarr-abb.enable = true;
     prowlarr.enable = true;
+    sonarr.enable = true;
+    radarr.enable = true;
     audiobookshelf.enable = true;
     nextcloud.enable = true;
     immich.enable = true;
