@@ -16,6 +16,22 @@ in
   };
 
   config = mkIf cfg.enable {
+    # Ensure /run/secrets doesn't exist before SOPS runs
+    # This prevents conflicts where something creates it as a regular directory
+    system.activationScripts.cleanupSecretsBeforeSops = {
+      text = ''
+        # Remove any existing /run/secrets directory that might interfere with SOPS
+        if [ -e /run/secrets ] && [ ! -L /run/secrets ]; then
+          echo "Removing existing /run/secrets directory to allow SOPS to create its symlink"
+          rm -rf /run/secrets
+        fi
+        # Also clean up any leftover temp directories
+        rm -rf /run/.secrets-temp 2>/dev/null || true
+      '';
+      # Run before setupSecrets (SOPS)
+      deps = [];
+    };
+
     sops = {
       defaultSopsFile = ./common.yaml;
       defaultSopsFormat = "yaml";
@@ -36,7 +52,6 @@ in
           mode = "0600";
         };
         "network/titan_credentials" = {
-          # SOPS will handle the path automatically
           owner = "root";
           mode = "0400";
         };
@@ -56,12 +71,10 @@ in
           mode = "0400";
         };
         "ci_runners/github_token" = {
-          path = "/run/secrets/github-runner-token";
           owner = "root";
           mode = "0400";
         };
         "ci_runners/forgejo_token" = {
-          path = "/run/secrets/forgejo-runner-token";
           owner = "root";
           mode = "0400";
         };

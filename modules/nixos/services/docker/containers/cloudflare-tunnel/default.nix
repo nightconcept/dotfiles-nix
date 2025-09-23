@@ -39,12 +39,18 @@ in
         # Copy docker-compose.yml to runtime directory
         cp ${./docker-compose.yml} ${containerPath}/docker-compose.yml
 
-        # Generate .env file with tunnel token
-        cat > ${containerPath}/.env <<EOF
+        # Generate .env file (initially empty)
+        touch ${containerPath}/.env
+
+        # Add tunnel token from file if configured
         ${lib.optionalString (cfg.tunnelTokenFile != null) ''
-        TUNNEL_TOKEN=$(cat ${cfg.tunnelTokenFile})
+        if [ -f ${cfg.tunnelTokenFile} ]; then
+          echo "TUNNEL_TOKEN=$(cat ${cfg.tunnelTokenFile})" > ${containerPath}/.env
+        else
+          echo "Error: Cloudflare tunnel token file not found at ${cfg.tunnelTokenFile}"
+          exit 1
+        fi
         ''}
-        EOF
       '';
 
       serviceConfig = {
