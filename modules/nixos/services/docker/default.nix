@@ -24,7 +24,7 @@ in
     ./containers/sonarr
 
     # Add other containers as default.nix files are created
-    # ./containers/audiobookshelf
+    ./containers/audiobookshelf
     ./containers/authelia
     # ./containers/calibre
     # ./containers/calibre-web
@@ -39,12 +39,12 @@ in
     # ./containers/nextcloud
     # ./containers/open-webui
     # ./containers/palworld
-    # ./containers/prowlarr-abb
+    ./containers/prowlarr-abb
     # ./containers/readarr
     # ./containers/readarr-books
     # ./containers/searxng
     # ./containers/uptime-kuma
-    # ./containers/vaultwarden
+    ./containers/vaultwarden
     # ./containers/wg-easy
   ];
 

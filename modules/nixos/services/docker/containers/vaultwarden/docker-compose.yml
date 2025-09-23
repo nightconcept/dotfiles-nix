@@ -11,10 +11,9 @@ services:
       - proxy
     environment:
       - ADMIN_TOKEN=$ADMIN_TOKEN
-      - DATA_PATH=~/data/vaultwarden
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ~/data/vaultwarden:/data
+      - ~/docker/vaultwarden/data:/data
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.vaultwarden.entrypoints=http"

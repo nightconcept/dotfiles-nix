@@ -39,6 +39,9 @@
 
     # Enable SOPS for secret management
     security.sops.enable = true;
+
+    # Enable titan network drive mount
+    network-drives.titan.enable = true;
   };
 
 
@@ -63,6 +66,10 @@
     watchtower.enable = true;
     flaresolverr.enable = true;
     cloudflare-tunnel.enable = true;
+    vaultwarden.enable = true;
+    prowlarr-abb.enable = true;
+    prowlarr.enable = true;
+    audiobookshelf.enable = true;
   };
 
   # System packages for server management
