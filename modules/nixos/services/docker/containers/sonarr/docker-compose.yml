@@ -5,9 +5,9 @@ services:
     networks:
       - proxy
     environment:
-      - PGID=0
-      - PUID=0
-      - TZ=America/Los_Angeles
+      - PGID=${PGID}
+      - PUID=${PUID}
+      - TZ=${TZ}
     image: linuxserver/sonarr:latest
     ports:
       - target: 8989
@@ -15,16 +15,16 @@ services:
         protocol: tcp
     volumes:
       - type: bind
-        source: ~/config/sonarr
+        source: ${CONFIG_PATH}
         target: /config
       - type: bind
-        source: /mnt/titan/downloads
+        source: ${DOWNLOADS_PATH}
         target: /downloads
       - type: bind
-        source: /mnt/titan/downloads
+        source: ${DOWNLOADS_PATH}
         target: /mnt/titan/downloads
       - type: bind
-        source: /mnt/titan/TVShows
+        source: ${TVSHOWS_PATH}
         target: /tv
     labels:
       - "traefik.enable=true"

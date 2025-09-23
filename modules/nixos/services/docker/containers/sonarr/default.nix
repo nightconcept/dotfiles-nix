@@ -10,9 +10,21 @@ in
   options.modules.nixos.docker.containers.sonarr = {
     enable = lib.mkEnableOption "Sonarr TV series manager container";
 
+    domain = lib.mkOption {
+      type = lib.types.str;
+      default = "local.solivan.dev";
+      description = "Base domain for Sonarr";
+    };
+
+    subdomain = lib.mkOption {
+      type = lib.types.str;
+      default = "sonarr";
+      description = "Subdomain for Sonarr";
+    };
+
     configPath = lib.mkOption {
       type = lib.types.str;
-      default = "${containerPath}/config";
+      default = "/home/danny/docker/sonarr/config";
       description = "Path to Sonarr configuration";
     };
 
@@ -34,11 +46,22 @@ in
       description = "Port for Sonarr web interface";
     };
 
-    environmentFile = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
-      default = null;
-      description = "Path to environment file containing secrets";
-      example = "/run/secrets/sonarr-env";
+    uid = lib.mkOption {
+      type = lib.types.int;
+      default = 1000;
+      description = "User ID for Sonarr";
+    };
+
+    gid = lib.mkOption {
+      type = lib.types.int;
+      default = 1000;
+      description = "Group ID for Sonarr";
+    };
+
+    timezone = lib.mkOption {
+      type = lib.types.str;
+      default = "America/Los_Angeles";
+      description = "Timezone for Sonarr";
     };
   };
 
@@ -49,55 +72,52 @@ in
     # Create required directories
     systemd.tmpfiles.rules = [
       "d ${containerPath} 0755 root root -"
-      "d ${cfg.configPath} 0755 root root -"
+      "d /home/danny/docker/sonarr 0755 danny users -"
+      "d ${cfg.configPath} 0755 ${toString cfg.uid} ${toString cfg.gid} -"
     ];
 
     # Container service
     systemd.services."docker-container-${containerName}" = {
       description = "Sonarr TV Series Manager Container";
-      after = [ "docker.service" ];
-      requires = [ "docker.service" ];
+      after = [ "docker.service" "docker-network-proxy.service" "mnt-titan.mount" ];
+      # Make Titan mount a hard requirement if paths use it
+      requires = if (lib.hasPrefix "/mnt/titan" cfg.downloadsPath || lib.hasPrefix "/mnt/titan" cfg.tvShowsPath)
+        then [ "docker.service" "docker-network-proxy.service" "mnt-titan.mount" ]
+        else [ "docker.service" "docker-network-proxy.service" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
+        # Wait for mount paths to be available
+        ${lib.optionalString (lib.hasPrefix "/mnt/titan" cfg.downloadsPath) ''
+        echo "Waiting for downloads path: ${cfg.downloadsPath}"
+        while [ ! -d "${cfg.downloadsPath}" ]; do
+          echo "Path not available yet, waiting..."
+          sleep 2
+        done
+        ''}
+        ${lib.optionalString (lib.hasPrefix "/mnt/titan" cfg.tvShowsPath) ''
+        echo "Waiting for TV shows path: ${cfg.tvShowsPath}"
+        while [ ! -d "${cfg.tvShowsPath}" ]; do
+          echo "Path not available yet, waiting..."
+          sleep 2
+        done
+        ''}
+
         # Copy docker-compose.yml to runtime directory
-        if [ -f ${./docker-compose.yml} ]; then
-          cp ${./docker-compose.yml} ${containerPath}/docker-compose.yml
-        else
-          # Create a basic docker-compose.yml if not exists
-          cat > ${containerPath}/docker-compose.yml <<'COMPOSE'
-        services:
-          sonarr:
-            container_name: sonarr
-            image: linuxserver/sonarr:latest
-            restart: unless-stopped
-            environment:
-              - PUID=1000
-              - PGID=1000
-              - TZ=America/Chicago
-            ports:
-              - ${toString cfg.port}:8989
-            volumes:
-              - ${cfg.configPath}:/config
-              - ${cfg.downloadsPath}:/downloads
-              - ${cfg.tvShowsPath}:/tv
-        COMPOSE
-        fi
+        cp ${./docker-compose.yml} ${containerPath}/docker-compose.yml
 
         # Generate .env file
         cat > ${containerPath}/.env <<EOF
+        PUID=${toString cfg.uid}
+        PGID=${toString cfg.gid}
+        TZ=${cfg.timezone}
         CONFIG_PATH=${cfg.configPath}
         DOWNLOADS_PATH=${cfg.downloadsPath}
         TVSHOWS_PATH=${cfg.tvShowsPath}
         WEBUI_PORT=${toString cfg.port}
+        DOMAIN=${cfg.domain}
+        SUBDOMAIN=${cfg.subdomain}
         EOF
-
-        # Append secrets if environment file exists
-        ${lib.optionalString (cfg.environmentFile != null) ''
-          if [ -f ${cfg.environmentFile} ]; then
-            cat ${cfg.environmentFile} >> ${containerPath}/.env
-          fi
-        ''}
       '';
 
       serviceConfig = {
@@ -105,7 +125,7 @@ in
         RemainAfterExit = true;
         WorkingDirectory = containerPath;
         ExecStart = "${pkgs.docker-compose}/bin/docker-compose up -d";
-        ExecStop = "${pkgs.docker-compose}/bin/docker-compose down";
+        ExecStop = "${pkgs.docker-compose}/bin/docker-compose stop";
         ExecReload = "${pkgs.docker-compose}/bin/docker-compose restart";
       };
     };
