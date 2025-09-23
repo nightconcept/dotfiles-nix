@@ -61,6 +61,8 @@
     ddclient.enable = true;
     portainer.enable = true;
     watchtower.enable = true;
+    flaresolverr.enable = true;
+    cloudflare-tunnel.enable = true;
   };
 
   # System packages for server management

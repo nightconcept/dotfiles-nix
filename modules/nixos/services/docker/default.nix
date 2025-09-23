@@ -28,10 +28,10 @@ in
     ./containers/authelia
     # ./containers/calibre
     # ./containers/calibre-web
-    # ./containers/cloudflare-tunnel
+    ./containers/cloudflare-tunnel
     ./containers/ddclient
     # ./containers/enshrouded
-    # ./containers/flaresolverr
+    ./containers/flaresolverr
     # ./containers/forgejo
     # ./containers/homepage
     # ./containers/immich

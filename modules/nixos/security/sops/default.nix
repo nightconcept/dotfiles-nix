@@ -102,6 +102,11 @@ in
           owner = "root";
           mode = "0400";
         };
+
+        "services/cloudflare-tunnel/tunnel_token" = {
+          owner = "root";
+          mode = "0400";
+        };
       };
     };
   };
