@@ -40,11 +40,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.forgejo.entrypoints=http"
-      - "traefik.http.routers.forgejo.rule=Host(`forge.solivan.dev`)"
+      - "traefik.http.routers.forgejo.rule=Host(`forge.local.solivan.dev`) || Host(`forge.solivan.dev`)"
       - "traefik.http.middlewares.forgejo-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.forgejo.middlewares=forgejo-https-redirect"
       - "traefik.http.routers.forgejo-secure.entrypoints=https"
-      - "traefik.http.routers.forgejo-secure.rule=Host(`forge.solivan.dev`)"
+      - "traefik.http.routers.forgejo-secure.rule=Host(`forge.local.solivan.dev`) || Host(`forge.solivan.dev`)"
       - "traefik.http.routers.forgejo-secure.tls=true"
       - "traefik.http.routers.forgejo-secure.service=forgejo"
       - "traefik.http.services.forgejo.loadbalancer.server.port=3000"
