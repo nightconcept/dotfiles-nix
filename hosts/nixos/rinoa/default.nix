@@ -70,6 +70,8 @@
     prowlarr-abb.enable = true;
     prowlarr.enable = true;
     audiobookshelf.enable = true;
+    nextcloud.enable = true;
+    immich.enable = true;
   };
 
   # System packages for server management

@@ -112,6 +112,28 @@ in
           owner = "root";
           mode = "0400";
         };
+
+        "services/nextcloud/db_root_password" = {
+          owner = "root";
+          mode = "0400";
+        };
+        "services/nextcloud/db_password" = {
+          owner = "root";
+          mode = "0400";
+        };
+        "services/nextcloud/collabora_password" = {
+          owner = "root";
+          mode = "0400";
+        };
+        "services/nextcloud/jwt_secret" = {
+          owner = "root";
+          mode = "0400";
+        };
+
+        "services/immich/db_password" = {
+          owner = "root";
+          mode = "0400";
+        };
       };
     };
   };
