@@ -258,19 +258,21 @@ ${envVars}
                       - forgejo-runner-data:/data
                     networks:
                       - runner-network
-                    user: "1000:1000"
-                    command: |
-                      sh -c "
-                        if [ ! -f /data/.runner ]; then
+                    user: "0:0"
+                    command:
+                      - sh
+                      - -c
+                      - |
+                        cd /data
+                        if [ ! -f .runner ]; then
                           sleep 5
                           forgejo-runner register --no-interactive \
-                            --instance '$${cfg.forgejo.instanceUrl}' \
-                            --token \$${FORGEJO_RUNNER_REGISTRATION_TOKEN} \
-                            --name '$${cfg.forgejo.runnerName}-'\$${HOSTNAME} \
-                            --labels '${lib.concatStringsSep "," cfg.forgejo.labels}'
+                            --instance "$${cfg.forgejo.instanceUrl}" \
+                            --token "$$FORGEJO_RUNNER_REGISTRATION_TOKEN" \
+                            --name "$${cfg.forgejo.runnerName}-$$HOSTNAME" \
+                            --labels "${lib.concatStringsSep "," cfg.forgejo.labels}"
                         fi
                         forgejo-runner daemon
-                      "
 
                 volumes:
                   forgejo-runner-data:
