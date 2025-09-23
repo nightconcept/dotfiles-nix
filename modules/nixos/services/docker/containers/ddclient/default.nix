@@ -19,7 +19,7 @@ in
     passwordFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = if config.modules.nixos.security.sops.enable
-               then "/run/secrets/ddclient-password"
+               then "/run/secrets/services/ddclient/password"
                else null;
       description = "Path to file containing DDClient password";
     };

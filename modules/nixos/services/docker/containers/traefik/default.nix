@@ -67,7 +67,7 @@ in
     cloudflareTokenFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = if config.modules.nixos.security.sops.enable
-               then "/run/secrets/traefik-cloudflare-token"
+               then "/run/secrets/services/traefik/cloudflare_token"
                else null;
       description = "Path to file containing Cloudflare DNS API token";
       example = "/run/secrets/cloudflare-dns-token";

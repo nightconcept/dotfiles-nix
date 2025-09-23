@@ -19,7 +19,7 @@ in
     apiTokenFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = if config.modules.nixos.security.sops.enable
-               then "/run/secrets/watchtower-api-token"
+               then "/run/secrets/services/watchtower/api_token"
                else null;
       description = "Path to file containing Watchtower API token";
     };
