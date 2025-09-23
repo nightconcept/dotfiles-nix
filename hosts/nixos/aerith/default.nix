@@ -28,18 +28,29 @@
   # Existing modular configuration
   modules.nixos = {
     kernel.type = "lts";
-    
+
     network = {
       networkManager = true;
       mdns = true;
     };
-    
+
     services.plex = {
       enable = true;
       user = "danny";
       openFirewall = true;
     };
+
+    # Hardware for server
+    hardware.usbAutomount.enable = true;
+
+    # Network storage
+    storage.networkDrives.enable = true;
+
+    # Security
+    security.sops.enable = true;
   };
+
+  services.openssh.enable = true;
 
   # System packages for server management
   environment.systemPackages = with pkgs; [
