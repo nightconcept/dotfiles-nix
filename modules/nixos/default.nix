@@ -3,7 +3,6 @@
   imports = [
     ./kernel
     ./network
-    ./network-drives
     ./services/plex
     ./services/vpn-torrent
 

@@ -62,14 +62,9 @@ in {
     hardware.usbAutomount.enable = true;
 
     # Network storage
-    storage.networkDrives.enable = true;
-
-    # Configure titan NAS mount
-    network-drives.titan = {
+    storage.networkDrives = {
       enable = true;
-      server = "192.168.1.167";
-      shareName = "titan";
-      mountPoint = "/mnt/titan";
+      enableTitan = true;
     };
 
     # Security

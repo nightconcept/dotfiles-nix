@@ -45,10 +45,9 @@ in {
     };
 
     # Mount titan network drive for downloads
-    network-drives.titan = {
+    storage.networkDrives = {
       enable = true;
-      # Reference the SOPS secret path
-      credentialsFile = config.sops.secrets."network/titan_credentials".path;
+      enableTitan = true;
     };
 
     services.vpn-torrent = {
