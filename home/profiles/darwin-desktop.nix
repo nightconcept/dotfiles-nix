@@ -18,7 +18,11 @@
     };
   };
 
-
+  homebrew = {
+    casks = [
+      "gitnuro"
+    ];
+  };
 
   fonts.fontconfig.enable = true;
 
