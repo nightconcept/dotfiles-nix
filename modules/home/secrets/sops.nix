@@ -43,7 +43,14 @@ in
           path = "%r/secrets/gemini_api_key";
           mode = "0400";
         };
-        
+
+        # Forgejo git personal access token
+        "forgejo_git_token" = {
+          # Use XDG runtime dir for better security (tmpfs, user-only access)
+          path = "%r/secrets/forgejo_git_token";
+          mode = "0400";
+        };
+
         # Other user secrets can be added here
       };
     };
