@@ -78,7 +78,7 @@ in
 
       image = lib.mkOption {
         type = lib.types.str;
-        default = "code.forgejo.org/forgejo/runner:latest";
+        default = "code.forgejo.org/forgejo/runner:11";
         description = "Docker image to use for Forgejo runners";
       };
 
@@ -223,48 +223,48 @@ ${envVars}
             ExecStart = let
               # Build environment variables with proper indentation
               baseEnvVars = [
-                "                      FORGEJO_INSTANCE_URL: '${cfg.forgejo.instanceUrl}'"
-                "                      FORGEJO_RUNNER_NAME: '${cfg.forgejo.runnerName}'"
-                "                      FORGEJO_RUNNER_LABELS: '${lib.concatStringsSep "," cfg.forgejo.labels}'"
+                "      FORGEJO_INSTANCE_URL: '${cfg.forgejo.instanceUrl}'"
+                "      FORGEJO_RUNNER_NAME: '${cfg.forgejo.runnerName}'"
+                "      FORGEJO_RUNNER_LABELS: '${lib.concatStringsSep "," cfg.forgejo.labels}'"
               ];
-              customEnvVars = lib.mapAttrsToList (name: value: "                      ${name}: '${value}'") cfg.forgejo.environment;
+              customEnvVars = lib.mapAttrsToList (name: value: "      ${name}: '${value}'") cfg.forgejo.environment;
               envVars = lib.concatStringsSep "\n" (baseEnvVars ++ customEnvVars);
 
               # Generate individual runner services
               runnerServices = lib.concatStringsSep "\n" (lib.genList (i: let
                 runnerNum = i + 1;
               in ''
-                  forgejo-runner-${toString runnerNum}:
-                    image: ${cfg.forgejo.image}
-                    restart: unless-stopped
-                    depends_on:
-                      - docker-in-docker
-                    environment:
+  forgejo-runner-${toString runnerNum}:
+    image: ${cfg.forgejo.image}
+    restart: unless-stopped
+    depends_on:
+      - docker-in-docker
+    environment:
 ${envVars}
-                      DOCKER_HOST: 'tcp://docker-in-docker:2375'
-                    env_file:
-                      - ${cfg.forgejo.workingDirectory}/.env
-                    volumes:
-                      - forgejo-runner-data-${toString runnerNum}:/data
-                    networks:
-                      - runner-network
-                    user: "0:0"
-                    command:
-                      - sh
-                      - -c
-                      - |
-                        cd /data
-                        if [ ! -f .runner ]; then
-                          sleep 5
-                          RUNNER_NAME="${cfg.forgejo.runnerName}-${toString runnerNum}"
-                          echo "Registering runner: $RUNNER_NAME"
-                          forgejo-runner register --no-interactive \
-                            --instance "${cfg.forgejo.instanceUrl}" \
-                            --token "$FORGEJO_RUNNER_REGISTRATION_TOKEN" \
-                            --name "$RUNNER_NAME" \
-                            --labels "${lib.concatStringsSep "," cfg.forgejo.labels}"
-                        fi
-                        forgejo-runner daemon
+      DOCKER_HOST: 'tcp://docker-in-docker:2375'
+    env_file:
+      - ${cfg.forgejo.workingDirectory}/.env
+    volumes:
+      - forgejo-runner-data-${toString runnerNum}:/data
+    networks:
+      - runner-network
+    user: "0:0"
+    command:
+      - sh
+      - -c
+      - |
+        cd /data
+        if [ ! -f .runner ]; then
+          sleep 5
+          RUNNER_NAME="${cfg.forgejo.runnerName}-${toString runnerNum}"
+          echo "Registering runner: $RUNNER_NAME"
+          forgejo-runner register --no-interactive \
+            --instance "${cfg.forgejo.instanceUrl}" \
+            --token "$FORGEJO_RUNNER_REGISTRATION_TOKEN" \
+            --name "$RUNNER_NAME" \
+            --labels "${lib.concatStringsSep "," cfg.forgejo.labels}"
+        fi
+        forgejo-runner daemon
               '') cfg.forgejo.replicas);
 
               # Generate volume definitions

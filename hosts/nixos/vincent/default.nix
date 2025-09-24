@@ -102,10 +102,35 @@
     # Default Dokploy UI is on port 3000
   };
 
-  # Set environment variables for Dokploy to use custom Traefik ports
-  systemd.services.dokploy-traefik.environment = {
-    TRAEFIK_PORT = "8080";
-    TRAEFIK_SSL_PORT = "8443";
+  # Override the dokploy-traefik service to use custom ports
+  systemd.services.dokploy-traefik = {
+    serviceConfig.ExecStart = lib.mkForce (
+      let
+        script = pkgs.writeShellApplication {
+          name = "dokploy-traefik-start-custom";
+          runtimeInputs = [pkgs.docker];
+          text = ''
+            if docker ps -a --format '{{.Names}}' | grep -q '^dokploy-traefik$'; then
+              echo "Starting existing Traefik container..."
+              docker start dokploy-traefik
+            else
+              echo "Creating and starting Traefik container with custom ports..."
+              docker run -d \
+                --name dokploy-traefik \
+                --network dokploy-network \
+                --restart=always \
+                -v /var/run/docker.sock:/var/run/docker.sock \
+                -v /var/lib/dokploy/traefik/traefik.yml:/etc/traefik/traefik.yml \
+                -v /var/lib/dokploy/traefik/dynamic:/etc/dokploy/traefik/dynamic \
+                -p 8080:80/tcp \
+                -p 8443:443/tcp \
+                -p 8443:443/udp \
+                traefik:v3.5.0
+            fi
+          '';
+        };
+      in "${script}/bin/dokploy-traefik-start-custom"
+    );
   };
 
   # Open firewall for Dokploy services
