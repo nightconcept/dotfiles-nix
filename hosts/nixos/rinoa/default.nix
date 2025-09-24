@@ -89,6 +89,7 @@
     immich.enable = true;
     jellyfin.enable = true;
     homepage.enable = true;
+    uptime-kuma.enable = true;
   };
 
   # System packages for server management
