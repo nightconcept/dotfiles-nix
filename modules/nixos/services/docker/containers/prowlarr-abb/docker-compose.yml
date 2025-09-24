@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   prowlarr-abb:
     image: bitlessbyte/prowlarr:latest
