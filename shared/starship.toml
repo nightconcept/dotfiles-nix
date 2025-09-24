@@ -8,27 +8,27 @@ right_format = "[─╯ ](#6c6c6c)$line_break"
 
 # Color reference
 [palettes.p10k_classic]
-red = "#d70000"           # 160
-orange = "#d78700"        # 172
-yellow = "#d7af00"        # 178
-light_yellow = "#afaf87"  # 144
-green = "#5fd700"         # 76 (git branch in P10k)
-teal = "#5fd7d7"          # 80
-light_teal = "#87d7d7"    # 116
-cyan = "#00afff"          # 39 (directory color)
-light_blue = "#5fafd7"    # 74 (nix shell)
-blue = "#0087ff"          # 33
-magenta = "#af5fff"       # 135
-white = "#eeeeee"         # 255
-foreground = "#bcbcbc"    # 250
-foreground_gutter = "#6c6c6c"  # 242
-comment = "#6c6c6c"       # 242 (frame/ornament color)
-dark_gray = "#444444"     # 238 (background)
-black = "#303030"         # 236
-bg = "#303030"            # 236 (terminal background)
-bg_highlight = "#444444"  # 238
-bg_dark = "#1c1c1c"       # 234
-segment_bg = "#444444"    # 238 (P10k background)
+red = "#d70000"               # 160
+orange = "#d78700"            # 172
+yellow = "#d7af00"            # 178
+light_yellow = "#afaf87"      # 144
+green = "#5fd700"             # 76 (git branch in P10k)
+teal = "#5fd7d7"              # 80
+light_teal = "#87d7d7"        # 116
+cyan = "#00afff"              # 39 (directory color)
+light_blue = "#5fafd7"        # 74 (nix shell)
+blue = "#0087ff"              # 33
+magenta = "#af5fff"           # 135
+white = "#eeeeee"             # 255
+foreground = "#bcbcbc"        # 250
+foreground_gutter = "#6c6c6c" # 242
+comment = "#6c6c6c"           # 242 (frame/ornament color)
+dark_gray = "#444444"         # 238 (background)
+black = "#303030"             # 236
+bg = "#303030"                # 236 (terminal background)
+bg_highlight = "#444444"      # 238
+bg_dark = "#1c1c1c"           # 234
+segment_bg = "#444444"        # 238 (P10k background)
 terminal_black = "#303030"
 fg = "#bcbcbc"
 fg_dark = "#6c6c6c"
@@ -92,7 +92,7 @@ format = "[](fg:#6c6c6c bg:#444444)[ $symbol $branch ]($style)"
 # Git status - with file counts like P10k
 [git_status]
 format = "$ahead_behind$all_status"
-conflicted = "~$count "
+conflicted = "[~$count ](fg:#5fd700 bg:#444444)"
 ahead = "[⇡$count ](fg:#5fd700 bg:#444444)"
 behind = "[⇣$count ](fg:#5fd700 bg:#444444)"
 diverged = "[⇡$ahead_count ⇣$behind_count ](fg:#5fd700 bg:#444444)"
