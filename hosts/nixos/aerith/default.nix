@@ -5,12 +5,27 @@
   lib,
   inputs,
   ...
-}: {
+}:
+let
+  sources = import ./npins;
+  pinnedPkgs = import sources.nixpkgs {
+    system = builtins.currentSystem;
+    config = { allowUnfree = true; };
+    overlays = [
+      # Override Plex with latest flake version
+      (import ../../overlays/flake-packages.nix {
+        inherit inputs;
+        overridePackages = [ "plex" ];
+      })
+    ];
+  };
+in {
   imports = [
     ./hardware-configuration.nix
   ];
 
-  # No overlays needed - everything is on unstable now
+  # Use pinned nixpkgs with Plex override
+  nixpkgs.pkgs = pinnedPkgs;
 
   # Networking
   modules.nixos.networking.base.hostName = "aerith";

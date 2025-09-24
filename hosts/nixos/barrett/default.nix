@@ -5,12 +5,20 @@
   lib,
   inputs,
   ...
-}: {
+}:
+let
+  sources = import ./npins;
+  pinnedPkgs = import sources.nixpkgs {
+    system = builtins.currentSystem;
+    config = { allowUnfree = true; };
+  };
+in {
   imports = [
     ./hardware-configuration.nix
   ];
 
-  # No overlays needed - everything is on unstable now
+  # Use pinned nixpkgs
+  nixpkgs.pkgs = pinnedPkgs;
 
   # Networking
   modules.nixos.networking.base.hostName = "barrett";

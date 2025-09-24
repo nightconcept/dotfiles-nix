@@ -123,6 +123,15 @@ in
         if test -d "/home/linuxbrew/"
             eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
         end
+
+        # UV tool path setup
+        if test -d "/home/danny/.local/share/uv/tools"
+            for tool_dir in /home/danny/.local/share/uv/tools/*/bin
+                if test -d "$tool_dir"
+                    fish_add_path --prepend "$tool_dir"
+                end
+            end
+        end
       '';
 
       plugins = [

@@ -142,9 +142,23 @@ The home configuration uses a profile-based system where `home/default.nix` sele
 #### Overlay Strategy
 Overlays provide package customizations and overrides:
 
-1. **Service Overlays** (e.g., `/overlays/plex/default.nix`):
-   - Override specific packages with custom versions
-   - Imported only by hosts that need them
+1. **Flake Package Override** (`/overlays/flake-packages.nix`):
+   - Generalized overlay to inject flake packages over npins
+   - Override specific packages with latest flake versions
+   - Used by pinned hosts that need newer versions of select packages
+
+Example usage:
+```nix
+let
+  pinnedPkgs = import sources.nixpkgs {
+    overlays = [
+      (import ../../overlays/flake-packages.nix {
+        inherit inputs;
+        overridePackages = [ "plex" "docker" ];
+      })
+    ];
+  };
+```
 
 #### Module Package Options
 Modules can expose package options for flexibility:
@@ -153,8 +167,6 @@ options.modules.nixos.services.plex = {
   package = mkOpt lib.types.package pkgs.plex "The plex package to use";
 };
 ```
-
-This allows hosts to override package choices without modifying the module.
 
 ### Host Configurations
 
@@ -211,11 +223,13 @@ docker compose down
 
 ## Package Version Management with npins
 
-Server hosts can be pinned to specific nixpkgs commits using [npins](https://github.com/andir/npins) for stability. This allows servers to stay on known-good package versions while other systems track nixpkgs unstable.
+Server hosts are pinned to specific nixpkgs commits using [npins](https://github.com/andir/npins) for stability. This allows servers to stay on known-good package versions while other systems track nixpkgs unstable.
 
 ### Current Pinned Hosts
 - `rinoa` - Uses npins-managed nixpkgs at `/hosts/nixos/rinoa/npins/`
 - `barrett` - Uses npins-managed nixpkgs at `/hosts/nixos/barrett/npins/`
+- `vincent` - Uses npins-managed nixpkgs at `/hosts/nixos/vincent/npins/`
+- `aerith` - Uses npins-managed nixpkgs with Plex override at `/hosts/nixos/aerith/npins/`
 
 ### Setting Up npins for a Host
 

@@ -6,16 +6,21 @@
   lib,
   inputs,
   ...
-}: {
+}:
+let
+  sources = import ./npins;
+  pinnedPkgs = import sources.nixpkgs {
+    system = builtins.currentSystem;
+    config = { allowUnfree = true; };
+  };
+in {
   imports = [
     ./hardware-configuration.nix
     inputs.nix-dokploy.nixosModules.default
   ];
 
-  # Apply shared overlays
-  nixpkgs.overlays = [
-    (import ../../../overlays/unstable-packages.nix { inherit inputs; })
-  ];
+  # Use pinned nixpkgs
+  nixpkgs.pkgs = pinnedPkgs;
 
   # Networking
   modules.nixos.networking.base.hostName = "vincent";
