@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  jellyfin:
+    image: linuxserver/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    networks:
+      - proxy
+    environment:
+      - JELLYFIN_PublishedServerUrl=${PUBLISHED_SERVER_URL}
+      - TZ=${TZ}
+    ports:
+      - "${WEBUI_PORT}:8096"
+      - "${HTTPS_PORT}:8920"
+      - "${DISCOVERY_PORT}:7359/udp"
+      - "${DLNA_PORT}:1900/udp"
+    volumes:
+      - ${CONFIG_PATH}:/config
+      - ${TV_SHOWS_PATH}:/data/tvshows
+      - ${MOVIES_PATH}:/data/movies
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.entrypoints=http"
+      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.local.solivan.dev`) || Host(`jellyfin.solivan.dev`)"
+      - "traefik.http.middlewares.jellyfin-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.jellyfin.middlewares=jellyfin-https-redirect"
+      - "traefik.http.routers.jellyfin-secure.entrypoints=https"
+      - "traefik.http.routers.jellyfin-secure.rule=Host(`jellyfin.local.solivan.dev`) || Host(`jellyfin.solivan.dev`)"
+      - "traefik.http.routers.jellyfin-secure.tls=true"
+      - "traefik.http.routers.jellyfin-secure.service=jellyfin"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+      - "traefik.docker.network=proxy"
+      - "com.centurylinklabs.watchtower.enable=${WATCHTOWER_ENABLE}"
+
+networks:
+  proxy:
+    external: true

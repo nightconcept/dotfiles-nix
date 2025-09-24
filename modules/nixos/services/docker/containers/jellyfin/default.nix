@@ -41,25 +41,6 @@ in
         default = "/mnt/titan/Movies";
         description = "Path to movies library";
       };
-
-      additionalPaths = lib.mkOption {
-        type = lib.types.listOf (lib.types.submodule {
-          options = {
-            name = lib.mkOption {
-              type = lib.types.str;
-              description = "Mount name in container";
-              example = "music";
-            };
-            hostPath = lib.mkOption {
-              type = lib.types.str;
-              description = "Host path to media";
-              example = "/mnt/storage/Music";
-            };
-          };
-        });
-        default = [];
-        description = "Additional media paths to mount";
-      };
     };
 
     ports = {
@@ -113,49 +94,21 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        # Generate docker-compose.yml directly
-        cat > ${containerPath}/docker-compose.yml <<EOF
-        version: "3"
+        # Copy docker-compose.yml to runtime directory
+        cp ${./docker-compose.yml} ${containerPath}/docker-compose.yml
 
-        services:
-          jellyfin:
-            image: linuxserver/jellyfin:latest
-            container_name: jellyfin
-            restart: unless-stopped
-            networks:
-              - proxy
-            environment:
-              - JELLYFIN_PublishedServerUrl=${cfg.publishedServerUrl}
-              - TZ=${cfg.timezone}
-            ports:
-              - "${toString cfg.ports.webUI}:8096"
-              - "${toString cfg.ports.https}:8920"
-              - "${toString cfg.ports.discovery}:7359/udp"
-              - "${toString cfg.ports.dlna}:1900/udp"
-            volumes:
-              - ${cfg.configPath}:/config
-              - ${cfg.mediaPaths.tvShows}:/data/tvshows
-              - ${cfg.mediaPaths.movies}:/data/movies
-        ${lib.concatMapStrings (path: ''
-              - ${path.hostPath}:/data/${path.name}
-        '') cfg.mediaPaths.additionalPaths}
-            labels:
-              - "traefik.enable=true"
-              - "traefik.http.routers.jellyfin.entrypoints=http"
-              - "traefik.http.routers.jellyfin.rule=Host(\`jellyfin.local.solivan.dev\`) || Host(\`jellyfin.solivan.dev\`)"
-              - "traefik.http.middlewares.jellyfin-https-redirect.redirectscheme.scheme=https"
-              - "traefik.http.routers.jellyfin.middlewares=jellyfin-https-redirect"
-              - "traefik.http.routers.jellyfin-secure.entrypoints=https"
-              - "traefik.http.routers.jellyfin-secure.rule=Host(\`jellyfin.local.solivan.dev\`) || Host(\`jellyfin.solivan.dev\`)"
-              - "traefik.http.routers.jellyfin-secure.tls=true"
-              - "traefik.http.routers.jellyfin-secure.service=jellyfin"
-              - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
-              - "traefik.docker.network=proxy"
-              - "com.centurylinklabs.watchtower.enable=${toString cfg.enableWatchtower}"
-
-        networks:
-          proxy:
-            external: true
+        # Create .env file with configuration
+        cat > ${containerPath}/.env <<EOF
+        PUBLISHED_SERVER_URL=${cfg.publishedServerUrl}
+        TZ=${cfg.timezone}
+        WEBUI_PORT=${toString cfg.ports.webUI}
+        HTTPS_PORT=${toString cfg.ports.https}
+        DISCOVERY_PORT=${toString cfg.ports.discovery}
+        DLNA_PORT=${toString cfg.ports.dlna}
+        CONFIG_PATH=${cfg.configPath}
+        TV_SHOWS_PATH=${cfg.mediaPaths.tvShows}
+        MOVIES_PATH=${cfg.mediaPaths.movies}
+        WATCHTOWER_ENABLE=${toString cfg.enableWatchtower}
         EOF
       '';
 

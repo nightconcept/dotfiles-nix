@@ -100,7 +100,7 @@ in
 
       preStart = ''
         # Copy docker-compose.yml to runtime directory
-        cp ${./docker-compose.yaml} ${containerPath}/docker-compose.yml
+        cp ${./docker-compose.yml} ${containerPath}/docker-compose.yml
 
         # Copy init script if exists
         ${lib.optionalString (builtins.pathExists ./init-nextcloud.sh) ''
