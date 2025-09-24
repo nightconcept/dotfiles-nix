@@ -61,6 +61,14 @@ in {
     # Network storage
     storage.networkDrives.enable = true;
 
+    # Configure titan NAS mount
+    network-drives.titan = {
+      enable = true;
+      server = "192.168.1.167";
+      shareName = "titan";
+      mountPoint = "/mnt/titan";
+    };
+
     # Security
     security.sops.enable = true;
   };

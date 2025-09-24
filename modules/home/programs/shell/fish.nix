@@ -252,6 +252,23 @@ in
                     echo "sudo authentication failed"
                     return 1
                 end
+
+                # Setup system-level SOPS age key if needed (NixOS only)
+                if test "$config_type" = "nixosConfigurations"
+                    if not test -f /var/lib/sops-nix/key.txt
+                        if test -f ~/.config/sops/age/keys.txt
+                            echo "Setting up system-level SOPS age key..."
+                            sudo mkdir -p /var/lib/sops-nix
+                            sudo cp ~/.config/sops/age/keys.txt /var/lib/sops-nix/key.txt
+                            sudo chmod 600 /var/lib/sops-nix/key.txt
+                            sudo chown root:root /var/lib/sops-nix/key.txt
+                            echo "System-level age key configured"
+                        else
+                            echo "Warning: No user age key found at ~/.config/sops/age/keys.txt"
+                            echo "System secrets will not be available until age key is configured"
+                        end
+                    end
+                end
             end
             
             # Run the appropriate rebuild command
