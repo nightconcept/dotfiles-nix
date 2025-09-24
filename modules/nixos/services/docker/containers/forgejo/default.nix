@@ -46,16 +46,16 @@ in
       description = "Default Actions URL (github.com for GitHub Actions compatibility, data.forgejo.org for FOSS actions)";
     };
 
-    localConfigPath = lib.mkOption {
+    localDbPath = lib.mkOption {
       type = lib.types.str;
-      default = "${containerPath}/config";
-      description = "Local path for Forgejo database and metadata";
+      default = "${containerPath}/db";
+      description = "Local path for PostgreSQL database";
     };
 
-    dataPath = lib.mkOption {
+    remoteDataPath = lib.mkOption {
       type = lib.types.str;
       default = "/mnt/titan/docker/forgejo";
-      description = "Path for Forgejo repositories and data";
+      description = "Remote path for Forgejo data and repositories";
     };
   };
 
@@ -64,9 +64,8 @@ in
 
     systemd.tmpfiles.rules = [
       "d ${containerPath} 0755 root root -"
-      "d ${cfg.localConfigPath} 0755 root root -"
-      "d ${cfg.localConfigPath}/db 0755 999 999 -"
-      "d ${cfg.dataPath} 0755 1000 1000 -"
+      "d ${cfg.localDbPath} 0755 999 999 -"
+      "d ${cfg.remoteDataPath} 0755 1000 1000 -"
     ];
 
     systemd.services."docker-container-${containerName}" = {
@@ -82,8 +81,8 @@ in
         # Generate .env file with proper environment variables
         cat > ${containerPath}/.env <<EOF
         DB_PASSWORD=${cfg.dbPassword}
-        LOCAL_CONFIG_PATH=${cfg.localConfigPath}
-        DATA_PATH=${cfg.dataPath}
+        LOCAL_DB_PATH=${cfg.localDbPath}
+        REMOTE_DATA_PATH=${cfg.remoteDataPath}
         FORGEJO_DOMAIN=${cfg.domain}
         FORGEJO_SSH_PORT=${toString cfg.sshPort}
         FORGEJO_HTTP_PORT=${toString cfg.httpPort}

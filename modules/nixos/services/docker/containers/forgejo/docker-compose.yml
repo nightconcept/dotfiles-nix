@@ -6,7 +6,7 @@ services:
     networks:
       - proxy
     volumes:
-      - ${LOCAL_CONFIG_PATH}/db:/var/lib/postgresql/data
+      - ${LOCAL_DB_PATH}:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=forgejo
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -21,7 +21,7 @@ services:
     depends_on:
       - forgejo-db
     volumes:
-      - ${DATA_PATH}:/data
+      - ${REMOTE_DATA_PATH}:/data
     environment:
       - USER_UID=1000
       - USER_GID=1000
