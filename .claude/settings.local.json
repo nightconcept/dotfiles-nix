@@ -5,7 +5,10 @@
       "Bash(nix:*)",
       "Bash(git checkout:*)",
       "Read(//mnt/titan/Movies/**)",
-      "Bash(/home/danny/remove_movie_extension_dirs.sh:*)"
+      "Bash(/home/danny/remove_movie_extension_dirs.sh:*)",
+      "Read(//tmp/**)",
+      "WebSearch",
+      "Bash(ssh:*)"
     ],
     "deny": []
   }

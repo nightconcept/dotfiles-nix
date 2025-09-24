@@ -9,6 +9,7 @@
 }: {
   imports = [
     ./hardware-configuration.nix
+    inputs.nix-dokploy.nixosModules.default
   ];
 
   # Apply shared overlays
@@ -46,8 +47,12 @@
     home-manager
   ];
 
-  # Enable Docker module
-  modules.nixos.docker.enable = true;
+  # Enable Docker module with Swarm support for Dokploy
+  modules.nixos.docker = {
+    enable = true;
+    # Dokploy requires Docker Swarm which needs live-restore disabled
+    swarm.enable = true;
+  };
 
   # CI/CD Runners
   services.ci-runners = {
@@ -86,6 +91,29 @@
       schedule = "0 0 4 * * *";
     };
   };
+
+  # Dokploy PaaS configuration
+  services.dokploy = {
+    enable = true;
+    dataDir = "/var/lib/dokploy";
+
+    # Use custom ports to avoid conflicts with rinoa's Traefik
+    # These will be proxied through rinoa
+    # Default Dokploy UI is on port 3000
+  };
+
+  # Set environment variables for Dokploy to use custom Traefik ports
+  systemd.services.dokploy-traefik.environment = {
+    TRAEFIK_PORT = "8080";
+    TRAEFIK_SSL_PORT = "8443";
+  };
+
+  # Open firewall for Dokploy services
+  networking.firewall.allowedTCPPorts = [
+    3000  # Dokploy UI
+    8080  # Traefik HTTP
+    8443  # Traefik HTTPS
+  ];
 
   # System state version
   system.stateVersion = "24.11";

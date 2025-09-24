@@ -78,7 +78,7 @@ in
 
       image = lib.mkOption {
         type = lib.types.str;
-        default = "data.forgejo.org/forgejo/runner:11";
+        default = "code.forgejo.org/forgejo/runner:latest";
         description = "Docker image to use for Forgejo runners";
       };
 
@@ -230,23 +230,13 @@ ${envVars}
               customEnvVars = lib.mapAttrsToList (name: value: "                      ${name}: '${value}'") cfg.forgejo.environment;
               envVars = lib.concatStringsSep "\n" (baseEnvVars ++ customEnvVars);
 
-              dockerComposeFile = pkgs.writeText "forgejo-docker-compose.yml" ''
-                version: '3.8'
-
-                services:
-                  docker-in-docker:
-                    image: docker:dind
-                    privileged: true
-                    command: ['dockerd', '-H', 'tcp://0.0.0.0:2375', '--tls=false']
-                    restart: unless-stopped
-                    networks:
-                      - runner-network
-
-                  forgejo-runner:
+              # Generate individual runner services
+              runnerServices = lib.concatStringsSep "\n" (lib.genList (i: let
+                runnerNum = i + 1;
+              in ''
+                  forgejo-runner-${toString runnerNum}:
                     image: ${cfg.forgejo.image}
                     restart: unless-stopped
-                    deploy:
-                      replicas: ${toString cfg.forgejo.replicas}
                     depends_on:
                       - docker-in-docker
                     environment:
@@ -255,7 +245,7 @@ ${envVars}
                     env_file:
                       - ${cfg.forgejo.workingDirectory}/.env
                     volumes:
-                      - forgejo-runner-data:/data
+                      - forgejo-runner-data-${toString runnerNum}:/data
                     networks:
                       - runner-network
                     user: "0:0"
@@ -266,7 +256,7 @@ ${envVars}
                         cd /data
                         if [ ! -f .runner ]; then
                           sleep 5
-                          RUNNER_NAME="${cfg.forgejo.runnerName}-$(hostname)"
+                          RUNNER_NAME="${cfg.forgejo.runnerName}-${toString runnerNum}"
                           echo "Registering runner: $RUNNER_NAME"
                           forgejo-runner register --no-interactive \
                             --instance "${cfg.forgejo.instanceUrl}" \
@@ -275,19 +265,37 @@ ${envVars}
                             --labels "${lib.concatStringsSep "," cfg.forgejo.labels}"
                         fi
                         forgejo-runner daemon
+              '') cfg.forgejo.replicas);
 
-                volumes:
-                  forgejo-runner-data:
+              # Generate volume definitions
+              runnerVolumes = lib.concatStringsSep "\n" (lib.genList (i: "  forgejo-runner-data-${toString (i + 1)}:") cfg.forgejo.replicas);
 
-                networks:
-                  runner-network:
-                    driver: bridge
+              dockerComposeFile = pkgs.writeText "forgejo-docker-compose.yml" ''
+version: '3.8'
+
+services:
+  docker-in-docker:
+    image: docker:dind
+    privileged: true
+    command: ['dockerd', '-H', 'tcp://0.0.0.0:2375', '--tls=false']
+    restart: unless-stopped
+    networks:
+      - runner-network
+
+${runnerServices}
+
+volumes:
+${runnerVolumes}
+
+networks:
+  runner-network:
+    driver: bridge
               '';
             in pkgs.writeScript "start-forgejo-runners" ''
               #!${pkgs.bash}/bin/bash
               ${pkgs.coreutils}/bin/cp ${dockerComposeFile} ${cfg.forgejo.workingDirectory}/docker-compose.yml
               echo "FORGEJO_RUNNER_REGISTRATION_TOKEN=$(cat ${cfg.forgejo.tokenFile})" > ${cfg.forgejo.workingDirectory}/.env
-              ${pkgs.docker-compose}/bin/docker-compose -f ${cfg.forgejo.workingDirectory}/docker-compose.yml up -d --scale forgejo-runner=${toString cfg.forgejo.replicas}
+              ${pkgs.docker-compose}/bin/docker-compose -f ${cfg.forgejo.workingDirectory}/docker-compose.yml up -d
             '';
             ExecStop = ''
               ${pkgs.docker-compose}/bin/docker-compose -f ${cfg.forgejo.workingDirectory}/docker-compose.yml down

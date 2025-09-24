@@ -562,6 +562,21 @@
         "type": "github"
       }
     },
+    "nix-dokploy": {
+      "locked": {
+        "lastModified": 1758191075,
+        "narHash": "sha256-nFP238vyQec5aSvvDdPj0Fh7UEpuNBygv+pwtbDKLow=",
+        "owner": "el-kurto",
+        "repo": "nix-dokploy",
+        "rev": "f6a8b2a1ae406fd38c57658d45732eeebc6e8c10",
+        "type": "github"
+      },
+      "original": {
+        "owner": "el-kurto",
+        "repo": "nix-dokploy",
+        "type": "github"
+      }
+    },
     "nixos-hardware": {
       "locked": {
         "lastModified": 1757943327,
@@ -736,6 +751,7 @@
         "lazyvim-nixvim": "lazyvim-nixvim",
         "lix-module": "lix-module",
         "nix-darwin": "nix-darwin_2",
+        "nix-dokploy": "nix-dokploy",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "nvchad": "nvchad",

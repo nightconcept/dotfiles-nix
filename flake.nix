@@ -67,6 +67,11 @@
       url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Dokploy - Self-hosted PaaS platform
+    nix-dokploy = {
+      url = "github:el-kurto/nix-dokploy";
+    };
   };
 
   outputs = {

@@ -33,7 +33,7 @@ in
     # ./containers/enshrouded
     ./containers/flaresolverr
     # ./containers/forgejo
-    # ./containers/homepage
+    ./containers/homepage
     ./containers/immich
     # ./containers/minecraft
     ./containers/nextcloud
@@ -43,7 +43,7 @@ in
     # ./containers/readarr
     # ./containers/readarr-books
     # ./containers/searxng
-    # ./containers/uptime-kuma
+    ./containers/uptime-kuma
     ./containers/vaultwarden
     # ./containers/wg-easy
   ];
@@ -70,6 +70,14 @@ in
       default = {};
       description = "Docker Compose projects to manage";
     };
+
+    swarm = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Enable Docker Swarm mode (disables live-restore)";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -81,6 +89,10 @@ in
         enable = true;
         dates = "weekly";
         flags = [ "--all" ];
+      };
+      # Swarm mode requires live-restore to be disabled
+      daemon.settings = lib.mkIf cfg.swarm.enable {
+        live-restore = false;
       };
     };
 
