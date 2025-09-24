@@ -1,11 +1,13 @@
 # Forgejo Runner Container Module
 # Manages Forgejo runners in Docker containers
-{ config, lib, pkgs, ... }:
-
-let
-  cfg = config.services.forgejo-runners;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  cfg = config.services.forgejo-runners;
+in {
   options.services.forgejo-runners = {
     enable = lib.mkEnableOption "Forgejo Actions runners";
 
@@ -41,7 +43,7 @@ in
 
     labels = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ "docker" "amd64" "linux" ];
+      default = ["docker" "amd64" "linux"];
       description = "Labels for the Forgejo runners";
     };
 
@@ -70,9 +72,9 @@ in
     # Forgejo Runners Service
     systemd.services.forgejo-runners = {
       description = "Forgejo Actions Runners";
-      after = [ "network.target" "docker.service" ];
-      requires = [ "docker.service" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target" "docker.service"];
+      requires = ["docker.service"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         Type = "oneshot";
@@ -91,71 +93,71 @@ in
 
           # Generate individual runner services
           runnerServices = lib.concatStringsSep "\n" (lib.genList (i: let
-            runnerNum = i + 1;
-          in ''
-  forgejo-runner-${toString runnerNum}:
-    image: ${cfg.image}
-    restart: unless-stopped
-    depends_on:
-      - docker-in-docker
-    environment:
-${envVars}
-      DOCKER_HOST: 'tcp://docker-in-docker:2375'
-    env_file:
-      - ${cfg.workingDirectory}/.env
-    volumes:
-      - forgejo-runner-data-${toString runnerNum}:/data
-    networks:
-      - runner-network
-    user: "0:0"
-    command:
-      - sh
-      - -c
-      - |
-        cd /data
-        if [ ! -f .runner ]; then
-          sleep 5
-          RUNNER_NAME="${cfg.runnerName}-${toString runnerNum}"
-          echo "Registering runner: ''${RUNNER_NAME}"
-          forgejo-runner register --no-interactive \
-            --instance "${cfg.instanceUrl}" \
-            --token "''${FORGEJO_RUNNER_REGISTRATION_TOKEN}" \
-            --name "''${RUNNER_NAME}" \
-            --labels "${lib.concatStringsSep "," cfg.labels}"
-        fi
-        forgejo-runner daemon
-          '') cfg.replicas);
+              runnerNum = i + 1;
+            in ''
+                forgejo-runner-${toString runnerNum}:
+                  image: ${cfg.image}
+                  restart: unless-stopped
+                  depends_on:
+                    - docker-in-docker
+                  environment:
+              ${envVars}
+                    DOCKER_HOST: 'tcp://docker-in-docker:2375'
+                  env_file:
+                    - ${cfg.workingDirectory}/.env
+                  volumes:
+                    - forgejo-runner-data-${toString runnerNum}:/data
+                  networks:
+                    - runner-network
+                  user: "0:0"
+                  command:
+                    - sh
+                    - -c
+                    - |
+                      cd /data
+                      if [ ! -f .runner ]; then
+                        sleep 5
+                        RUNNER_NAME="${cfg.runnerName}-${toString runnerNum}"
+                        echo "Registering runner: ''${RUNNER_NAME}"
+                        forgejo-runner register --no-interactive \
+                          --instance "${cfg.instanceUrl}" \
+                          --token "''${FORGEJO_RUNNER_REGISTRATION_TOKEN}" \
+                          --name "''${RUNNER_NAME}" \
+                          --labels "${lib.concatStringsSep "," cfg.labels}"
+                      fi
+                      forgejo-runner daemon
+            '')
+            cfg.replicas);
 
           # Generate volume definitions
           runnerVolumes = lib.concatStringsSep "\n" (lib.genList (i: "  forgejo-runner-data-${toString (i + 1)}:") cfg.replicas);
 
           dockerComposeFile = pkgs.writeText "forgejo-docker-compose.yml" ''
-version: '3.8'
+            services:
+              docker-in-docker:
+                image: docker:dind
+                privileged: true
+                command: ['dockerd', '-H', 'tcp://0.0.0.0:2375', '--tls=false']
+                restart: unless-stopped
+                networks:
+                  - runner-network
 
-services:
-  docker-in-docker:
-    image: docker:dind
-    privileged: true
-    command: ['dockerd', '-H', 'tcp://0.0.0.0:2375', '--tls=false']
-    restart: unless-stopped
-    networks:
-      - runner-network
+            ${runnerServices}
 
-${runnerServices}
+            volumes:
+            ${runnerVolumes}
 
-volumes:
-${runnerVolumes}
-
-networks:
-  runner-network:
-    driver: bridge
+            networks:
+              runner-network:
+                driver: bridge
           '';
-        in pkgs.writeScript "start-forgejo-runners" ''
-          #!${pkgs.bash}/bin/bash
-          ${pkgs.coreutils}/bin/cp ${dockerComposeFile} ${cfg.workingDirectory}/docker-compose.yml
-          echo "FORGEJO_RUNNER_REGISTRATION_TOKEN=$(cat ${cfg.tokenFile})" > ${cfg.workingDirectory}/.env
-          ${pkgs.docker-compose}/bin/docker-compose -f ${cfg.workingDirectory}/docker-compose.yml up -d
-        '';
+        in
+          pkgs.writeScript "start-forgejo-runners" ''
+            #!${pkgs.bash}/bin/bash
+            ${pkgs.coreutils}/bin/cp ${dockerComposeFile} ${cfg.workingDirectory}/docker-compose.yml
+            echo "FORGEJO_RUNNER_REGISTRATION_TOKEN=$(cat ${cfg.tokenFile})" > ${cfg.workingDirectory}/.env
+            ${pkgs.docker-compose}/bin/docker-compose -f ${cfg.workingDirectory}/docker-compose.yml up -d
+          '';
         ExecStop = ''
           ${pkgs.docker-compose}/bin/docker-compose -f ${cfg.workingDirectory}/docker-compose.yml down
         '';

@@ -1,7 +1,4 @@
-version: "3.9"
-
 services:
-
   vaultwarden:
     container_name: vaultwarden
     hostname: vaultwarden
