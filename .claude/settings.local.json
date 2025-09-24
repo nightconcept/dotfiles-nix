@@ -3,7 +3,9 @@
     "allow": [
       "Bash(find:*)",
       "Bash(nix:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Read(//mnt/titan/Movies/**)",
+      "Bash(/home/danny/remove_movie_extension_dirs.sh:*)"
     ],
     "deny": []
   }
