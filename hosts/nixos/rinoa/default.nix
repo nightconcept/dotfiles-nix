@@ -5,11 +5,21 @@
   lib,
   inputs,
   ...
-}: {
+}:
+let
+  sources = import ./npins;
+  pinnedPkgs = import sources.nixpkgs {
+    system = builtins.currentSystem;
+    config = { allowUnfree = true; };
+  };
+in {
   imports = [
     ./hardware-configuration.nix
     # TODO: Add after pushing changes: ./dokploy-routing.nix  # Route traffic to Vincent's Dokploy
   ];
+
+  # Use pinned nixpkgs
+  nixpkgs.pkgs = pinnedPkgs;
 
   # Bootloader configuration (override any systemd-boot settings)
   boot.loader = {
@@ -27,11 +37,6 @@
       device = "/swapfile";
       size = 8192; # 8GB in MB
     }
-  ];
-
-  # Apply shared overlays
-  nixpkgs.overlays = [
-    (import ../../../overlays/unstable-packages.nix { inherit inputs; })
   ];
 
   # Networking
