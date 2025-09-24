@@ -39,6 +39,9 @@
       networkManager = true;
       mdns = true;
     };
+
+    # Enable SOPS for secrets management
+    security.sops.enable = true;
   };
 
 
@@ -54,27 +57,13 @@
     swarm.enable = true;
   };
 
-  # CI/CD Runners
-  services.ci-runners = {
+  # Forgejo Runners
+  services.forgejo-runners = {
     enable = true;
-
-    github = {
-      enable = true;
-      replicas = 3;
-      ephemeral = true;
-      owner = "nightconcept";
-      repo = "dotfiles-nix";  # Repository-specific runners for user account
-      labels = [ "docker" "self-hosted" "linux" "x64" "vincent" ];
-      tokenFile = "/run/secrets/ci_runners/github_token";
-    };
-
-    forgejo = {
-      enable = true;
-      replicas = 3;
-      instanceUrl = "https://forge.solivan.dev";
-      labels = [ "docker" "amd64" "linux" "vincent" ];
-      tokenFile = "/run/secrets/ci_runners/forgejo_token";
-    };
+    replicas = 3;
+    instanceUrl = "https://forge.solivan.dev";
+    labels = [ "docker" "amd64" "linux" "vincent" ];
+    # Uses default tokenFile path: /run/secrets/forgejo_runner_token
   };
 
   # Additional container management

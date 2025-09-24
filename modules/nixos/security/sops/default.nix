@@ -70,11 +70,7 @@ in
           owner = "danny";
           mode = "0400";
         };
-        "ci_runners/github_token" = {
-          owner = "root";
-          mode = "0400";
-        };
-        "ci_runners/forgejo_token" = {
+        "forgejo_runner_token" = {
           owner = "root";
           mode = "0400";
         };
