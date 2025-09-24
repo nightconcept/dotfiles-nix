@@ -32,7 +32,7 @@ in
     ./containers/ddclient
     # ./containers/enshrouded
     ./containers/flaresolverr
-    # ./containers/forgejo
+    ./containers/forgejo
     ./containers/homepage
     ./containers/immich
     # ./containers/minecraft

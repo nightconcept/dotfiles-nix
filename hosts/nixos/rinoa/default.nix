@@ -99,6 +99,7 @@
     jellyfin.enable = true;
     homepage.enable = true;
     uptime-kuma.enable = true;
+    forgejo.enable = true;
   };
 
   # System packages for server management
