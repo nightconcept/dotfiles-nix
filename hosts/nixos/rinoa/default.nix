@@ -9,7 +9,7 @@
 let
   sources = import ./npins;
   pinnedPkgs = import sources.nixpkgs {
-    system = builtins.currentSystem;
+    system = "x86_64-linux";
     config = { allowUnfree = true; };
   };
 in {
@@ -20,6 +20,9 @@ in {
 
   # Use pinned nixpkgs
   nixpkgs.pkgs = pinnedPkgs;
+
+  # Disable nixpkgs.config since we're using an external pkgs instance
+  nixpkgs.config = lib.mkForce {};
 
   # Bootloader configuration (override any systemd-boot settings)
   boot.loader = {
