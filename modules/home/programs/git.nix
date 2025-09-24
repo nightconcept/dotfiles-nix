@@ -109,6 +109,11 @@ in
           ];
         };
 
+        # Configure credentials for Forgejo
+        "credential \"https://forge.solivan.dev\"" = {
+          helper = "!f() { echo \"username=danny\"; echo \"password=$(cat $XDG_RUNTIME_DIR/secrets/forgejo_git_token)\"; }; f";
+        };
+
         "filter \"lfs\"" = {
           process = "git-lfs filter-process";
           required = true;
