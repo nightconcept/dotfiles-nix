@@ -11,7 +11,7 @@
   ];
 
   modules.home.programs = {
-    firefox.enable = true;
+    firefox.enable = false;  # Disabled to avoid conflicts with existing Firefox profile
     spotify.enable = true;
     wezterm.configOnly = true;
     xdg.enable = true;
@@ -26,6 +26,7 @@
 
   home.packages = with pkgs; [
     github-desktop
+    gitnuro
     kdePackages.xdg-desktop-portal-kde
     nerd-fonts.fira-code
     nerd-fonts.fira-mono
