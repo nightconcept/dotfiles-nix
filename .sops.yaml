@@ -29,7 +29,7 @@ creation_rules:
       - *danny_personal
   
   # User home secrets (SSH keys, personal tokens)
-  - path_regex: home/secrets/[^/]+\.(yaml|json|env|ini)$
+  - path_regex: (home|modules/home)/secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
     - age:
       - *danny_personal

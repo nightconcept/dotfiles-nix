@@ -14,6 +14,17 @@ in
   };
 
   config = lib.mkIf config.modules.home.programs.git.enable {
+    # Create git credentials file with Forgejo token from SOPS
+    home.activation.gitCredentials = lib.mkIf (config.sops.secrets ? forgejo_git_token) (
+      lib.hm.dag.entryAfter ["writeBoundary"] ''
+        if [ -f "${config.sops.secrets.forgejo_git_token.path}" ]; then
+          TOKEN=$(cat "${config.sops.secrets.forgejo_git_token.path}")
+          echo "https://nightconcept:$TOKEN@forge.solivan.dev" > ~/.git-credentials
+          chmod 600 ~/.git-credentials
+        fi
+      ''
+    );
+
     programs.git = {
       enable = true;
       userName = "Danny Solivan";
@@ -41,6 +52,14 @@ in
         github = {
           user = "nightconcept";
         };
+
+        # Forgejo configuration
+        "url \"https://forge.solivan.dev\"" = {
+          insteadOf = [
+            "forgejo:"
+          ];
+        };
+
 
         alias = {
           del = "branch -D";
