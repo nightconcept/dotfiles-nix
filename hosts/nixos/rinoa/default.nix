@@ -85,9 +85,10 @@
     sonarr.enable = true;
     radarr.enable = true;
     audiobookshelf.enable = true;
-    nextcloud.enable = true;
+    nextcloud.enable = false;
     immich.enable = true;
     jellyfin.enable = true;
+    homepage.enable = true;
   };
 
   # System packages for server management
