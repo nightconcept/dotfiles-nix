@@ -48,7 +48,7 @@
 
       qbittorrent = {
         enable = true;
-        webUIPort = 8080;
+        webUIPort = 8112;
         torrentPort = 6881;
         username = "danny";
         passwordFile = config.sops.secrets."vpn/qbittorrent_password".path;
