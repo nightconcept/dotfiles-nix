@@ -58,11 +58,12 @@ in {
     security.sops.enable = true;
 
     # Enable titan network drive mount
-    network-drives.titan = {
+    storage.networkDrives = {
       enable = true;
+      enableTitan = true;
       # Disable automount timeout to prevent services from stopping
       # Sonarr and Radarr require this mount, and the 60s timeout causes them to stop
-      idleTimeout = 0;
+      titanIdleTimeout = 0;
     };
   };
 

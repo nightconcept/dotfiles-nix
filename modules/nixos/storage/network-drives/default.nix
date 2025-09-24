@@ -5,10 +5,29 @@ with lib;
 
 let
   cfg = config.modules.nixos.storage.networkDrives;
+
+  # Default titan mount configuration
+  titanMount = {
+    name = "titan";
+    source = "//192.168.1.167/titan";
+    credentials = "/run/secrets/network/titan_credentials";
+  };
 in
 {
   options.modules.nixos.storage.networkDrives = {
     enable = mkEnableOption "Network drive mounting";
+
+    enableTitan = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable default titan network mount";
+    };
+
+    titanIdleTimeout = mkOption {
+      type = types.int;
+      default = 60;
+      description = "Timeout in seconds before unmounting titan when idle (0 to disable)";
+    };
 
     mounts = mkOption {
       type = types.listOf (types.submodule {
@@ -28,17 +47,20 @@ in
           };
         };
       });
-      default = [];  # Don't set defaults here, let the host configure it
+      default = [];
       description = "Network mounts to configure";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable (let
+    # Combine user-defined mounts with titan if enabled
+    allMounts = cfg.mounts ++ (optionals cfg.enableTitan [titanMount]);
+  in {
     # Create mount points
-    systemd.tmpfiles.rules = map (mount: 
+    systemd.tmpfiles.rules = map (mount:
       "d /mnt/${mount.name} 0755 root root -"
-    ) cfg.mounts;
-    
+    ) allMounts;
+
     # Create mount units
     systemd.mounts = map (mount: {
       description = "Mount ${mount.name} network share";
@@ -50,17 +72,19 @@ in
       after = [ "network-online.target" "nss-lookup.target" ];
       wants = [ "network-online.target" ];
       requiredBy = [ ];
-    }) cfg.mounts;
-    
+    }) allMounts;
+
     # Create automount units
     systemd.automounts = map (mount: {
       description = "Automount ${mount.name} network share";
       where = "/mnt/${mount.name}";
       wantedBy = [ "multi-user.target" ];
       automountConfig = {
-        TimeoutIdleSec = "60";
+        TimeoutIdleSec = if mount.name == "titan"
+          then toString cfg.titanIdleTimeout
+          else "60";
         DirectoryMode = "0755";
       };
-    }) cfg.mounts;
-  };
+    }) allMounts;
+  });
 }
