@@ -11,7 +11,6 @@
   ];
 
   modules.home.programs = {
-    firefox.enable = false;  # Disabled to avoid conflicts with existing Firefox profile
     spotify.enable = true;
     wezterm.configOnly = true;
     xdg.enable = true;

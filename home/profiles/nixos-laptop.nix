@@ -12,7 +12,6 @@
   ];
 
   modules.home.programs = {
-    firefox.enable = true;
     gaming.enable = true;
     spotify.enable = true;
     wezterm.enable = true;
@@ -29,6 +28,7 @@
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
+    firefox  # Install directly as package
     github-desktop
     kdePackages.xdg-desktop-portal-kde
     nerd-fonts.fira-code
