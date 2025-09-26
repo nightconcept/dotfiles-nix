@@ -1,11 +1,14 @@
 # Waver - MacBook Pro M1 (laptop)
-{ pkgs, ... }: {
+{pkgs, ...}: {
   # Enable Darwin modules for laptop
   modules.darwin = {
     core.enable = true;
     homebrew = {
       enable = true;
       systemType = "laptop";
+      extraCasks = [
+        "ungoogled-chromium"
+      ];
     };
     systemSettings = {
       enable = true;
