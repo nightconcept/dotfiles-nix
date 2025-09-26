@@ -1,7 +1,10 @@
 # macOS laptop-specific configuration
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   imports = [
     ./darwin-desktop.nix
     ../desktops/aerospace
@@ -16,7 +19,4 @@
   };
 
   desktops.aerospace.enable = true;
-
-  # macOS laptops use shell instead of zsh
-  # (included via default.nix based on hostname)
 }
