@@ -28,12 +28,13 @@
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
-    firefox  # Install directly as package
+    firefox
     github-desktop
     kdePackages.xdg-desktop-portal-kde
     nerd-fonts.fira-code
     nerd-fonts.fira-mono
     obsidian
+    ungoogled-chromium
     uv
     vlc
     vscode
