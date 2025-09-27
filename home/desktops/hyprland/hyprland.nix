@@ -234,9 +234,11 @@
         "ALT, Tab, workspace, m+1"
         "ALT SHIFT, Tab, workspace, m-1"
 
-        # Window cycling within workspace with Super+Left/Right
-        "$mod, Right, focuswindow, next"
-        "$mod, Left, focuswindow, prev"
+        # Focus movement - vim-style jkl;
+        "$mod, J, movefocus, l"
+        "$mod, K, movefocus, d"
+        "$mod, L, movefocus, u"
+        "$mod, semicolon, movefocus, r"
 
         # Gaps
         "$mod SHIFT, G, exec, hyprctl --batch \"keyword general:gaps_out 5;keyword general:gaps_in 3\""
@@ -255,26 +257,16 @@
         "$mod, O, exec, killall -SIGUSR2 waybar"
 
         # Window movement
-        "$mod SHIFT, left, movewindow, l"
-        "$mod SHIFT, right, movewindow, r"
-        "$mod SHIFT, up, movewindow, u"
-        "$mod SHIFT, down, movewindow, d"
-
-        # Focus movement
-        "$mod, left, movefocus, l"
-        "$mod, right, movefocus, r"
-        "$mod, up, movefocus, u"
-        "$mod, down, movefocus, d"
+        "$mod SHIFT, J, movewindow, l"
+        "$mod SHIFT, K, movewindow, d"
+        "$mod SHIFT, L, movewindow, u"
+        "$mod SHIFT, semicolon, movewindow, r"
 
         # Quick resize with keyboard
-        "$mod CTRL SHIFT, right, resizeactive, 15 0"
-        "$mod CTRL SHIFT, left, resizeactive, -15 0"
-        "$mod CTRL SHIFT, up, resizeactive, 0 -15"
-        "$mod CTRL SHIFT, down, resizeactive, 0 15"
-        "$mod CTRL SHIFT, l, resizeactive, 15 0"
-        "$mod CTRL SHIFT, h, resizeactive, -15 0"
-        "$mod CTRL SHIFT, k, resizeactive, 0 -15"
-        "$mod CTRL SHIFT, j, resizeactive, 0 15"
+        "$mod ALT, J, resizeactive, -15 0"
+        "$mod ALT, K, resizeactive, 0 15"
+        "$mod ALT, L, resizeactive, 0 -15"
+        "$mod ALT, semicolon, resizeactive, 15 0"
 
         # Workspace switching
         "$mod, 1, workspace, 1"
@@ -299,8 +291,6 @@
         "$mod CTRL, 8, movetoworkspace, 8"
         "$mod CTRL, 9, movetoworkspace, 9"
         "$mod CTRL, 0, movetoworkspace, 10"
-        "$mod CTRL, left, movetoworkspace, -1"
-        "$mod CTRL, right, movetoworkspace, +1"
 
         # Move silently to workspace
         "$mod SHIFT, 1, movetoworkspacesilent, 1"
@@ -427,14 +417,10 @@
       resize = {
         settings = {
           bind = [
-            ", right, resizeactive, 15 0"
-            ", left, resizeactive, -15 0"
-            ", up, resizeactive, 0 -15"
-            ", down, resizeactive, 0 15"
-            ", l, resizeactive, 15 0"
-            ", h, resizeactive, -15 0"
-            ", k, resizeactive, 0 -15"
-            ", j, resizeactive, 0 15"
+            ", j, resizeactive, -15 0"
+            ", k, resizeactive, 0 15"
+            ", l, resizeactive, 0 -15"
+            ", semicolon, resizeactive, 15 0"
             ", escape, submap, reset"
           ];
         };

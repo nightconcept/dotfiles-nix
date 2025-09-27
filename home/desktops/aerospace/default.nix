@@ -48,78 +48,74 @@
 
         mode.main.binding = {
           # Layout commands
-          alt-slash = "layout tiles horizontal vertical";
-          alt-comma = "layout accordion horizontal vertical";
+          ctrl-slash = "layout tiles horizontal vertical";
+          ctrl-comma = "layout accordion horizontal vertical";
 
           # Close window
-          alt-q = "close";
-          alt-shift-c = "close";
+          ctrl-q = "close";
+          ctrl-shift-c = "close";
 
           # Application launching (keeping cmd for these as they're app shortcuts)
-          alt-enter = "exec-and-forget open -n /Applications/WezTerm.app";
-          alt-b = "exec-and-forget open -a 'Firefox'";
-          alt-f = "exec-and-forget open -a 'Finder'";
-          alt-v = "exec-and-forget open -a 'Visual Studio Code'";
+          ctrl-enter = "exec-and-forget open -n /Applications/WezTerm.app";
+          ctrl-b = "exec-and-forget open -a 'Firefox'";
+          ctrl-f = "exec-and-forget open -a 'Finder'";
+          ctrl-v = "exec-and-forget open -a 'Visual Studio Code'";
 
-          # Navigation - vim-style hjkl and arrow keys
-          alt-h = ["focus left" "move-mouse window-lazy-center"];
-          alt-j = ["focus down" "move-mouse window-lazy-center"];
-          alt-k = ["focus up" "move-mouse window-lazy-center"];
-          alt-l = ["focus right" "move-mouse window-lazy-center"];
-          alt-left = ["focus left" "move-mouse window-lazy-center"];
-          alt-down = ["focus down" "move-mouse window-lazy-center"];
-          alt-up = ["focus up" "move-mouse window-lazy-center"];
-          alt-right = ["focus right" "move-mouse window-lazy-center"];
+          # Navigation - vim-style jkl;
+          ctrl-j = ["focus left" "move-mouse window-lazy-center"];
+          ctrl-k = ["focus down" "move-mouse window-lazy-center"];
+          ctrl-l = ["focus up" "move-mouse window-lazy-center"];
+          ctrl-semicolon = ["focus right" "move-mouse window-lazy-center"];
 
           # Move windows
-          alt-shift-h = "move left";
-          alt-shift-j = "move down";
-          alt-shift-k = "move up";
-          alt-shift-l = "move right";
+          ctrl-shift-j = "move left";
+          ctrl-shift-k = "move down";
+          ctrl-shift-l = "move up";
+          ctrl-shift-semicolon = "move right";
 
           # Window resizing
-          alt-shift-minus = "resize smart -50";
-          alt-shift-equal = "resize smart +50";
+          ctrl-shift-minus = "resize smart -50";
+          ctrl-shift-equal = "resize smart +50";
 
           # Workspace navigation - full 1-10 support
-          alt-1 = "workspace 1";
-          alt-2 = "workspace 2";
-          alt-3 = "workspace 3";
-          alt-4 = "workspace 4";
-          alt-5 = "workspace 5";
-          alt-6 = "workspace 6";
-          alt-7 = "workspace 7";
-          alt-8 = "workspace 8";
-          alt-9 = "workspace 9";
-          alt-0 = "workspace 10";
+          ctrl-1 = "workspace 1";
+          ctrl-2 = "workspace 2";
+          ctrl-3 = "workspace 3";
+          ctrl-4 = "workspace 4";
+          ctrl-5 = "workspace 5";
+          ctrl-6 = "workspace 6";
+          ctrl-7 = "workspace 7";
+          ctrl-8 = "workspace 8";
+          ctrl-9 = "workspace 9";
+          ctrl-0 = "workspace 10";
 
           # Move window to workspace
-          alt-shift-1 = "move-node-to-workspace 1";
-          alt-shift-2 = "move-node-to-workspace 2";
-          alt-shift-3 = "move-node-to-workspace 3";
-          alt-shift-4 = "move-node-to-workspace 4";
-          alt-shift-5 = "move-node-to-workspace 5";
-          alt-shift-6 = "move-node-to-workspace 6";
-          alt-shift-7 = "move-node-to-workspace 7";
-          alt-shift-8 = "move-node-to-workspace 8";
-          alt-shift-9 = "move-node-to-workspace 9";
-          alt-shift-0 = "move-node-to-workspace 10";
+          ctrl-shift-1 = "move-node-to-workspace 1";
+          ctrl-shift-2 = "move-node-to-workspace 2";
+          ctrl-shift-3 = "move-node-to-workspace 3";
+          ctrl-shift-4 = "move-node-to-workspace 4";
+          ctrl-shift-5 = "move-node-to-workspace 5";
+          ctrl-shift-6 = "move-node-to-workspace 6";
+          ctrl-shift-7 = "move-node-to-workspace 7";
+          ctrl-shift-8 = "move-node-to-workspace 8";
+          ctrl-shift-9 = "move-node-to-workspace 9";
+          ctrl-shift-0 = "move-node-to-workspace 10";
 
           # Workspace switching - cycle through all workspaces with windows
           ctrl-tab = "workspace next";
           ctrl-shift-tab = "workspace prev";
 
           # Tiling controls
-          alt-shift-f = "fullscreen";
-          alt-shift-w = "layout floating tiling";
-          alt-shift-s = "layout v_accordion";
-          alt-shift-t = "layout h_accordion";
-          alt-shift-e = "layout tiles horizontal vertical";
-          alt-shift-d = "resize width 1280";
+          ctrl-shift-f = "fullscreen";
+          ctrl-shift-w = "layout floating tiling";
+          ctrl-shift-s = "layout v_accordion";
+          ctrl-shift-t = "layout h_accordion";
+          ctrl-shift-e = "layout tiles horizontal vertical";
+          ctrl-shift-d = "resize width 1280";
 
           # Mode switching
-          alt-shift-semicolon = "mode service";
-          alt-shift-g = "mode lock";
+          ctrl-shift-semicolon = "mode service";
+          ctrl-shift-g = "mode lock";
         };
 
         mode.service.binding = {
@@ -127,10 +123,10 @@
           f = ["flatten-workspace-tree" "mode main"];
           backspace = ["close-all-windows-but-current" "mode main"];
 
-          alt-shift-h = ["join-with left" "mode main"];
-          alt-shift-j = ["join-with down" "mode main"];
-          alt-shift-k = ["join-with up" "mode main"];
-          alt-shift-l = ["join-with right" "mode main"];
+          ctrl-shift-j = ["join-with left" "mode main"];
+          ctrl-shift-k = ["join-with down" "mode main"];
+          ctrl-shift-l = ["join-with up" "mode main"];
+          ctrl-shift-semicolon = ["join-with right" "mode main"];
 
           enter = "mode main";
           esc = "mode main";
