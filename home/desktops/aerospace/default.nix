@@ -114,7 +114,7 @@
           ctrl-shift-d = "resize width 1280";
 
           # Mode switching
-          ctrl-shift-semicolon = "mode service";
+          ctrl-shift-m = "mode service";
           ctrl-shift-g = "mode lock";
         };
 
