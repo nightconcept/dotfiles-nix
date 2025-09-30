@@ -59,7 +59,7 @@
           ctrl-enter = "exec-and-forget open -n /Applications/WezTerm.app";
           ctrl-b = "exec-and-forget open -a 'Firefox'";
           ctrl-f = "exec-and-forget open -a 'Finder'";
-          ctrl-v = "exec-and-forget open -a 'Visual Studio Code'";
+          ctrl-e = "exec-and-forget open -a 'Visual Studio Code'";
 
           # Navigation - vim-style jkl;
           ctrl-j = ["focus left" "move-mouse window-lazy-center"];
