@@ -100,20 +100,20 @@ let
       } else null;
 
       # Brave search (requires API key)
-      brave-search = if (cfg.mcp.brave-search.enable && cfg.mcp.brave-search.apiKey != "") then {
-        command = "env";
+      brave-search = if cfg.mcp.brave-search.enable then {
+        command = "bash";
         args = [
-          "BRAVE_API_KEY=${cfg.mcp.brave-search.apiKey}"
-          "npx" "-y" "@modelcontextprotocol/server-brave-search"
+          "-c"
+          "BRAVE_API_KEY=$(cat ${config.sops.secrets.brave_api_key.path}) npx -y @modelcontextprotocol/server-brave-search"
         ];
       } else null;
 
       # Context7 for library docs (requires API key)
-      context7 = if (cfg.mcp.context7.enable && cfg.mcp.context7.apiKey != "") then {
-        command = "npx";
+      context7 = if cfg.mcp.context7.enable then {
+        command = "bash";
         args = [
-          "-y" "@upstash/context7-mcp"
-          "--api-key" cfg.mcp.context7.apiKey
+          "-c"
+          "npx -y @upstash/context7-mcp --api-key $(cat ${config.sops.secrets.context7_api_key.path})"
         ];
       } else null;
     };
@@ -153,13 +153,11 @@ in
       };
 
       brave-search = {
-        enable = mkBoolOpt false "Enable Brave Search MCP server";
-        apiKey = mkStrOpt "" "Brave Search API key (set via secrets)";
+        enable = mkBoolOpt false "Enable Brave Search MCP server (uses SOPS secret)";
       };
 
       context7 = {
-        enable = mkBoolOpt false "Enable Context7 MCP server for library docs";
-        apiKey = mkStrOpt "" "Context7 API key (set via secrets)";
+        enable = mkBoolOpt false "Enable Context7 MCP server for library docs (uses SOPS secret)";
       };
     };
   };

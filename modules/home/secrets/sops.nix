@@ -51,6 +51,20 @@ in
           mode = "0400";
         };
 
+        # Brave Search API key for Claude Code MCP
+        "brave_api_key" = {
+          # Use XDG runtime dir for better security (tmpfs, user-only access)
+          path = "%r/secrets/brave_api_key";
+          mode = "0400";
+        };
+
+        # Context7 API key for Claude Code MCP (library docs)
+        "context7_api_key" = {
+          # Use XDG runtime dir for better security (tmpfs, user-only access)
+          path = "%r/secrets/context7_api_key";
+          mode = "0400";
+        };
+
         # Other user secrets can be added here
       };
     };

@@ -16,9 +16,9 @@
           filesystem.enable = true;
           puppeteer.enable = true;
           fetch.enable = true;
-          # These require API keys - enable them after adding secrets
-          brave-search.enable = false;  # Set to true and configure apiKey
-          context7.enable = false;       # Set to true and configure apiKey
+          # API keys are managed via SOPS secrets
+          brave-search.enable = true;
+          context7.enable = true;
         };
       };
       common.enable = true;
