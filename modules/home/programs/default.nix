@@ -2,6 +2,7 @@
 {
   imports = [
     ./alacritty.nix
+    ./claude-code.nix
     ./common.nix
     ./direnv.nix
     ./firefox.nix

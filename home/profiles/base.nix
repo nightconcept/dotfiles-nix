@@ -8,6 +8,19 @@
 
   modules.home = {
     programs = {
+      claude-code = {
+        enable = true;
+        # Enable MCP servers that don't require API keys by default
+        mcp = {
+          sequential-thinking.enable = true;
+          filesystem.enable = true;
+          puppeteer.enable = true;
+          fetch.enable = true;
+          # These require API keys - enable them after adding secrets
+          brave-search.enable = false;  # Set to true and configure apiKey
+          context7.enable = false;       # Set to true and configure apiKey
+        };
+      };
       common.enable = true;
       direnv.enable = true;
       git.enable = true;
