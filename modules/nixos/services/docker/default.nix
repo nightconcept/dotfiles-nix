@@ -31,6 +31,7 @@ in
     # ./containers/enshrouded
     ./containers/flaresolverr
     ./containers/forgejo
+    ./containers/freshrss
     ./containers/homepage
     ./containers/immich
     # ./containers/minecraft
