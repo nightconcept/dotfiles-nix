@@ -72,6 +72,18 @@ let
     };
   });
 
+  # MCP wrapper scripts for servers that need secrets
+  braveSearchMcpScript = pkgs.writeShellScriptBin "brave-search-mcp" ''
+    #!/usr/bin/env bash
+    BRAVE_API_KEY=$(cat /run/user/1000/secrets/brave_api_key) npx -y @modelcontextprotocol/server-brave-search
+  '';
+
+  context7McpScript = pkgs.writeShellScriptBin "context7-mcp" ''
+    #!/usr/bin/env bash
+    API_KEY=$(cat /run/user/1000/secrets/context7_api_key)
+    npx -y @upstash/context7-mcp --api-key "$API_KEY"
+  '';
+
   # MCP server configuration
   mcpConfig = pkgs.writeText "mcp-config.json" (builtins.toJSON {
     mcpServers = lib.filterAttrs (n: v: v != null) {
@@ -99,22 +111,16 @@ let
         args = [ "-y" "@kazuph/mcp-fetch" ];
       } else null;
 
-      # Brave search (requires API key)
+      # Brave search (requires API key) - uses wrapper script
       brave-search = if cfg.mcp.brave-search.enable then {
-        command = "bash";
-        args = [
-          "-c"
-          "BRAVE_API_KEY=$(cat ${config.sops.secrets.brave_api_key.path}) npx -y @modelcontextprotocol/server-brave-search"
-        ];
+        command = "${braveSearchMcpScript}/bin/brave-search-mcp";
+        args = [];
       } else null;
 
-      # Context7 for library docs (requires API key)
+      # Context7 for library docs (requires API key) - uses wrapper script
       context7 = if cfg.mcp.context7.enable then {
-        command = "bash";
-        args = [
-          "-c"
-          "npx -y @upstash/context7-mcp --api-key $(cat ${config.sops.secrets.context7_api_key.path})"
-        ];
+        command = "${context7McpScript}/bin/context7-mcp";
+        args = [];
       } else null;
     };
   });
@@ -171,6 +177,17 @@ in
 
       ".claude/mcp-config.json" = lib.mkIf cfg.mcp.enable {
         source = mcpConfig;
+      };
+
+      # Wrapper scripts for MCP servers that need secrets
+      ".claude/brave-search-mcp.sh" = lib.mkIf (cfg.mcp.enable && cfg.mcp.brave-search.enable) {
+        source = "${braveSearchMcpScript}/bin/brave-search-mcp";
+        executable = true;
+      };
+
+      ".claude/context7-mcp.sh" = lib.mkIf (cfg.mcp.enable && cfg.mcp.context7.enable) {
+        source = "${context7McpScript}/bin/context7-mcp";
+        executable = true;
       };
     };
 
