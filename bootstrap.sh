@@ -409,7 +409,7 @@ setup_age_keys() {
                 ;;
             3)
                 # Extract keys from encrypted bootstrap archive
-                local keys_archive="./bootstrap/keys.tar.gz.gpg"
+                local keys_archive="./scripts/bootstrap/keys.tar.gz.gpg"
 
                 if [[ ! -f "$keys_archive" ]]; then
                     print_error "Keys archive not found at: $keys_archive"
