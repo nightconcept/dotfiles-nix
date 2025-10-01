@@ -17,18 +17,24 @@
       package = pkgs.rofi;
 
       theme = let
-        colors = config.lib.stylix.colors;
         inherit (config.lib.formats.rasi) mkLiteral;
       in {
         "*" = {
-          bg-col = mkLiteral "#${colors.base00}";
-          bg-col-light = mkLiteral "#${colors.base01}";
-          border-col = mkLiteral "#${colors.base0D}";
-          selected-col = mkLiteral "#${colors.base02}";
-          blue = mkLiteral "#${colors.base0D}";
-          fg-col = mkLiteral "#${colors.base05}";
-          fg-col2 = mkLiteral "#${colors.base06}";
-          grey = mkLiteral "#${colors.base03}";
+          # Tokyo Night color palette
+          bg-col = mkLiteral "#1a1b26";           # tokyonight_bg
+          bg-col-light = mkLiteral "#292e42";     # tokyonight_bg_highlight
+          border-col = mkLiteral "#7aa2f7";       # tokyonight_blue
+          selected-col = mkLiteral "#3b4261";     # tokyonight_fg_gutter
+          blue = mkLiteral "#7aa2f7";             # tokyonight_blue
+          cyan = mkLiteral "#7dcfff";             # tokyonight_cyan
+          fg-col = mkLiteral "#c0caf5";           # tokyonight_fg
+          fg-col2 = mkLiteral "#a9b1d6";          # tokyonight_fg_dark
+          grey = mkLiteral "#565f89";             # tokyonight_comment
+          red = mkLiteral "#f7768e";              # tokyonight_red
+          green = mkLiteral "#9ece6a";            # tokyonight_green
+          yellow = mkLiteral "#e0af68";           # tokyonight_yellow
+          orange = mkLiteral "#ff9e64";           # tokyonight_orange
+          purple = mkLiteral "#bb9af7";           # tokyonight_magenta
 
           width = 600;
           font = "${config.stylix.fonts.monospace.name} ${toString config.stylix.fonts.sizes.applications}";
@@ -59,7 +65,7 @@
         };
 
         "prompt" = {
-          background-color = mkLiteral "@blue";
+          background-color = mkLiteral "@cyan";
           padding = mkLiteral "6px";
           text-color = mkLiteral "@bg-col";
           border-radius = mkLiteral "3px";
@@ -100,7 +106,8 @@
         "element selected" = {
           background-color = mkLiteral "@selected-col";
           border = mkLiteral "0px 0px 0px 2px";
-          border-color = mkLiteral "@blue";
+          border-color = mkLiteral "@cyan";
+          text-color = mkLiteral "@cyan";
         };
 
         "mode-switcher" = {
@@ -117,7 +124,7 @@
 
         "button selected" = {
           background-color = mkLiteral "@bg-col";
-          text-color = mkLiteral "@blue";
+          text-color = mkLiteral "@cyan";
         };
 
         "message" = {
@@ -130,7 +137,7 @@
         "textbox" = {
           padding = mkLiteral "6px";
           margin = mkLiteral "20px 0px 0px 20px";
-          text-color = mkLiteral "@blue";
+          text-color = mkLiteral "@cyan";
           background-color = mkLiteral "@bg-col-light";
         };
       };
