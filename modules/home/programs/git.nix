@@ -14,13 +14,21 @@ in
   };
 
   config = lib.mkIf config.modules.home.programs.git.enable {
-    # Create git credentials file with Forgejo token from SOPS
+    # Configure git URL rewrite for Forgejo with token from SOPS
     home.activation.gitCredentials = lib.mkIf (config.sops.secrets ? forgejo_git_token) (
       lib.hm.dag.entryAfter ["writeBoundary"] ''
+        # Only proceed if SOPS secret is available
         if [ -f "${config.sops.secrets.forgejo_git_token.path}" ]; then
           TOKEN=$(cat "${config.sops.secrets.forgejo_git_token.path}")
+
+          # Configure git URL rewrite for automatic Forgejo authentication
+          git config --global url."https://nightconcept:$TOKEN@forge.solivan.dev/".insteadOf "https://forge.solivan.dev/"
+
+          # Also create git-credentials file as backup
           echo "https://nightconcept:$TOKEN@forge.solivan.dev" > ~/.git-credentials
           chmod 600 ~/.git-credentials
+        else
+          echo "Warning: Forgejo git token not available from SOPS at ${config.sops.secrets.forgejo_git_token.path}"
         fi
       ''
     );
@@ -59,7 +67,6 @@ in
             "forgejo:"
           ];
         };
-
 
         alias = {
           del = "branch -D";
@@ -130,7 +137,7 @@ in
 
         # Configure credentials for Forgejo
         "credential \"https://forge.solivan.dev\"" = {
-          helper = "!f() { echo \"username=danny\"; echo \"password=$(cat $XDG_RUNTIME_DIR/secrets/forgejo_git_token)\"; }; f";
+          helper = "!f() { echo \"username=nightconcept\"; echo \"password=$(cat ~/.local/share/sops/secrets/forgejo_git_token 2>/dev/null || echo 'token-not-found')\"; }; f";
         };
 
         "filter \"lfs\"" = {
