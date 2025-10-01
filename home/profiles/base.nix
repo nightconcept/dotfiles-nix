@@ -10,6 +10,11 @@
     programs = {
       claude-code = {
         enable = true;
+        # Enable statusline with settings management
+        statusline = {
+          enable = true;
+          manageSettings = true;
+        };
         # Enable GLM wrapper for Z.AI integration
         glm = {
           enable = true;
