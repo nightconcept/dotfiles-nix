@@ -24,13 +24,14 @@ jobs:
           fetch-depth: 0
 
       - name: Install Nix
-        uses: cachix/install-nix-action@v27
-        with:
-          install_url: https://releases.nixos.org/nix/nix-2.31.2/install
-          extra_nix_config: |
-            experimental-features = nix-command flakes
-            substituters = https://cache.nixos.org/ https://nix-community.cachix.org
-            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+        uses: nixbuild/nix-quick-install-action@v33
+
+      - name: Configure Nix
+        run: |
+          mkdir -p ~/.config/nix
+          echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+          echo "substituters = https://cache.nixos.org/ https://nix-community.cachix.org" >> ~/.config/nix/nix.conf
+          echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" >> ~/.config/nix/nix.conf
 
       - name: Flake Check
         run: nix flake check --all-systems
@@ -56,13 +57,14 @@ jobs:
           fetch-depth: 0
 
       - name: Install Nix
-        uses: cachix/install-nix-action@v27
-        with:
-          install_url: https://releases.nixos.org/nix/nix-2.31.2/install
-          extra_nix_config: |
-            experimental-features = nix-command flakes
-            substituters = https://cache.nixos.org/ https://nix-community.cachix.org
-            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+        uses: nixbuild/nix-quick-install-action@v33
+
+      - name: Configure Nix
+        run: |
+          mkdir -p ~/.config/nix
+          echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+          echo "substituters = https://cache.nixos.org/ https://nix-community.cachix.org" >> ~/.config/nix/nix.conf
+          echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" >> ~/.config/nix/nix.conf
 
       - name: Build Home Manager Profile - ${{ matrix.profile }}
         run: |
