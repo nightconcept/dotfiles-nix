@@ -9,8 +9,6 @@
   imports = [
     ./hardware-configuration.nix
     inputs.nixos-hardware.nixosModules.dell-latitude-7420
-    # Include Lix module for this host
-    inputs.lix-module.nixosModules.default
   ];
 
   # Networking
@@ -19,8 +17,6 @@
     # Desktop environment
     modules.nixos.desktop.hyprland.enable = true;
 
-    # Enable Lix as alternative Nix implementation (tidus only)
-    modules.nixos.core.lix.enable = true;
     
     # Hardware features
     modules.nixos.hardware = {
@@ -39,7 +35,6 @@
 
     # Programs
     modules.nixos.programs.nomachine.enable = true;
-    modules.nixos.programs.ccache.enable = true;
 
     system.stateVersion = "23.11";
 }

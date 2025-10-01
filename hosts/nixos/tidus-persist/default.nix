@@ -14,8 +14,6 @@
     inputs.nixos-hardware.nixosModules.dell-latitude-7420
     inputs.disko.nixosModules.disko
     inputs.impermanence.nixosModules.impermanence
-    # Include Lix module for this host
-    inputs.lix-module.nixosModules.default
   ];
 
   # Networking
@@ -24,8 +22,6 @@
     # Desktop environment
     modules.nixos.desktop.hyprland.enable = true;
 
-    # Enable Lix as alternative Nix implementation (tidus only)
-    modules.nixos.core.lix.enable = true;
     
     # Hardware features
     modules.nixos.hardware = {

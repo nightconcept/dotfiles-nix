@@ -65,7 +65,7 @@ in {
   # Forgejo Runners
   services.forgejo-runners = {
     enable = true;
-    replicas = 3;
+    replicas = 5;
     labels = ["docker" "amd64" "linux" "vincent" "ubuntu-latest"];
   };
 

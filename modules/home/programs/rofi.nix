@@ -11,7 +11,7 @@
   config = lib.mkIf config.modules.home.programs.rofi.enable {
     programs.rofi = {
       enable = true;
-      package = pkgs.rofi-wayland;
+      package = pkgs.rofi;
 
       theme = let
         colors = config.lib.stylix.colors;

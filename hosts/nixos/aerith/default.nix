@@ -13,7 +13,7 @@ let
     config = { allowUnfree = true; };
     overlays = [
       # Override Plex with latest flake version
-      (import ../../overlays/flake-packages.nix {
+      (import ../../../overlays/flake-packages.nix {
         inherit inputs;
         overridePackages = [ "plex" ];
       })

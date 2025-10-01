@@ -13,7 +13,7 @@
 
   modules.home.programs = {
     gaming.enable = true;
-    rofi.enable = true;
+    rofi.enable = false; # Disabled due to conflict with stylix
     spotify.enable = true;
     wezterm.enable = true;
     xdg.enable = true;
