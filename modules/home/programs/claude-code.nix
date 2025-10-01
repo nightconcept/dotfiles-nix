@@ -15,13 +15,17 @@ let
   cfg = config.modules.home.programs.claude-code;
 
   # Claude Code settings.json configuration
-  claudeSettingsConfig = pkgs.writeText "claude-settings.json" (builtins.toJSON {
-    model = "sonnet";
-    statusLine = lib.mkIf cfg.statusline.enable {
-      type = "command";
-      command = "bash $HOME/.claude/statusline-command.sh";
-    };
-  });
+  claudeSettingsConfig = pkgs.writeText "claude-settings.json" (builtins.toJSON (
+    if cfg.statusline.enable then {
+      model = "sonnet";
+      statusLine = {
+        type = "command";
+        command = "bash $HOME/.claude/statusline-command.sh";
+      };
+    } else {
+      model = "sonnet";
+    }
+  ));
 
   # Advanced Claude Code statusline script
   claudeStatuslineScript = pkgs.writeShellScript "statusline-command.sh" ''
@@ -359,9 +363,11 @@ let
     if [ -n "''$cost_usd" ] && [[ "''$cost_usd" =~ ^[0-9.]+$ ]]; then
       if [ -n "''$cost_per_hour" ] && [[ "''$cost_per_hour" =~ ^[0-9.]+$ ]]; then
         cost_per_hour_formatted=$(printf '%.2f' "''$cost_per_hour")
-        line3="💰 $(cost_color)\$(printf '%.2f' "''$cost_usd")$(rst) ($(burn_color)\''${cost_per_hour_formatted}/h$(rst))"
+        formatted_cost=$(printf '%.2f' "''$cost_usd")
+        line3="💰 $(cost_color)\$''${formatted_cost}$(rst) ($(burn_color)\$''${cost_per_hour_formatted}/h$(rst))"
       else
-        line3="💰 $(cost_color)\$(printf '%.2f' "''$cost_usd")$(rst)"
+        formatted_cost=$(printf '%.2f' "''$cost_usd")
+        line3="💰 $(cost_color)\$''${formatted_cost}$(rst)"
       fi
     fi
     if [ -n "''$tot_tokens" ] && [[ "''$tot_tokens" =~ ^[0-9]+$ ]]; then
