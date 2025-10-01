@@ -9,6 +9,9 @@
   };
 
   config = lib.mkIf config.modules.home.programs.rofi.enable {
+    # Disable stylix rofi theming to avoid conflicts
+    stylix.targets.rofi.enable = false;
+
     programs.rofi = {
       enable = true;
       package = pkgs.rofi;
