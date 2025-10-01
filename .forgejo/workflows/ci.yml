@@ -31,22 +31,24 @@ jobs:
 
   build-home-manager:
     runs-on: linux
-    container: node:lts-trixie
+    container: nixos/nix:2.31.2
     strategy:
       matrix:
         profile: [desktop, server]
       fail-fast: false
     steps:
+      - name: Setup Node.js
+        run: |
+          apk add --no-cache nodejs npm
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-
       - name: Configure Nix
         run: |
+          echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
           echo "substituters = https://cache.nixos.org/ https://nix-community.cachix.org" >> /etc/nix/nix.conf
           echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" >> /etc/nix/nix.conf
 
