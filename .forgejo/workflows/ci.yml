@@ -11,14 +11,14 @@ jobs:
     runs-on: linux
     container: nixos/nix:2.31.2
     steps:
+      - name: Setup Node.js
+        run: |
+          apk add --no-cache nodejs npm
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Setup Node.js
-        run: |
-          apk add --no-cache nodejs npm
 
       - name: Configure Nix
         run: |
@@ -31,7 +31,7 @@ jobs:
 
   build-home-manager:
     runs-on: linux
-    container: nixos/nix:2.31.2
+    container: node:lts-trixie
     strategy:
       matrix:
         profile: [desktop, server]
@@ -42,13 +42,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        run: |
-          apk add --no-cache nodejs npm
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
 
       - name: Configure Nix
         run: |
-          echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
           echo "substituters = https://cache.nixos.org/ https://nix-community.cachix.org" >> /etc/nix/nix.conf
           echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" >> /etc/nix/nix.conf
 
