@@ -9,34 +9,47 @@ on:
 jobs:
   flake-check:
     runs-on: linux
-    container: nixos/nix:2.31.2
+    container: ubuntu:24.04
     steps:
       - name: Setup Node.js
         run: |
-          apk add --no-cache nodejs npm
+          apt-get update
+          apt-get install -y curl
+          curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+          apt-get install -y nodejs
 
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Configure Nix
-        run: |
-          echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
-          echo "substituters = https://cache.nixos.org/ https://nix-community.cachix.org" >> /etc/nix/nix.conf
-          echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" >> /etc/nix/nix.conf
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.31.2/install
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            substituters = https://cache.nixos.org/ https://nix-community.cachix.org
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
 
       - name: Flake Check
         run: nix flake check --all-systems
 
   build-home-manager:
     runs-on: linux
-    container: node:lts-trixie
+    container: ubuntu:24.04
     strategy:
       matrix:
         profile: [desktop, server]
       fail-fast: false
     steps:
+      - name: Setup Node.js
+        run: |
+          apt-get update
+          apt-get install -y curl
+          curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+          apt-get install -y nodejs
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
