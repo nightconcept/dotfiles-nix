@@ -31,6 +31,7 @@ in {
 
     instanceUrl = lib.mkOption {
       type = lib.types.str;
+      default = "https://forge.solivan.dev";
       description = "URL of your Forgejo instance";
       example = "https://forge.solivan.dev";
     };
