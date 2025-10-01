@@ -62,10 +62,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Dokploy - Self-hosted PaaS platform
-    nix-dokploy = {
-      url = "github:el-kurto/nix-dokploy";
-    };
   };
 
   outputs = {
