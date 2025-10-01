@@ -14,24 +14,8 @@ in
   };
 
   config = lib.mkIf config.modules.home.programs.git.enable {
-    # Configure git URL rewrite for Forgejo with token from SOPS
-    home.activation.gitCredentials = lib.mkIf (config.sops.secrets ? forgejo_git_token) (
-      lib.hm.dag.entryAfter ["writeBoundary"] ''
-        # Only proceed if SOPS secret is available
-        if [ -f "${config.sops.secrets.forgejo_git_token.path}" ]; then
-          TOKEN=$(cat "${config.sops.secrets.forgejo_git_token.path}")
-
-          # Configure git URL rewrite for automatic Forgejo authentication
-          git config --global url."https://nightconcept:$TOKEN@forge.solivan.dev/".insteadOf "https://forge.solivan.dev/"
-
-          # Also create git-credentials file as backup
-          echo "https://nightconcept:$TOKEN@forge.solivan.dev" > ~/.git-credentials
-          chmod 600 ~/.git-credentials
-        else
-          echo "Warning: Forgejo git token not available from SOPS at ${config.sops.secrets.forgejo_git_token.path}"
-        fi
-      ''
-    );
+    # Note: Forgejo authentication is handled by the credential helper below
+    # No activation script needed since we use credential helper instead of URL rewrite
 
     programs.git = {
       enable = true;
