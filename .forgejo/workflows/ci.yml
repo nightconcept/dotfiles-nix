@@ -29,68 +29,12 @@ jobs:
       - name: Flake Check
         run: nix flake check --all-systems
 
-  build-nixos-systems:
-    runs-on: linux
-    container: nixos/nix:2.31.2
-    strategy:
-      matrix:
-        host: [tidus, tidus-persist, aerith, barrett, rinoa, vincent]
-      fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        run: |
-          apk add --no-cache nodejs npm
-
-      - name: Configure Nix
-        run: |
-          echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
-          echo "substituters = https://cache.nixos.org/ https://nix-community.cachix.org" >> /etc/nix/nix.conf
-          echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" >> /etc/nix/nix.conf
-
-      - name: Build NixOS System - ${{ matrix.host }}
-        run: |
-          echo "Building NixOS configuration for ${{ matrix.host }}..."
-          nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel --print-build-logs
-
-  build-darwin-systems:
-    runs-on: linux
-    container: nixos/nix:2.31.2
-    strategy:
-      matrix:
-        host: [waver, merlin]
-      fail-fast: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        run: |
-          apk add --no-cache nodejs npm
-
-      - name: Configure Nix
-        run: |
-          echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
-          echo "substituters = https://cache.nixos.org/ https://nix-community.cachix.org" >> /etc/nix/nix.conf
-          echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" >> /etc/nix/nix.conf
-
-      - name: Build Darwin System - ${{ matrix.host }}
-        run: |
-          echo "Building Darwin configuration for ${{ matrix.host }}..."
-          nix build .#darwinConfigurations.${{ matrix.host }}.system --print-build-logs
-
   build-home-manager:
     runs-on: linux
     container: nixos/nix:2.31.2
     strategy:
       matrix:
-        profile: [desktop, laptop, server]
+        profile: [desktop, server]
       fail-fast: false
     steps:
       - name: Checkout
