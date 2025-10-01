@@ -13,6 +13,7 @@
 
   modules.home.programs = {
     gaming.enable = true;
+    rofi.enable = true;
     spotify.enable = true;
     wezterm.enable = true;
     xdg.enable = true;

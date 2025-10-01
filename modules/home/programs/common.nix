@@ -27,7 +27,6 @@ in
       duf
       eza
       fastfetch
-      gemini-cli
       gnupg
       just  # Task runner for command organization
       lazygit

@@ -1,7 +1,7 @@
 { inputs }:
 
 let
-  inherit (inputs) nixpkgs home-manager nix-darwin vscode-server stylix spicetify-nix sops-nix vicinae disko lix-module;
+  inherit (inputs) nixpkgs home-manager nix-darwin vscode-server stylix spicetify-nix sops-nix disko lix-module;
 in
 {
   # Create a fake nixpkgs input for npins-managed hosts
@@ -33,7 +33,6 @@ in
               stylix.homeModules.stylix
               spicetify-nix.homeManagerModules.default
               sops-nix.homeManagerModules.sops
-              vicinae.homeManagerModules.default
             ];
             extraSpecialArgs = {inherit inputs; inherit hostname;};
           };

@@ -46,12 +46,6 @@
       url = "github:nix-community/impermanence";
     };
 
-    # Vicinae - High-performance launcher for Linux
-    vicinae = {
-      url = "github:vicinaehq/vicinae";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     nvchad = {
       url = "github:nix-community/nix4nvchad";
       inputs.nixpkgs.follows = "nixpkgs";

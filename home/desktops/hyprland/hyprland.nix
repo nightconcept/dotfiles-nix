@@ -16,7 +16,7 @@
       # Default applications
       "$terminal" = "wezterm";
       "$filemanager" = "";
-      "$applauncher" = "vicinae";
+      "$applauncher" = "rofi -show drun";
       "$browser" = "firefox";
       "$idlehandler" = "hypridle";
 
@@ -407,8 +407,8 @@
         "animation slide top, logout_dialog"
         "animation slide down, waybar"
         "animation fade 50%, wallpaper"
-        "blur, vicinae"
-        "ignorealpha 0, vicinae"
+        "blur, rofi"
+        "ignorealpha 0, rofi"
       ];
     };
 

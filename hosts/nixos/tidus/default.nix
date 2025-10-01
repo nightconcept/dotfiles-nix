@@ -39,6 +39,7 @@
 
     # Programs
     modules.nixos.programs.nomachine.enable = true;
+    modules.nixos.programs.ccache.enable = true;
 
     system.stateVersion = "23.11";
 }

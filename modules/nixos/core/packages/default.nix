@@ -26,6 +26,7 @@ in
       git
       gnupg
       home-manager
+      nix-fast-build
       uv
       vim
       wget

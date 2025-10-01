@@ -7,9 +7,10 @@
     ./direnv.nix
     ./firefox.nix
     ./gaming.nix
+    ./gemini-cli.nix
     ./git.nix
-    ./helix.nix
     ./nvim
+    ./rofi.nix
     ./shell
     ./spotify.nix
     ./ssh.nix
