@@ -9,36 +9,30 @@ on:
 jobs:
   flake-check:
     runs-on: linux
-    container: ubuntu:24.04
+    container: nixos/nix:2.31.2
     steps:
       - name: Setup Node.js
         run: |
-          apt-get update
-          apt-get install -y curl
-          curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
-          apt-get install -y nodejs
+          nix-env -iA nixpkgs.nodejs
+          nix-env -iA nixpkgs.nodePackages.npm
 
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Install Nix
-        uses: nixbuild/nix-quick-install-action@v33
-
       - name: Configure Nix
         run: |
-          mkdir -p ~/.config/nix
-          echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
-          echo "substituters = https://cache.nixos.org/ https://nix-community.cachix.org" >> ~/.config/nix/nix.conf
-          echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" >> ~/.config/nix/nix.conf
+          echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
+          echo "substituters = https://cache.nixos.org/ https://nix-community.cachix.org" >> /etc/nix/nix.conf
+          echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" >> /etc/nix/nix.conf
 
       - name: Flake Check
         run: nix flake check --all-systems
 
   build-home-manager:
     runs-on: linux
-    container: ubuntu:24.04
+    container: nixos/nix:2.31.2
     strategy:
       matrix:
         profile: [desktop, server]
@@ -46,25 +40,19 @@ jobs:
     steps:
       - name: Setup Node.js
         run: |
-          apt-get update
-          apt-get install -y curl
-          curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
-          apt-get install -y nodejs
+          nix-env -iA nixpkgs.nodejs
+          nix-env -iA nixpkgs.nodePackages.npm
 
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Install Nix
-        uses: nixbuild/nix-quick-install-action@v33
-
       - name: Configure Nix
         run: |
-          mkdir -p ~/.config/nix
-          echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
-          echo "substituters = https://cache.nixos.org/ https://nix-community.cachix.org" >> ~/.config/nix/nix.conf
-          echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" >> ~/.config/nix/nix.conf
+          echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
+          echo "substituters = https://cache.nixos.org/ https://nix-community.cachix.org" >> /etc/nix/nix.conf
+          echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" >> /etc/nix/nix.conf
 
       - name: Build Home Manager Profile - ${{ matrix.profile }}
         run: |
