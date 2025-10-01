@@ -134,6 +134,14 @@ in
       config = mkOpt lib.types.attrs {} "Custom statusline configuration";
     };
 
+    glm = {
+      enable = mkBoolOpt false "Enable GLM (Z.AI) wrapper script";
+      apiKey = mkStrOpt "YOUR_ZAI_API_KEY" "Z.AI API key for GLM models";
+      baseUrl = mkStrOpt "https://api.z.ai/api/anthropic" "Z.AI API base URL";
+      defaultModel = mkStrOpt "glm-4.6" "Default GLM model to use";
+      fastModel = mkStrOpt "glm-4.5-air" "Fast GLM model for auxiliary tasks";
+    };
+
     mcp = {
       enable = mkBoolOpt true "Enable MCP server configuration";
 
@@ -191,8 +199,8 @@ in
       };
     };
 
-    # Create a setup script to configure Claude Code
-    home.packages = with pkgs; [
+    # Install Claude Code package and additional scripts
+    home.packages = [ pkgs.claude-code ] ++ (with pkgs; [
       (writeShellScriptBin "claude-setup" ''
         #!/usr/bin/env bash
         set -e
@@ -243,6 +251,19 @@ in
         echo "  claude mcp list"
       '')
 
+      # Official Claude Code wrapper (preserves default behavior)
+      # Note: claude-code package already provides 'claude' binary
+      # This wrapper is commented out to avoid conflicts
+      # (writeShellScriptBin "claude" ''
+      #   #!/usr/bin/env bash
+      #   # Official Anthropic Claude Code
+      #   if [ -f ~/.claude/mcp-config.json ]; then
+      #     exec ${lib.getExe pkgs.claude-code} --mcp-config ~/.claude/mcp-config.json "$@"
+      #   else
+      #     exec ${lib.getExe pkgs.claude-code} "$@"
+      #   fi
+      # '')
+
       # Helper to start Claude with MCP config
       (writeShellScriptBin "claude-mcp" ''
         #!/usr/bin/env bash
@@ -253,14 +274,34 @@ in
           exit 1
         fi
       '')
+    ]) ++ lib.optionals cfg.glm.enable [
+      # GLM (Z.AI) wrapper script
+      (pkgs.writeShellScriptBin "glm" ''
+        #!/usr/bin/env bash
+        # GLM-powered Claude Code via Z.AI
+        export ANTHROPIC_BASE_URL="${cfg.glm.baseUrl}"
+        export ANTHROPIC_AUTH_TOKEN="${cfg.glm.apiKey}"
+        export ANTHROPIC_DEFAULT_HAIKU_MODEL="${cfg.glm.fastModel}"
+        export ANTHROPIC_DEFAULT_SONNET_MODEL="${cfg.glm.defaultModel}"
+        export ANTHROPIC_DEFAULT_OPUS_MODEL="${cfg.glm.defaultModel}"
+
+        if [ -f ~/.claude/mcp-config.json ]; then
+          exec ${lib.getExe pkgs.claude-code} --mcp-config ~/.claude/mcp-config.json "$@"
+        else
+          exec ${lib.getExe pkgs.claude-code} "$@"
+        fi
+      '')
     ];
 
     # Add activation script
-    home.activation.claudeCodeSetup = lib.mkIf (cfg.statusline.enable || cfg.mcp.enable) (
+    home.activation.claudeCodeSetup = lib.mkIf (cfg.statusline.enable || cfg.mcp.enable || cfg.glm.enable) (
       lib.hm.dag.entryAfter ["writeBoundary"] ''
         if [ ! -f "$HOME/.claude/.nix_configured" ]; then
           $DRY_RUN_CMD echo "Claude Code configuration available."
           $DRY_RUN_CMD echo "Run 'claude-setup' for setup instructions."
+          ${lib.optionalString cfg.glm.enable ''
+          $DRY_RUN_CMD echo "GLM wrapper available as 'glm' command."
+          ''}
           $DRY_RUN_CMD touch "$HOME/.claude/.nix_configured"
         fi
       ''
