@@ -363,7 +363,8 @@ setup_age_keys() {
         print_info "You can either:"
         echo "  1) Enter an existing age key"
         echo "  2) Generate a new age key (will need to be added to .sops.yaml)"
-        echo "  3) Skip (secrets won't work until configured later)"
+        echo "  3) Extract keys from encrypted bootstrap archive"
+        echo "  4) Skip (secrets won't work until configured later)"
         echo
 
         if [[ ! -r /dev/tty ]] || [[ ! -w /dev/tty ]]; then
@@ -371,7 +372,7 @@ setup_age_keys() {
             return
         fi
 
-        read -p "Select option (1-3): " -n 1 -r </dev/tty || {
+        read -p "Select option (1-4): " -n 1 -r </dev/tty || {
             print_warning "Failed to read input, skipping age key setup"
             return
         }
@@ -407,6 +408,60 @@ setup_age_keys() {
                 fi
                 ;;
             3)
+                # Extract keys from encrypted bootstrap archive
+                local keys_archive="./bootstrap/keys.tar.gz.gpg"
+
+                if [[ ! -f "$keys_archive" ]]; then
+                    print_error "Keys archive not found at: $keys_archive"
+                    print_info "Make sure you're running from the dotfiles-nix directory."
+                    return 1
+                fi
+
+                print_info "🔓 Extracting keys from bootstrap archive..."
+                echo -n "Enter bootstrap password: "
+                read -s bootstrap_password </dev/tty || return 1
+                echo
+
+                # Create temporary directory for extraction
+                local temp_dir="/tmp/bootstrap-key-extract-$$"
+                mkdir -p "$temp_dir"
+                cd "$temp_dir"
+
+                # Decrypt and extract keys
+                if echo "$bootstrap_password" | gpg --batch --yes --passphrase-fd 0 --decrypt "$keys_archive" | tar xzf -; then
+                    # Deploy age key
+                    if [[ -f "age_keys_extracted" ]]; then
+                        cp "age_keys_extracted" "$HOME/.config/sops/age/keys.txt"
+                        chmod 600 "$HOME/.config/sops/age/keys.txt"
+                        age_key=$(cat "$HOME/.config/sops/age/keys.txt")
+                        print_success "✓ Age key deployed to ~/.config/sops/age/keys.txt"
+                    fi
+
+                    # Deploy SSH keys
+                    if [[ -f "id_sdev_extracted" ]]; then
+                        mkdir -p "$HOME/.ssh"
+                        cp "id_sdev_extracted" "$HOME/.ssh/id_sdev"
+                        chmod 600 "$HOME/.ssh/id_sdev"
+                        print_success "✓ SSH private key deployed to ~/.ssh/id_sdev"
+                    fi
+
+                    if [[ -f "id_sdev.pub_extracted" ]]; then
+                        cp "id_sdev.pub_extracted" "$HOME/.ssh/id_sdev.pub"
+                        chmod 644 "$HOME/.ssh/id_sdev.pub"
+                        print_success "✓ SSH public key deployed to ~/.ssh/id_sdev.pub"
+                    fi
+
+                    print_success "🎉 Keys extracted and deployed successfully!"
+                else
+                    print_error "Failed to decrypt archive. Wrong password?"
+                    rm -rf "$temp_dir"
+                    return 1
+                fi
+
+                # Cleanup
+                rm -rf "$temp_dir"
+                ;;
+            4)
                 print_warning "Skipping age key setup. Secrets won't work until configured."
                 return
                 ;;

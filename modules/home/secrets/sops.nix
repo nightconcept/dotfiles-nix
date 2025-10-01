@@ -20,8 +20,6 @@ in
       # Use the user's age key (converted from SSH key)
       age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
       
-      # Can also use SSH keys directly if they have no password
-      age.sshKeyPaths = [ "${config.home.homeDirectory}/.ssh/id_sdev" ];
       
       # Default secrets file
       defaultSopsFile = ./user.yaml;
@@ -31,12 +29,6 @@ in
       
       # User-level secrets
       secrets = {
-        # SSH private key - deployed to actual location for git/ssh
-        "id_sdev" = {
-          path = "${config.home.homeDirectory}/.ssh/id_sdev";
-          mode = "0600";
-        };
-        
         # Gemini API key - deployed to a file that shell can source
         "gemini_api_key" = {
           # Use XDG runtime dir for better security (tmpfs, user-only access)
