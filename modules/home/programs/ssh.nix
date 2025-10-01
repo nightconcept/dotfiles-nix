@@ -38,10 +38,10 @@ in
         };
       };
     };
-    
+
     # Deploy the public key (not sensitive, doesn't need encryption)
     home.file.".ssh/id_sdev.pub".text = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMJKTm63zFmYfGauCBlUWq7lvHFq+NVPT5RqIfjLM7MN danny@solivan.dev";
-    
+
     # Set up authorized_keys with id_sdev for SSH access
     home.file.".ssh/authorized_keys" = lib.mkIf config.modules.home.programs.ssh.authorizedKeysAllowed {
       text = ''

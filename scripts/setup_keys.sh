@@ -79,7 +79,7 @@ main() {
     print_success "Archive decrypted successfully"
 
     # Verify we have the expected keys
-    if [ ! -f "id_sdev_extracted" ] || [ ! -f "id_sdev.pub_extracted" ] || [ ! -f "age_keys_extracted" ]; then
+    if [ ! -f "id_sdev_extracted" ] || [ ! -f "age_keys_extracted" ]; then
         print_error "Missing expected keys in archive"
         ls -la
         exit 1
@@ -87,7 +87,6 @@ main() {
 
     print_info "Found keys:"
     echo "  ✓ SSH private key (id_sdev_extracted)"
-    echo "  ✓ SSH public key (id_sdev.pub_extracted)"
     echo "  ✓ Age key (age_keys_extracted)"
     echo
 
@@ -97,14 +96,10 @@ main() {
     # Ensure target directories exist
     mkdir -p "$HOME/.ssh" "$HOME/.config/sops/age"
 
-    # Deploy SSH keys
+    # Deploy SSH private key
     cp "id_sdev_extracted" "$HOME/.ssh/id_sdev"
     chmod 600 "$HOME/.ssh/id_sdev"
     print_success "✓ Deployed SSH private key to ~/.ssh/id_sdev"
-
-    cp "id_sdev.pub_extracted" "$HOME/.ssh/id_sdev.pub"
-    chmod 644 "$HOME/.ssh/id_sdev.pub"
-    print_success "✓ Deployed SSH public key to ~/.ssh/id_sdev.pub"
 
     # Deploy age key
     cp "age_keys_extracted" "$HOME/.config/sops/age/keys.txt"
@@ -113,11 +108,6 @@ main() {
 
     echo
     print_success "🎉 Key setup complete!"
-    echo
-    print_info "Next steps:"
-    echo "1. Test SSH: ssh -T git@github.com"
-    echo "2. Test SOPS: SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt sops -d modules/home/secrets/user.yaml | head"
-    echo "3. Rebuild system: sudo flake-rebuild"
 }
 
 main "$@"

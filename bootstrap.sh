@@ -437,18 +437,12 @@ setup_age_keys() {
                         print_success "✓ Age key deployed to ~/.config/sops/age/keys.txt"
                     fi
 
-                    # Deploy SSH keys
+                    # Deploy SSH private key
                     if [[ -f "id_sdev_extracted" ]]; then
                         mkdir -p "$HOME/.ssh"
                         cp "id_sdev_extracted" "$HOME/.ssh/id_sdev"
                         chmod 600 "$HOME/.ssh/id_sdev"
                         print_success "✓ SSH private key deployed to ~/.ssh/id_sdev"
-                    fi
-
-                    if [[ -f "id_sdev.pub_extracted" ]]; then
-                        cp "id_sdev.pub_extracted" "$HOME/.ssh/id_sdev.pub"
-                        chmod 644 "$HOME/.ssh/id_sdev.pub"
-                        print_success "✓ SSH public key deployed to ~/.ssh/id_sdev.pub"
                     fi
 
                     print_success "🎉 Keys extracted and deployed successfully!"
