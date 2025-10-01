@@ -32,7 +32,7 @@ in {
     instanceUrl = lib.mkOption {
       type = lib.types.str;
       description = "URL of your Forgejo instance";
-      example = "https://forge.example.com";
+      example = "https://forge.solivan.dev";
     };
 
     runnerName = lib.mkOption {
@@ -43,7 +43,7 @@ in {
 
     labels = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = ["docker" "amd64" "linux"];
+      default = ["docker" "amd64" "linux" "ubuntu-latest"];
       description = "Labels for the Forgejo runners";
     };
 

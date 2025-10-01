@@ -6,12 +6,11 @@
   lib,
   inputs,
   ...
-}:
-let
+}: let
   sources = import ./npins;
   pinnedPkgs = import sources.nixpkgs {
     system = "x86_64-linux";
-    config = { allowUnfree = true; };
+    config = {allowUnfree = true;};
   };
 in {
   imports = [
@@ -52,7 +51,6 @@ in {
     security.sops.enable = true;
   };
 
-
   # System packages for server management
   environment.systemPackages = with pkgs; [
     home-manager
@@ -69,9 +67,7 @@ in {
   services.forgejo-runners = {
     enable = true;
     replicas = 3;
-    instanceUrl = "https://forge.solivan.dev";
-    labels = [ "docker" "amd64" "linux" "vincent" ];
-    # Uses default tokenFile path: /run/secrets/forgejo_runner_token
+    labels = ["docker" "amd64" "linux" "vincent" "ubuntu-latest"];
   };
 
   # Additional container management
@@ -84,7 +80,7 @@ in {
 
     # Auto-update containers (optional)
     watchtower = {
-      enable = false;  # Disabled by default for CI runners
+      enable = false; # Disabled by default for CI runners
       schedule = "0 0 4 * * *";
     };
   };
@@ -132,9 +128,9 @@ in {
 
   # Open firewall for Dokploy services
   networking.firewall.allowedTCPPorts = [
-    3000  # Dokploy UI
-    8080  # Traefik HTTP
-    8443  # Traefik HTTPS
+    3000 # Dokploy UI
+    8080 # Traefik HTTP
+    8443 # Traefik HTTPS
   ];
 
   # System state version
