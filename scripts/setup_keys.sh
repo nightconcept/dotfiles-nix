@@ -23,7 +23,7 @@ print_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
-BOOTSTRAP_DIR="$REPO_DIR/bootstrap"
+BOOTSTRAP_DIR="$REPO_DIR/scripts/bootstrap"
 KEYS_ARCHIVE="$BOOTSTRAP_DIR/keys.tar.gz.gpg"
 WORK_DIR="/tmp/dotfiles-key-setup-$$"
 
