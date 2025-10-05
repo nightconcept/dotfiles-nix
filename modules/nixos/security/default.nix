@@ -1,6 +1,0 @@
-# Security modules
-{
-  imports = [
-    ./sops
-  ];
-}

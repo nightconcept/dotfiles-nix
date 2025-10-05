@@ -1,6 +1,0 @@
-# Networking modules
-{
-  imports = [
-    ./base
-  ];
-}

@@ -1,5 +1,3 @@
 # dotfiles-nix
 
-This repository has been deprecated.
-
-The new home for my dotfiles is at [forge.solivan.dev/nightconcept/dotfiles](https://forge.solivan.dev/nightconcept/dotfiles).
+This repository was a NixOS and nix-darwin configuration managing dotfiles and system configurations across multiple machines, including Linux desktops/laptops and macOS systems. It featured declarative configurations for Hyprland (Wayland compositor), home-manager setups, various development tools, and system-wide settings using the Nix flakes architecture. The repository included host-specific configurations for machines codenamed after Final Fantasy characters (tidus, aerith, barrett, rinoa, vincent, etc.) and supported both impermanent and traditional filesystem setups. This repository has been deprecated and migrated to [forge.solivan.dev/nightconcept/dotfiles](https://forge.solivan.dev/nightconcept/dotfiles).
